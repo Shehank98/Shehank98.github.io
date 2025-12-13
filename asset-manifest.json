@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/static/css/main.a6afe766.css",
-    "main.js": "/static/js/main.9a278a82.js",
+    "main.js": "/static/js/main.18c8b868.js",
     "static/css/487.bb36206c.chunk.css": "/static/css/487.bb36206c.chunk.css",
     "static/js/487.253957c0.chunk.js": "/static/js/487.253957c0.chunk.js",
     "static/css/990.c6a7ee28.chunk.css": "/static/css/990.c6a7ee28.chunk.css",
     "static/js/990.387f1c62.chunk.js": "/static/js/990.387f1c62.chunk.js",
-    "static/media/nsf.mp4": "/static/media/nsf.f7c310b21952f1faf424.mp4",
+    "static/media/nsf.mp4": "/static/media/nsf.3efba99ab12c7a790fb4.mp4",
     "static/media/drone.png": "/static/media/drone.ce0d0b72f9bb7e3c0866.png",
     "static/media/Japuralogo.png": "/static/media/Japuralogo.ed3a62c549f5bfb152bc.png",
     "static/media/isef.png": "/static/media/isef.76306b38e2d7ea6b7f1b.png",
@@ -31,7 +31,7 @@
     "index.html": "/index.html",
     "static/media/talksCardBack.svg": "/static/media/talksCardBack.73ed1545d58273ba64b0.svg",
     "main.a6afe766.css.map": "/static/css/main.a6afe766.css.map",
-    "main.9a278a82.js.map": "/static/js/main.9a278a82.js.map",
+    "main.18c8b868.js.map": "/static/js/main.18c8b868.js.map",
     "487.bb36206c.chunk.css.map": "/static/css/487.bb36206c.chunk.css.map",
     "487.253957c0.chunk.js.map": "/static/js/487.253957c0.chunk.js.map",
     "990.c6a7ee28.chunk.css.map": "/static/css/990.c6a7ee28.chunk.css.map",
@@ -39,6 +39,6 @@
   },
   "entrypoints": [
     "static/css/main.a6afe766.css",
-    "static/js/main.9a278a82.js"
+    "static/js/main.18c8b868.js"
   ]
 }
