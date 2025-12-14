@@ -472,7 +472,7 @@ const linkedinRecommendations = {
       recommenderName: "Champika Mahanama",
       title: "Adcertising Associate",
       company: "Media",
-      image: require("./assets/images/champika.JPG"), // Add their profile picture
+      image: require("./assets/images/champika.jpg"), // Add their profile picture
       recommendation:
        "I had the pleasure of having Shehan as a part of my team, and I can confidently say he has been an exceptional asset. Shehan consistently demonstrated a strong enthusiasm for his work and a commendable commitment to going above and beyond his assigned responsibilities.\n\nHe takes initiative without hesitation and shows a genuine interest in contributing wherever he can add value. His proactive mindset and willingness to step outside his scope make him stand out as a dedicated professional.\n\nShehan is also a fantastic team player. He's supportive, collaborative, and always ready to help others, qualities that greatly enhance the team dynamic and contribute to a positive working environment.\n\nI highly recommend Shehan for any opportunity where dedication, teamwork, and a proactive approach are valued. He would be a great addition to any team."
     },

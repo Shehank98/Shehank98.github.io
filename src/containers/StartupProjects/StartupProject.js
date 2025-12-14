@@ -1,22 +1,31 @@
-import React, {useContext} from "react";
+import React, { useContext, useState } from "react";
 import "./StartupProjects.scss";
-import {bigProjects} from "../../portfolio";
-import {Fade} from "react-reveal";
+import { bigProjects } from "../../portfolio";
+import { Fade } from "react-reveal";
 import StyleContext from "../../contexts/StyleContext";
 
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+
 export default function StartupProject() {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   function openUrlInNewTab(url) {
-    if (!url) {
-      return;
-    }
-    var win = window.open(url, "_blank");
-    win.focus();
+    if (!url) return;
+    const win = window.open(url, "_blank");
+    win?.focus();
   }
 
-  const {isDark} = useContext(StyleContext);
-  if (!bigProjects.display) {
-    return null;
-  }
+  const { isDark } = useContext(StyleContext);
+
+  if (!bigProjects.display) return null;
+
+  const toggleExpand = (index) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
+
   return (
     <Fade bottom duration={1000} distance="20px">
       <div className="main" id="projects">
@@ -32,61 +41,86 @@ export default function StartupProject() {
             {bigProjects.subtitle}
           </p>
 
-          <div className="projects-container">
-            {bigProjects.projects.map((project, i) => {
-              return (
+          <Swiper
+            modules={[Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={{
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            speed={800}
+            grabCursor={true}
+            className="startup-projects-swiper"
+          >
+            {bigProjects.projects.map((project, i) => (
+              <SwiperSlide key={i}>
                 <div
-                  key={i}
                   className={
                     isDark
                       ? "dark-mode project-card project-card-dark"
                       : "project-card project-card-light"
                   }
                 >
-                  {project.image ? (
+                  {project.image && (
                     <div className="project-image">
                       <img
                         src={project.image}
                         alt={project.projectName}
                         className="card-image"
-                      ></img>
+                      />
                     </div>
-                  ) : null}
+                  )}
+
                   <div className="project-detail">
-                    <h5
-                      className={isDark ? "dark-mode card-title" : "card-title"}
-                    >
+                    <h5 className={isDark ? "dark-mode card-title" : "card-title"}>
                       {project.projectName}
                     </h5>
+
                     <p
-                      className={
-                        isDark ? "dark-mode card-subtitle" : "card-subtitle"
-                      }
+                      className={`card-subtitle ${
+                        isDark ? "dark-mode" : ""
+                      } description-text ${
+                        expandedIndex === i ? "expanded" : "collapsed"
+                      }`}
                     >
                       {project.projectDesc}
                     </p>
-                    {project.footerLink ? (
+
+                    {project.projectDesc.length > 150 && ( // Only show button if text is long
+                      <button
+                        className="see-more-btn"
+                        onClick={() => toggleExpand(i)}
+                      >
+                        {expandedIndex === i ? "See Less" : "See More"}
+                      </button>
+                    )}
+
+                    {project.footerLink && (
                       <div className="project-card-footer">
-                        {project.footerLink.map((link, i) => {
-                          return (
-                            <span
-                              key={i}
-                              className={
-                                isDark ? "dark-mode project-tag" : "project-tag"
-                              }
-                              onClick={() => openUrlInNewTab(link.url)}
-                            >
-                              {link.name}
-                            </span>
-                          );
-                        })}
+                        {project.footerLink.map((link, j) => (
+                          <span
+                            key={j}
+                            className={
+                              isDark ? "dark-mode project-tag" : "project-tag"
+                            }
+                            onClick={() => openUrlInNewTab(link.url)}
+                          >
+                            {link.name}
+                          </span>
+                        ))}
                       </div>
-                    ) : null}
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
     </Fade>

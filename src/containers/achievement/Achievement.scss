@@ -6,21 +6,64 @@
   line-height: normal;
   margin: 0px;
 }
+
 .achievement-subtitle {
   text-transform: uppercase;
   margin: 0px;
   margin-bottom: 50px;
 }
+
 .subTitle {
   color: $subTitle;
 }
 
-/* Media Query */
+/* Swiper Slider */
+.achievement-swiper {
+  padding: 20px 0 60px 0;
+  overflow: hidden;
+}
+
+.achievement-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.achievement-card-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  display: flex;
+}
+
+/* Force all AchievementCards to same height */
+.achievement-card-wrapper > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: If you control AchievementCard styles, ensure this inside it */
+.achievement-card {
+  display: flex;
+  flex-direction: column;
+  height: 520px; /* Uniform height */
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Responsive */
 @media (max-width: 1380px) {
   .achievement-heading {
     font-size: 40px;
   }
 }
+
 @media (max-width: 768px) {
   .achievement-heading {
     font-size: 30px;
@@ -30,5 +73,20 @@
     font-size: 16px;
     line-height: normal;
     text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .achievement-card {
+    height: 480px;
+  }
+
+  .achievement-swiper {
+    padding: 20px 0 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievement-card {
+    height: 460px;
   }
 }
