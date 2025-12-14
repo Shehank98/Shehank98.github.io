@@ -373,7 +373,7 @@ const honorsSection = {
         "National Winner for the project 'Toxic Cr(VI) Remediation using Biochar and Nanoparticles from Wastewater'",
       date: "May 2017",
       image: require("./assets/images/brain.jpeg"),
-      video: "https://www.youtube.com/embed/vFGGkyWPhTw",
+      video: "https://www.youtube.com/watch?v=vFGGkyWPhTw",
       imageAlt: "National Winner Certificate",
       footer: []
     },
