@@ -21,9 +21,9 @@ const illustration = {
 
 const greeting = {
   username: "Shehan Kavishka",
-  title: "Hi all, I'm Shehan",
+  title: "Hi Guys, I'm Shehan",
   subTitle: emoji(
-    "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions | Python • TensorFlow • scikit-learn • FastAPI"
+    "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions"
   ),
   resumeLink:
     "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing", // Set to empty to hide the button
@@ -158,24 +158,39 @@ const workExperiences = {
       company: "Ogilvy Media",
       companylogo: require("./assets/images/ogilvyLogo.jpeg"),
       //date: "June 2025 – Present",
-      desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems."
-      //descBullets: [
-      //"Media Reconciliation System: Built automated reconciliation workflow reducing manual processing time from hours to ~10 minutes using data matching algorithms",
-      //"Operational Analytics Dashboards: Created tracking dashboards using BI tools to extract actionable insights from media schedules and reconciliation data"
-      //]
+      desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems.",
+      descBullets: [
+        "Scheduled monthly commercials across leading TV, radio, and press outlets",
+        "Involved in campaign planning and budgeting for multi-channel media strategies",
+        "Negotiated with media channels for optimal rates and premium ad placements",
+        "Coordinated campaign implementation and performance tracking across media platforms"
+      ]
     },
     {
       role: "Scheduling Officer",
       company: "Wijeya Newspapers Ltd",
       companylogo: require("./assets/images/wijeyaLogo.png"),
       //date: "Sep 2019 – Sep 2024",
-      desc: "Managed advertising scheduling and workflows. Developed systems and processes for efficient ad placement coordination."
+      desc: "Managed advertising scheduling and workflows. Developed systems and processes for efficient ad placement coordination.",
+      descBullets: [
+        "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror and other publications",
+        "Handled advertisement artworks maintaining quality and consistency across daily releases",
+        "Managed client communications and ad bookings while coordinating advertisement rates",
+        "Streamlined workflow between sales, creative, and editorial teams for efficient operations"
+      ]
     },
     {
       role: "Research field assistant",
       company: "University of Sri Jayewardenepura",
-      companylogo: require("./assets/images/Japuralogo.png")
+      companylogo: require("./assets/images/Japuralogo.png"),
       //date: "Jan 2019 – Sep 2019",
+      desc: "Supported microplastic pollution research project led by Prof. Meththika Vithanage.",
+      descBullets: [
+        "Conducted fieldwork activities collecting environmental samples from multiple locations",
+        "Performed laboratory analysis including sample preparation and testing procedures",
+        "Assisted in research documentation and environmental data collection",
+        "Contributed to scientific research in environmental monitoring and pollution assessment"
+      ]
       //desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
   ]
@@ -208,6 +223,19 @@ const bigProjects = {
         //  you can add extra buttons here.
       ]
     },
+      {
+      image: require("./assets/images/slt.png"),
+      projectName: "Automated Dashboard Reports - SLT Fiber Rush Campaign",
+      projectDesc:
+        "Built automated reporting system using Google Apps Script that eliminated 40+ hours of manual work. Generates twice-daily dashboard emails (1 PM & 6 PM) for 38 locations tracking thousands of campaign leads. Enabled real-time decision-making across teams by automating Google Form → Sheets → Email pipeline. 800+ lines of Apps Script code with zero external dependencies.",
+      footerLink: [
+        {
+          name: "View on GitHub",
+          url: "http://test.com/"
+        }
+        //  you can add extra buttons here.
+      ]
+    },
     {
       image: require("./assets/images/heart.webp"),
       projectName: "Heart Disease Prediction System",
@@ -229,6 +257,42 @@ const bigProjects = {
         {
           name: "View on GitHub",
           url: "https://github.com/Shehank98/Image-Classification-using-CNN"
+        }
+      ]
+    },
+      {
+      image: require("./assets/images/recon.jfif"),
+      projectName: "Advertising Reconciliation System - Ogilvy Media",
+      projectDesc:
+        "Production-ready reconciliation system reducing ad verification time from hours to 10 minutes. Implemented automated data matching with strong teamwork. Designed for scalability and continuous improvement, successfully moved into trial phase.",
+      footerLink: [
+        {
+          name: "Trial Phase",
+          url: "https://github.com/Shehank98"
+        }
+      ]
+    },
+        {
+      image: require("./assets/images/tvm.png"),
+      projectName: "TV Advertisement Monitoring System",
+      projectDesc:
+        "Automated media reconciliation system exploring feasibility of matching scheduled advertisements with broadcast data. Tested automated matching, audio/video fingerprinting, and real-time monitoring. Addresses the challenge of verifying whether ads aired as planned, reducing manual verification hours.",
+      footerLink: [
+        {
+          name: "Inprogress",
+          url: "https://github.com/Shehank98"
+        }
+      ]
+    },
+        {
+      image: require("./assets/images/rate.png"),
+      projectName: "AI Chatbot for Advertisement Rates - LLM Solution",
+      projectDesc:
+        "Intelligent chatbot system using LangChain, Google Palm2, and ChromaDB to provide instant advertisement rate quotes. Eliminates customer delays by enabling self-service inquiries. Integrated semantic similarity matching with SQL database queries. Built with Streamlit UI and deployable via WhatsApp.",
+      footerLink: [
+        {
+          name: "View on GitHub",
+          url: "https://github.com/Shehank98"
         }
       ]
     }
@@ -401,6 +465,31 @@ const blogSection = {
   display: true // Set false to hide this section, defaults to true
 };
 
+const linkedinRecommendations = {
+  display: true, // Set to true to show recommendations section
+  recommendations: [
+    {
+      recommenderName: "Champika Mahanama",
+      title: "Adcertising Associate",
+      company: "Media",
+      image: require("./assets/images/champika.JPG"), // Add their profile picture
+      recommendation:
+       "I had the pleasure of having Shehan as a part of my team, and I can confidently say he has been an exceptional asset. Shehan consistently demonstrated a strong enthusiasm for his work and a commendable commitment to going above and beyond his assigned responsibilities.\n\nHe takes initiative without hesitation and shows a genuine interest in contributing wherever he can add value. His proactive mindset and willingness to step outside his scope make him stand out as a dedicated professional.\n\nShehan is also a fantastic team player. He's supportive, collaborative, and always ready to help others, qualities that greatly enhance the team dynamic and contribute to a positive working environment.\n\nI highly recommend Shehan for any opportunity where dedication, teamwork, and a proactive approach are valued. He would be a great addition to any team."
+    },
+    {
+      recommenderName: "Anuradha Yapa",
+      title: "Lecturer",
+      company: "Horizon Campus",
+      image: require("./assets/images/yapa.jfif"),
+      recommendation:
+        "I had the pleasure of teaching and mentoring Shehan during his time at ESOFT Campus while he pursued his HND, and I can sincerely say he's one of those students you don't forget.\n\nShehan has this unstoppable drive to keep learning and improving himself, no matter what challenges come his way. He doesn't give up easily; in fact, the harder it gets, the more determined he becomes. That mindset alone says a lot about him.\n\nHe's done some impressive work already and is always looking for ways to push the boundaries, especially in areas like AI, Machine Learning, Data Science and Software Development. On top of his skills, he's a great team player; easy to work with, motivated, always listening and full of good vibes.\n\nIf you're looking for someone who's hardworking, passionate, and ready to do great things for your company, Shehan's definitely someone to watch."
+    },
+    
+    
+  ]
+};
+
+
 // Talks Sections
 
 const talkSection = {
@@ -453,6 +542,7 @@ export {
   achievementSection,
   honorsSection,
   blogSection,
+  linkedinRecommendations,
   talkSection,
   podcastSection,
   contactInfo,

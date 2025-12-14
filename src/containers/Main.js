@@ -9,6 +9,8 @@ import StartupProject from "./StartupProjects/StartupProject";
 import Achievement from "./achievement/Achievement";
 import Honors from "./honors/Honors";
 import Blogs from "./blogs/Blogs";
+import LinkedinRecommendations from "./linkedinRecommendations/LinkedinRecommendations";
+import { linkedinRecommendations } from "../portfolio";
 import Footer from "../components/footer/Footer";
 import Talks from "./talks/Talks";
 import Podcast from "./podcast/Podcast";
@@ -62,6 +64,12 @@ const Main = () => {
             <Achievement />
             <Honors />
             <Blogs />
+            {linkedinRecommendations.display && (
+              <LinkedinRecommendations
+                recommendations={linkedinRecommendations.recommendations}
+                isDark={isDark}
+              />
+            )}
             <Talks />
             <Twitter />
             <Podcast />
