@@ -156,7 +156,7 @@ const workExperiences = {
     {
       role: "Media Executive",
       company: "Ogilvy Media",
-      companylogo: require("./assets/images/ogilvy.png"),
+      companylogo: require("./assets/images/ogilvyLogo.jpeg"),
       //date: "June 2025 – Present",
       desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems."
       //descBullets: [
