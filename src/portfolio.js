@@ -353,7 +353,8 @@ const honorsSection = {
       description:
         "Made history as Sri Lanka's first-ever Grand Award winner at ISEF. Represented Sri Lanka at the world's premier science competition in Los Angeles, California, competing among 1,700+ participants from 78 countries in the Earth and Environmental Science category.",
       date: "May 2017",
-      image: require("./assets/images/isef.png"),
+      //image: require("./assets/images/isef.png"),
+      video: "https://www.youtube.com/watch?v=Z-rp2wTpg_s",
       imageAlt: "ISEF Grand Award",
       footer: []
     },
@@ -363,7 +364,8 @@ const honorsSection = {
       description:
         "Recognized with a Special Award at ISEF for outstanding achievement and innovation. This recognition highlighted the exceptional quality of the research and its potential impact on environmental remediation and water technology solutions.",
       date: "May 2017",
-      image: require("./assets/images/isef.png"),
+      //image: require("./assets/images/isef.png"),
+      video: "https://www.youtube.com/watch?v=IlsCEjYRoS0",
       imageAlt: "ISEF Special Award",
       footer: []
     },
