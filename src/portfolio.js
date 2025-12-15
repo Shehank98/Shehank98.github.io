@@ -161,9 +161,7 @@ const workExperiences = {
       desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems.",
       descBullets: [
         "Scheduled monthly commercials across leading TV, radio, and press outlets",
-        "Involved in campaign planning and budgeting for multi-channel media strategies",
-        "Negotiated with media channels for optimal rates and premium ad placements",
-        "Coordinated campaign implementation and performance tracking across media platforms"
+        "Involved in campaign planning and budgeting for multi-channel media strategies"
       ]
     },
     {
@@ -171,12 +169,10 @@ const workExperiences = {
       company: "Wijeya Newspapers Ltd",
       companylogo: require("./assets/images/wijeyaLogo.png"),
       //date: "Sep 2019 – Sep 2024",
-      desc: "Managed advertising scheduling and workflows. Developed systems and processes for efficient ad placement coordination.",
+      desc: "Managed advertising scheduling and workflows",
       descBullets: [
         "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror and other publications",
         "Handled advertisement artworks maintaining quality and consistency across daily releases",
-        "Managed client communications and ad bookings while coordinating advertisement rates",
-        "Streamlined workflow between sales, creative, and editorial teams for efficient operations"
       ]
     },
     {
@@ -188,8 +184,7 @@ const workExperiences = {
       descBullets: [
         "Conducted fieldwork activities collecting environmental samples from multiple locations",
         "Performed laboratory analysis including sample preparation and testing procedures",
-        "Assisted in research documentation and environmental data collection",
-        "Contributed to scientific research in environmental monitoring and pollution assessment"
+
       ]
       //desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     }
@@ -211,7 +206,7 @@ const bigProjects = {
   subtitle: "Research & production-grade ML/AI systems",
   projects: [
     {
-      image: require("./assets/images/brain.webp"),
+      image: require("./assets/images/brain.png"),
       projectName: "Brain Tumor Classification - Ensemble Learning Research",
       projectDesc:
         "Advanced deep learning system achieving 98.2% accuracy on MRI classification. Compared CNNs, fine-tuned models (Inception V3, Xception), and ensemble methods. Processed 9,047 MRI images across 4 tumor classes. Implemented with FastAPI for production deployment.",
@@ -237,7 +232,7 @@ const bigProjects = {
       ]
     },
     {
-      image: require("./assets/images/heart.webp"),
+      image: require("./assets/images/heart.png"),
       projectName: "Heart Disease Prediction System",
       projectDesc:
         "Developed a machine learning model to predict heart disease risk using patient data. Achieved 85% accuracy with feature engineering and model optimization.",
@@ -415,7 +410,7 @@ const honorsSection = {
       title:
         "Grand Award Winner at INTEL International Science & Engineering Fair",
       description:
-        "Made history as Sri Lanka's first-ever Grand Award winner at ISEF. Represented Sri Lanka at the world's premier science competition in Los Angeles, California, competing among 1,700+ participants from 78 countries in the Earth and Environmental Science category.",
+        "Made history as Sri Lanka's first-ever Grand Award winner at ISEF, the world's premier science competition in Los Angeles, California.",
       date: "May 2017",
       //image: require("./assets/images/isef.png"),
       video: "https://www.youtube.com/watch?v=Z-rp2wTpg_s",
@@ -426,7 +421,7 @@ const honorsSection = {
       title:
         "Special Award Winner at INTEL International Science & Engineering Fair",
       description:
-        "Recognized with a Special Award at ISEF for outstanding achievement and innovation. This recognition highlighted the exceptional quality of the research and its potential impact on environmental remediation and water technology solutions.",
+        "Recognized with a Special Award at ISEF for outstanding achievement and innovation.",
       date: "May 2017",
       //image: require("./assets/images/isef.png"),
       video: "https://www.youtube.com/watch?v=IlsCEjYRoS0",
