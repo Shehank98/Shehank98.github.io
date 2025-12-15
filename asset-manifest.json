@@ -1,18 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.24bcea44.css",
-    "main.js": "/static/js/main.382c3b3c.js",
+    "main.js": "/static/js/main.a98035ec.js",
     "static/css/487.bb36206c.chunk.css": "/static/css/487.bb36206c.chunk.css",
     "static/js/487.253957c0.chunk.js": "/static/js/487.253957c0.chunk.js",
     "static/css/990.c6a7ee28.chunk.css": "/static/css/990.c6a7ee28.chunk.css",
     "static/js/990.387f1c62.chunk.js": "/static/js/990.387f1c62.chunk.js",
     "static/media/heart.png": "/static/media/heart.1cc6c3e8d8bd066307c2.png",
-    "static/media/drone.png": "/static/media/drone.ce0d0b72f9bb7e3c0866.png",
-    "static/media/rate.png": "/static/media/rate.b8f5c1842586b9ce5c3c.png",
-    "static/media/tvm.png": "/static/media/tvm.d838a382a7d1a6e1b79d.png",
     "static/media/Japuralogo.png": "/static/media/Japuralogo.ed3a62c549f5bfb152bc.png",
     "static/media/champika.jpg": "/static/media/champika.12bbdb3303b9286263dc.jpg",
-    "static/media/recon.jfif": "/static/media/recon.c4039fcdacfdac8c37b5.jfif",
+    "static/media/newspaper.png": "/static/media/newspaper.d05e3acdb0fda899d9fe.png",
+    "static/media/sample.png": "/static/media/sample.260165b307e4e5d61526.png",
     "static/media/Montserrat-Regular.ttf": "/static/media/Montserrat-Regular.3cd786652b8a2e9d41f2.ttf",
     "static/media/brain.jpeg": "/static/media/brain.06e4f5028630d2441eab.jpeg",
     "static/media/brain.png": "/static/media/brain.c038f1f3f7e15a9cb4a1.png",
@@ -34,7 +32,7 @@
     "index.html": "/index.html",
     "static/media/talksCardBack.svg": "/static/media/talksCardBack.73ed1545d58273ba64b0.svg",
     "main.24bcea44.css.map": "/static/css/main.24bcea44.css.map",
-    "main.382c3b3c.js.map": "/static/js/main.382c3b3c.js.map",
+    "main.a98035ec.js.map": "/static/js/main.a98035ec.js.map",
     "487.bb36206c.chunk.css.map": "/static/css/487.bb36206c.chunk.css.map",
     "487.253957c0.chunk.js.map": "/static/js/487.253957c0.chunk.js.map",
     "990.c6a7ee28.chunk.css.map": "/static/css/990.c6a7ee28.chunk.css.map",
@@ -42,6 +40,6 @@
   },
   "entrypoints": [
     "static/css/main.24bcea44.css",
-    "static/js/main.382c3b3c.js"
+    "static/js/main.a98035ec.js"
   ]
 }
