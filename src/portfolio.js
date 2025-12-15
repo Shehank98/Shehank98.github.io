@@ -244,7 +244,7 @@ const bigProjects = {
       ]
     },
     {
-      image: require("./assets/images/drone.png"),
+      image: require("./assets/images/sample.png"),
       projectName: "Image Classification with Deep Learning (CNN)",
       projectDesc:
         "CNN-based image classification for drone vs bird detection using TensorFlow and Keras. Built production-ready web interface with Streamlit providing real-time predictions and confidence scores.",
@@ -256,7 +256,7 @@ const bigProjects = {
       ]
     },
       {
-      image: require("./assets/images/recon.jfif"),
+      image: require("./assets/images/sample.png"),
       projectName: "Advertising Reconciliation System - Ogilvy Media",
       projectDesc:
         "Production-ready reconciliation system reducing ad verification time from hours to 10 minutes. Implemented automated data matching with strong teamwork. Designed for scalability and continuous improvement, successfully moved into trial phase.",
@@ -268,7 +268,7 @@ const bigProjects = {
       ]
     },
         {
-      image: require("./assets/images/tvm.png"),
+      image: require("./assets/images/sample.png"),
       projectName: "TV Advertisement Monitoring System",
       projectDesc:
         "Automated media reconciliation system exploring feasibility of matching scheduled advertisements with broadcast data. Tested automated matching, audio/video fingerprinting, and real-time monitoring. Addresses the challenge of verifying whether ads aired as planned, reducing manual verification hours.",
@@ -280,7 +280,7 @@ const bigProjects = {
       ]
     },
         {
-      image: require("./assets/images/rate.png"),
+      image: require("./assets/images/newspaper.png"),
       projectName: "AI Chatbot for Advertisement Rates - LLM Solution",
       projectDesc:
         "Intelligent chatbot system using LangChain, Google Palm2, and ChromaDB to provide instant advertisement rate quotes. Eliminates customer delays by enabling self-service inquiries. Integrated semantic similarity matching with SQL database queries. Built with Streamlit UI and deployable via WhatsApp.",
