@@ -1,12 +1,13 @@
 {
   "files": {
     "main.css": "/static/css/main.24bcea44.css",
-    "main.js": "/static/js/main.a98035ec.js",
+    "main.js": "/static/js/main.5b9bba7d.js",
     "static/css/487.bb36206c.chunk.css": "/static/css/487.bb36206c.chunk.css",
     "static/js/487.253957c0.chunk.js": "/static/js/487.253957c0.chunk.js",
     "static/css/990.c6a7ee28.chunk.css": "/static/css/990.c6a7ee28.chunk.css",
     "static/js/990.387f1c62.chunk.js": "/static/js/990.387f1c62.chunk.js",
     "static/media/heart.png": "/static/media/heart.1cc6c3e8d8bd066307c2.png",
+    "static/media/resume.pdf": "/static/media/resume.d507fcfcf9dbab28a4f6.pdf",
     "static/media/Japuralogo.png": "/static/media/Japuralogo.ed3a62c549f5bfb152bc.png",
     "static/media/champika.jpg": "/static/media/champika.12bbdb3303b9286263dc.jpg",
     "static/media/newspaper.png": "/static/media/newspaper.d05e3acdb0fda899d9fe.png",
@@ -28,11 +29,10 @@
     "static/media/deep.png": "/static/media/deep.4a2f26eb82e6d711375e.png",
     "static/media/yapa.jfif": "/static/media/yapa.c03a8fe75fb9e36e93b0.jfif",
     "static/media/skill.svg": "/static/media/skill.35a147662ab0a1d15e579690446e0258.svg",
-    "static/media/resume.pdf": "/static/media/resume.f0f733dd3cd732b39262.pdf",
     "index.html": "/index.html",
     "static/media/talksCardBack.svg": "/static/media/talksCardBack.73ed1545d58273ba64b0.svg",
     "main.24bcea44.css.map": "/static/css/main.24bcea44.css.map",
-    "main.a98035ec.js.map": "/static/js/main.a98035ec.js.map",
+    "main.5b9bba7d.js.map": "/static/js/main.5b9bba7d.js.map",
     "487.bb36206c.chunk.css.map": "/static/css/487.bb36206c.chunk.css.map",
     "487.253957c0.chunk.js.map": "/static/js/487.253957c0.chunk.js.map",
     "990.c6a7ee28.chunk.css.map": "/static/css/990.c6a7ee28.chunk.css.map",
@@ -40,6 +40,6 @@
   },
   "entrypoints": [
     "static/css/main.24bcea44.css",
-    "static/js/main.a98035ec.js"
+    "static/js/main.5b9bba7d.js"
   ]
 }
