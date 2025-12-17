@@ -10,7 +10,7 @@ import splashAnimation from "./assets/lottie/splashAnimation"; // Rename to your
 const splashScreen = {
   enabled: true, // set false to disable splash screen
   animation: splashAnimation,
-  duration: 2000 // Set animation duration as per your animation
+  duration: 3000 // Set animation duration as per your animation
 };
 
 // Summary And Greeting Section
@@ -52,18 +52,18 @@ const skillsSection = {
   subTitle: "MACHINE LEARNING • DEEP LEARNING • DATA SCIENCE • AI SOLUTIONS",
   skills: [
     emoji(
-      "⚡ Build, train & deploy ML models with scikit-learn & TensorFlow"
+      "Build, train & deploy ML models with scikit-learn & TensorFlow"
     ),
     emoji(
-      "⚡ Deep learning architectures: CNNs, custom dense networks, fine-tuned models"
+      "Deep learning architectures: CNNs, custom dense networks, fine-tuned models"
     ),
     emoji(
-      "⚡ Create interactive dashboards & data apps with Streamlit and Power BI"
+      "Create interactive dashboards & data apps with Streamlit and Power BI"
     ),
     emoji(
-      "⚡ Data wrangling, EDA, feature engineering & visualization with pandas, Matplotlib"
+      "Data wrangling, EDA, feature engineering & visualization with pandas, Matplotlib"
     ),
-    emoji("⚡ Deploy ML APIs with FastAPI and manage projects with Git/GitHub")
+    emoji("Deploy ML APIs with FastAPI and manage projects with Git/GitHub")
   ],
 
   /* Make Sure to include correct Font Awesome Classname to view your icon
@@ -72,7 +72,7 @@ https://fontawesome.com/icons?d=gallery */
   softwareSkills: [
     {skillName: "Python", fontAwesomeClassname: "fab fa-python"},
     {skillName: "TensorFlow", fontAwesomeClassname: "fas fa-brain"},
-    //{skillName: "Keras", fontAwesomeClassname: "fas fa-project-diagram"},
+    {skillName: "Keras", fontAwesomeClassname: "fas fa-project-diagram"},
     {skillName: "scikit-learn", fontAwesomeClassname: "fas fa-cogs"},
     {skillName: "pandas", fontAwesomeClassname: "fas fa-table"},
     {skillName: "NumPy", fontAwesomeClassname: "fas fa-calculator"},
@@ -81,9 +81,9 @@ https://fontawesome.com/icons?d=gallery */
     {skillName: "Streamlit", fontAwesomeClassname: "fas fa-stream"},
     {skillName: "Jupyter", fontAwesomeClassname: "fas fa-book-open"},
     {skillName: "SQL", fontAwesomeClassname: "fas fa-database"},
-    //{skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
-    //{skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
-    //{skillName: "Docker", fontAwesomeClassname: "fab fa-docker"}
+    {skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
+    {skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
+    {skillName: "Docker", fontAwesomeClassname: "fab fa-docker"}
   ],
   display: true // Set false to hide this section, defaults to true
 };
@@ -157,7 +157,7 @@ const workExperiences = {
       role: "Media Executive",
       company: "Ogilvy Media",
       companylogo: require("./assets/images/ogilvy.png"),
-      //date: "June 2025 – Present",
+      date: "Aug 2024 – Present",
       desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems.",
       descBullets: [
         "Scheduled monthly commercials across leading TV, radio, and press outlets",
@@ -168,7 +168,7 @@ const workExperiences = {
       role: "Scheduling Officer",
       company: "Wijeya Newspapers Ltd",
       companylogo: require("./assets/images/wijeyaLogo.png"),
-      //date: "Sep 2019 – Sep 2024",
+      date: "Sep 2019 – Aug 2024",
       desc: "Managed advertising scheduling and workflows",
       descBullets: [
         "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror and other publications",
@@ -179,7 +179,7 @@ const workExperiences = {
       role: "Research field assistant",
       company: "University of Sri Jayewardenepura",
       companylogo: require("./assets/images/Japuralogo.png"),
-      //date: "Jan 2019 – Sep 2019",
+      date: "Jan 2019 – Sep 2019",
       desc: "Supported microplastic pollution research project led by Prof. Meththika Vithanage.",
       descBullets: [
         "Conducted fieldwork activities collecting environmental samples from multiple locations",
@@ -365,7 +365,7 @@ const achievementSection = {
     {
       title: "Introduction to Statistics - Stanford University",
       subtitle: "Coursera (Apr 2023)",
-      image: require("./assets/images/stanford.jpg"),
+      image: require("./assets/images/deep.png"),
       imageAlt: "Certificate",
       footerLink: [
         {

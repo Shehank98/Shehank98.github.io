@@ -13,7 +13,7 @@ export default function SplashScreen() {
       </div>
       <div className="splash-title-container">
         <span className="grey-color"></span>
-        <span className="splash-title">Hi there</span>
+        <span className="splash-title"></span>
         <span className="grey-color"></span>
       </div>
     </div>
