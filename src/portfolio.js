@@ -21,7 +21,7 @@ const illustration = {
 
 const greeting = {
   username: "Shehan Kavishka",
-  title: "Hi Guys, I'm Shehan",
+  title: "Hi, I'm Shehan",
   subTitle: emoji(
     "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions"
   ),
@@ -36,10 +36,10 @@ const socialMediaLinks = {
   github: "https://github.com/Shehank98",
   linkedin: "https://www.linkedin.com/in/shehan-kavishka/",
   gmail: "shehan.k98@gmail.com",
-  //gitlab: "https://gitlab.com/saadpasta",
-  //facebook: "https://www.facebook.com/saad.pasta7",
+  //gitlab: "",
+  //facebook: "",
   medium: "https://medium.com/@shehan_kavishka",
-  //stackoverflow: "https://stackoverflow.com/users/10422806/saad-pasta",
+  //stackoverflow: "",
   // Instagram, Twitter and Kaggle are also supported in the links!
   // To customize icons and social links, tweak src/components/SocialMedia
   display: true // Set true to display this section, defaults to false
@@ -52,16 +52,16 @@ const skillsSection = {
   subTitle: "MACHINE LEARNING • DEEP LEARNING • DATA SCIENCE • AI SOLUTIONS",
   skills: [
     emoji(
-      "⚡ Build, train & deploy ML models (classification, regression, ensemble methods) with scikit-learn & TensorFlow"
+      "⚡ Build, train & deploy ML models with scikit-learn & TensorFlow"
     ),
     emoji(
-      "⚡ Deep learning architectures: CNNs, custom dense networks, fine-tuned models (Inception V3, Xception)"
+      "⚡ Deep learning architectures: CNNs, custom dense networks, fine-tuned models"
     ),
     emoji(
       "⚡ Create interactive dashboards & data apps with Streamlit and Power BI"
     ),
     emoji(
-      "⚡ Data wrangling, EDA, feature engineering & visualization with pandas, NumPy, Matplotlib"
+      "⚡ Data wrangling, EDA, feature engineering & visualization with pandas, Matplotlib"
     ),
     emoji("⚡ Deploy ML APIs with FastAPI and manage projects with Git/GitHub")
   ],
@@ -72,7 +72,7 @@ https://fontawesome.com/icons?d=gallery */
   softwareSkills: [
     {skillName: "Python", fontAwesomeClassname: "fab fa-python"},
     {skillName: "TensorFlow", fontAwesomeClassname: "fas fa-brain"},
-    {skillName: "Keras", fontAwesomeClassname: "fas fa-project-diagram"},
+    //{skillName: "Keras", fontAwesomeClassname: "fas fa-project-diagram"},
     {skillName: "scikit-learn", fontAwesomeClassname: "fas fa-cogs"},
     {skillName: "pandas", fontAwesomeClassname: "fas fa-table"},
     {skillName: "NumPy", fontAwesomeClassname: "fas fa-calculator"},
@@ -81,9 +81,9 @@ https://fontawesome.com/icons?d=gallery */
     {skillName: "Streamlit", fontAwesomeClassname: "fas fa-stream"},
     {skillName: "Jupyter", fontAwesomeClassname: "fas fa-book-open"},
     {skillName: "SQL", fontAwesomeClassname: "fas fa-database"},
-    {skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
-    {skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
-    {skillName: "Docker", fontAwesomeClassname: "fab fa-docker"}
+    //{skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
+    //{skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
+    //{skillName: "Docker", fontAwesomeClassname: "fab fa-docker"}
   ],
   display: true // Set false to hide this section, defaults to true
 };
