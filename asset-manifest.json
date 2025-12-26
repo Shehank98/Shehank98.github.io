@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.e0c55fc5.css",
-    "main.js": "/static/js/main.021e57eb.js",
+    "main.js": "/static/js/main.3523e481.js",
     "static/css/487.bb36206c.chunk.css": "/static/css/487.bb36206c.chunk.css",
     "static/js/487.253957c0.chunk.js": "/static/js/487.253957c0.chunk.js",
     "static/css/990.c6a7ee28.chunk.css": "/static/css/990.c6a7ee28.chunk.css",
     "static/js/990.387f1c62.chunk.js": "/static/js/990.387f1c62.chunk.js",
     "static/media/heart.png": "/static/media/heart.1cc6c3e8d8bd066307c2.png",
     "static/media/Japuralogo.png": "/static/media/Japuralogo.ed3a62c549f5bfb152bc.png",
-    "static/media/resume.pdf": "/static/media/resume.cb5e66252ec53948ef3d.pdf",
+    "static/media/resume.pdf": "/static/media/resume.16b0d61800828995df46.pdf",
     "static/media/champika.jpg": "/static/media/champika.12bbdb3303b9286263dc.jpg",
     "static/media/newspaper.png": "/static/media/newspaper.d05e3acdb0fda899d9fe.png",
     "static/media/sample.png": "/static/media/sample.260165b307e4e5d61526.png",
@@ -31,7 +31,7 @@
     "index.html": "/index.html",
     "static/media/talksCardBack.svg": "/static/media/talksCardBack.73ed1545d58273ba64b0.svg",
     "main.e0c55fc5.css.map": "/static/css/main.e0c55fc5.css.map",
-    "main.021e57eb.js.map": "/static/js/main.021e57eb.js.map",
+    "main.3523e481.js.map": "/static/js/main.3523e481.js.map",
     "487.bb36206c.chunk.css.map": "/static/css/487.bb36206c.chunk.css.map",
     "487.253957c0.chunk.js.map": "/static/js/487.253957c0.chunk.js.map",
     "990.c6a7ee28.chunk.css.map": "/static/css/990.c6a7ee28.chunk.css.map",
@@ -39,6 +39,6 @@
   },
   "entrypoints": [
     "static/css/main.e0c55fc5.css",
-    "static/js/main.021e57eb.js"
+    "static/js/main.3523e481.js"
   ]
 }
