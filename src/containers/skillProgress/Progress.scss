@@ -1,53 +1,74 @@
 @import "../../_globalColor";
 
-.meter {
-  height: 20px;
-  position: relative;
-  background: $progressBarBackground;
-  -moz-border-radius: 25px;
-  -webkit-border-radius: 25px;
-  border-radius: 25px;
-}
-.meter > span {
-  display: block;
-  height: 100%;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background-color: $progressBarSpanBG;
-  position: relative;
-  overflow: hidden;
-}
-.skill {
-  line-height: 3.5vw;
-}
-.skill-bars {
-  font-size: 28px;
-  width: 40%;
-}
+/* ===== SKILLS PROGRESS SECTION ===== */
 .skills-container {
   display: flex;
   width: 90%;
+  max-width: 1100px;
   padding: 20px 10px;
-  margin: 0px auto;
+  margin: 0 auto;
   margin-top: 2rem;
 }
+
 .skills-container > * {
   flex: 1;
   margin-bottom: 30px;
 }
+
+/* ===== SKILL BARS WRAPPER ===== */
+.skill-bars {
+  font-size: 1rem;
+  width: 50%;
+  padding-right: 40px;
+}
+
+.skill {
+  margin-bottom: 1.75rem;
+  line-height: 1.4;
+}
+
+/* ===== PROGRESS BAR TRACK ===== */
+.meter {
+  height: 10px;
+  position: relative;
+  background: $progressBarBackground;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.dark-mode .meter {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+/* ===== PROGRESS BAR FILL ===== */
+.meter > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
+  background-size: 200% 100%;
+  position: relative;
+  overflow: hidden;
+  animation: progressShimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ===== SKILLS IMAGE ===== */
 .skills-image > img {
-  margin-left: 80px;
+  margin-left: 40px;
   max-width: 90%;
   height: auto;
 }
 
-/* Media Query */
-
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1456px) {
-  .skills-bar {
-    line-height: 4rem;
+  .skill-bars {
+    width: 60%;
   }
   .skills-image {
     display: none;
@@ -59,9 +80,11 @@
   .skills-container {
     flex-direction: column;
   }
-  .skills-bar {
-    line-height: 3rem;
-    margin: 20px;
+  .skill-bars {
+    width: 100%;
+    padding-right: 0;
+    line-height: 1.5;
+    margin: 0 16px;
   }
   .skills-image {
     display: none;
