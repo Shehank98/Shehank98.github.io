@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.27e2e201.css",
-    "main.js": "/static/js/main.ac9477ba.js",
+    "main.css": "/static/css/main.4bf270d6.css",
+    "main.js": "/static/js/main.661f5ca2.js",
     "static/css/487.3eaff9c4.chunk.css": "/static/css/487.3eaff9c4.chunk.css",
     "static/js/487.253957c0.chunk.js": "/static/js/487.253957c0.chunk.js",
     "static/css/990.8698dfba.chunk.css": "/static/css/990.8698dfba.chunk.css",
@@ -20,7 +20,6 @@
     "static/media/slt.png": "/static/media/slt.260c9ac5dcf18e17b25e.png",
     "static/media/ures.jpg": "/static/media/ures.5a0a911238cdd0714c16.jpg",
     "static/media/wijeyaLogo.png": "/static/media/wijeyaLogo.69c864ac32bd2d103631.png",
-    "static/media/manOnTable.svg": "/static/media/manOnTable.8f117eb207e57ed8f89d67d595aceb45.svg",
     "static/media/infotechLogo.jpg": "/static/media/infotechLogo.f2e9fa87a2cb2cf96d47.jpg",
     "static/media/google.png": "/static/media/google.c1e13db31763230e33f1.png",
     "static/media/contactMailDark.svg": "/static/media/contactMailDark.1db650d351729a0f17b4e3104e6a7b7a.svg",
@@ -30,15 +29,15 @@
     "static/media/skill.svg": "/static/media/skill.35a147662ab0a1d15e579690446e0258.svg",
     "index.html": "/index.html",
     "static/media/talksCardBack.svg": "/static/media/talksCardBack.73ed1545d58273ba64b0.svg",
-    "main.27e2e201.css.map": "/static/css/main.27e2e201.css.map",
-    "main.ac9477ba.js.map": "/static/js/main.ac9477ba.js.map",
+    "main.4bf270d6.css.map": "/static/css/main.4bf270d6.css.map",
+    "main.661f5ca2.js.map": "/static/js/main.661f5ca2.js.map",
     "487.3eaff9c4.chunk.css.map": "/static/css/487.3eaff9c4.chunk.css.map",
     "487.253957c0.chunk.js.map": "/static/js/487.253957c0.chunk.js.map",
     "990.8698dfba.chunk.css.map": "/static/css/990.8698dfba.chunk.css.map",
     "990.387f1c62.chunk.js.map": "/static/js/990.387f1c62.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.27e2e201.css",
-    "static/js/main.ac9477ba.js"
+    "static/css/main.4bf270d6.css",
+    "static/js/main.661f5ca2.js"
   ]
 }
