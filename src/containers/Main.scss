@@ -1,7 +1,51 @@
 @import "../_globalColor";
 
+/* ===== LIGHT MODE BASE ===== */
+body {
+  background-color: #f8fafc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== DARK MODE BASE ===== */
 .dark-mode {
   background-color: $darkBackground;
-  color: white;
-  transition: "0.1s";
+  color: $textColorDark;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== SHARED SECTION HEADING STYLES ===== */
+.section-heading {
+  font-size: 2.8rem;
+  font-weight: 800;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: $subTitle;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+/* ===== GLASS CARD MIXIN-LIKE UTILITY ===== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.08);
+}
+
+.dark-mode .glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }

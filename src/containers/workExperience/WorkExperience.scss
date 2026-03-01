@@ -1,19 +1,28 @@
 .experience-cards-div {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 1rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .experience-heading {
-  font-size: 56px;
-  font-weight: 400;
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.25rem;
 }
 
 .experience-container {
   display: flex;
+  flex-direction: column;
   width: 90%;
+  max-width: 1200px;
   padding: 20px 10px;
-  margin: 0px auto;
+  margin: 0 auto;
   margin-top: 2rem;
 }
 
@@ -25,13 +34,13 @@
 
 @media (max-width: 1380px) {
   .experience-heading {
-    font-size: 40px;
+    font-size: 2.2rem;
   }
 }
 
 @media (max-width: 768px) {
   .experience-heading {
-    font-size: 30px;
+    font-size: 1.8rem;
     text-align: center;
   }
 }

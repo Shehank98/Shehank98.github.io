@@ -1,30 +1,27 @@
 @import "../../_globalColor";
 
-/*React-headroom*/
+/* ===== HEADROOM WRAPPER ===== */
 .headroom-wrapper {
-  max-height: 100px;
+  max-height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
-/* header */
-
-.dark-menu {
-  background-color: $darkBackground !important;
-  color: $textColorDark;
-}
-
-.dark-menu li a {
-  color: $textColorDark !important;
-}
-
-.dark-menu li a:hover {
-  background-color: $buttonColor !important;
-}
-
+/* ===== HEADER BASE ===== */
 .header {
-  background-color: $lightBackground1;
+  background: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1);
   max-width: 100%;
-  padding: 15px 20px;
-  margin: 0px auto;
+  padding: 0 32px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 20px rgba(99, 102, 241, 0.06);
 }
 
 .header ul {
@@ -32,57 +29,88 @@
   padding: 0;
   list-style: none;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.grey-color {
-  color: $subTitle;
+/* ===== DARK MODE HEADER ===== */
+.dark-menu {
+  background: rgba(10, 15, 30, 0.9) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
+.dark-menu li a {
+  color: $textColorDark !important;
+}
+
+.dark-menu li a:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  color: #a5b4fc !important;
+}
+
+/* ===== NAV LINKS ===== */
 .header li a {
   display: block;
-  padding: 15px 20px;
+  padding: 8px 16px;
   color: $textColor;
   text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
 }
 
 .header li a:hover,
 .header .menu-btn:hover {
-  background-color: $headerHoverBG;
+  background: $headerHoverBG;
+  color: $buttonColor;
+  transform: translateY(-1px);
 }
 
+/* ===== LOGO ===== */
 .header .logo {
   display: block;
   flex: none;
   float: left;
-  font-size: 1.5em;
+  font-size: 1.4em;
   text-decoration: none;
-  margin-top: 10px;
-  line-height: normal;
+  line-height: 1;
 }
 
 .header .logo-name {
-  font-family: "Space Grotesk";
-  font-weight: bold;
-  font-variant-ligatures: no-common-ligatures;
-  -webkit-font-variant-ligatures: no-common-ligatures;
+  font-family: "Agustina Regular", sans-serif;
+  font-weight: 700;
   padding: 0 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
 }
 
-/* menu */
+/* ===== GREY COLOR ===== */
+.grey-color {
+  color: $subTitle;
+}
 
+/* ===== MENU (MOBILE) ===== */
 .header .menu {
   clear: both;
   max-height: 0;
-  transition: max-height 0.2s ease-out;
+  transition: max-height 0.25s ease-out;
 }
 
-/* menu icon */
-
+/* ===== MENU ICON (HAMBURGER) ===== */
 .header .menu-icon {
   cursor: pointer;
   display: inline-block;
   float: right;
-  padding: 28px 20px;
+  padding: 24px 0;
   position: relative;
   user-select: none;
 }
@@ -93,11 +121,13 @@
   height: 2px;
   position: relative;
   transition: background 0.2s ease-out;
-  width: 18px;
+  width: 22px;
+  border-radius: 2px;
 }
 
 .header .menu-icon .navicon-dark {
   background: $textColorDark;
+  border-radius: 2px;
 }
 
 .header .menu-icon .navicon:before,
@@ -109,6 +139,7 @@
   position: absolute;
   transition: all 0.2s ease-out;
   width: 100%;
+  border-radius: 2px;
 }
 
 .header .menu-icon .navicon-dark:before,
@@ -120,24 +151,24 @@
   position: absolute;
   transition: all 0.2s ease-out;
   width: 100%;
+  border-radius: 2px;
 }
 
 .header .menu-icon .navicon:before {
-  top: 5px;
+  top: 6px;
 }
 
 .header .menu-icon .navicon:after {
-  top: -5px;
+  top: -6px;
 }
 
-/* menu btn */
-
+/* ===== MENU BTN ===== */
 .header .menu-btn {
   display: none;
 }
 
 .header .menu-btn:checked ~ .menu {
-  max-height: 486px;
+  max-height: 500px;
 }
 
 .header .menu-btn:checked ~ .menu-icon .navicon {
@@ -157,9 +188,8 @@
   top: 0;
 }
 
-/* 48em = 768px */
-
-@media (min-width: 48em) {
+/* ===== DESKTOP LAYOUT ===== */
+@media (min-width: 768px) {
   .header li {
     float: left;
   }
@@ -175,8 +205,48 @@
     display: none;
   }
 }
+
+/* ===== TABLET ===== */
 @media (max-width: 960px) and (min-width: 768px) {
   .header {
-    font-size: 12px;
+    font-size: 0.85rem;
+    padding: 0 20px;
+  }
+  .header li a {
+    padding: 6px 12px;
+  }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .header {
+    height: 60px;
+    padding: 0 20px;
+  }
+
+  .dark-menu li {
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+  }
+
+  .header .menu {
+    background: rgba(248, 250, 252, 0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+    padding: 8px 0;
+  }
+
+  .dark-menu .menu {
+    background: rgba(10, 15, 30, 0.97) !important;
+  }
+
+  .header li a {
+    padding: 12px 20px;
+    border-radius: 0;
+    font-size: 1rem;
+  }
+
+  .header li a:hover {
+    transform: none;
+    padding-left: 28px;
   }
 }

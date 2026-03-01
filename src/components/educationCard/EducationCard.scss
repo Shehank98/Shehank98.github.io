@@ -1,89 +1,152 @@
 @import "../../_globalColor";
 
+/* ===== EDUCATION CARD WRAPPER ===== */
 .education-card {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 0;
 }
 
+.dark-mode .education-card {
+  background: #0f172a;
+  border-color: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.education-card:hover {
+  transform: translateX(6px);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.14);
+}
+
+.dark-mode .education-card:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.12);
+}
+
+/* ===== SEPARATOR BORDER ===== */
 .education-card:hover + .education-card-border {
   border-color: $educationCardBorder;
   width: 100%;
-  -webkit-transition: width 0.6s ease-in-out;
-  -moz-transition: width 0.6s ease-in-out;
-  -o-transition: width 0.6s ease-in-out;
-  transition: width 0.6s ease-in-out;
+  transition: width 0.5s ease-in-out;
 }
 
 .education-card-border {
-  height: 30px;
+  height: 24px;
   width: 80%;
-  border-top: 2px solid $lightBorder1;
-  margin-bottom: 20px;
-  -webkit-transition: width 0.6s ease-in-out;
-  -moz-transition: width 0.6s ease-in-out;
-  -o-transition: width 0.6s ease-in-out;
-  transition: width 0.6s ease-in-out;
+  border-top: 2px solid rgba(99, 102, 241, 0.12);
+  margin-bottom: 16px;
+  transition: width 0.5s ease-in-out;
 }
 
+/* ===== SCHOOL LOGO ===== */
+.education-roundedimg {
+  object-fit: cover;
+  margin-right: 1.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 3px solid rgba(99, 102, 241, 0.15);
+  background: #fff;
+  transition: transform 0.3s ease;
+}
+
+.education-card:hover .education-roundedimg {
+  transform: scale(1.05);
+}
+
+/* ===== CARD HEAD ===== */
 .education-head {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
+/* ===== CARD RIGHT SIDE ===== */
+.education-card-right {
+  max-width: 70%;
+  flex: 1;
+}
+
+/* ===== TEXT STYLES ===== */
 .education-text-school {
   margin: 0;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: $titleColor;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  height: 27px;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.education-roundedimg {
-  object-fit: cover;
-  margin-right: 2rem;
-  width: 6rem;
-  height: 6rem;
-  box-shadow: 0 0.5rem 1rem $lightBoxShadowDarker;
-  border-radius: 50%;
-}
-
-.education-card-right {
-  max-width: 70%;
+.dark-mode .education-text-school {
+  background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .education-text-subHeader {
   color: $textColor;
   font-weight: 700;
-  font-size: 19px;
-  margin: 0px;
-  padding-top: 0.8rem;
-  line-height: normal;
+  font-size: 0.95rem;
+  margin: 0;
+  padding-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.dark-mode .education-text-subHeader {
+  color: $textColorDark;
 }
 
 .education-text-duration {
-  color: $titleColor;
-  font-size: 19px;
-  margin: 0px;
-  padding-top: 0.5rem;
+  color: $buttonColor;
+  font-size: 0.8rem;
+  margin: 0;
+  padding-top: 0.4rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .education-text-desc {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  color: $subTitle;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.dark-mode .education-text-desc {
+  color: rgba(241, 245, 249, 0.7);
 }
 
 .education-text-bullets > ul {
   margin-top: 0.5rem;
+  color: $subTitle;
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
-/* Media Query */
-
+/* ===== RESPONSIVE: TABLET ===== */
 @media (max-width: 1380px) {
   .education-card {
     flex-direction: column;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
   }
   .education-card-right {
     max-width: 90%;
@@ -92,27 +155,29 @@
     width: 90%;
   }
   .education-text-subHeader {
-    padding-top: 0.5rem;
-    font-size: 16px;
+    padding-top: 0.4rem;
+    font-size: 0.9rem;
   }
   .education-text-school {
-    font-size: 20px;
-    height: 23px;
+    font-size: 1.1rem;
+    white-space: normal;
   }
   .education-text-duration {
-    font-size: 16px;
+    font-size: 0.75rem;
   }
   .education-roundedimg {
-    width: 4rem;
-    height: 4rem;
-    margin-bottom: 0.5rem;
-    margin-right: 0px;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: 0.75rem;
+    margin-right: 0;
   }
 }
 
+/* ===== RESPONSIVE: MOBILE ===== */
 @media (max-width: 768px) {
   .education-card {
     text-align: center;
+    align-items: center;
   }
   .education-card-right {
     max-width: 100%;
@@ -121,14 +186,15 @@
     width: 100%;
   }
   .education-roundedimg {
-    margin-top: 10px;
+    margin-top: 0;
     width: 4rem;
     height: 4rem;
     margin-bottom: 1rem;
     margin-right: 0;
   }
   .education-text-bullets > ul {
-    max-width: 80%;
+    max-width: 85%;
     margin: auto;
+    text-align: left;
   }
 }

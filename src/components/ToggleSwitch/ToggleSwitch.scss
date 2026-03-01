@@ -19,9 +19,9 @@ input {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $toggleSwitchSliderBG;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  background: $toggleSwitchSliderBG;
+  transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.12);
 }
 
 .slider::before {
@@ -37,11 +37,11 @@ input {
 }
 
 input:checked + .slider {
-  background-color: $toggleCheck;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
 }
 
 input:focus + .slider {
-  box-shadow: $toggleCheck;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
 input:checked + .slider::before,

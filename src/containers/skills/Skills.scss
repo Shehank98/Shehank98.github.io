@@ -1,151 +1,168 @@
 @import "../../_globalColor";
 
+/* ===== SKILLS SECTION LAYOUT ===== */
 .skills-main-div {
-display: flex;
-width: 100%;
-overflow: hidden;
-align-items: center;
-gap: 40px;
-}
-
-.skills-text-div {
-margin-left: 50px;
-flex: 1;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  align-items: center;
+  gap: 60px;
 }
 
 .skills-main-div > * {
-flex: 1;
-margin-bottom: 30px;
+  flex: 1;
+  margin-bottom: 30px;
 }
 
-/* Control Lottie Animation Size Here */
-.skills-image-div {
-max-width: 500px;
-width: 100%;
-height: auto;
-display: flex;
-justify-content: center;
-align-items: center;
-flex: 1;
-
-> div {
-  max-width: 100%;
-  max-height: 500px;
-}
-}
-
-.skills-image-div > img {
-max-width: 100%;
-height: auto;
+/* ===== SKILLS TEXT ===== */
+.skills-text-div {
+  margin-left: 20px;
+  flex: 1;
 }
 
 .skills-heading {
-font-size: 56px;
-font-weight: 700;
-color: #ffffff !important;
-line-height: 1.2;
-background: linear-gradient(135deg, #ffffff, #e0e7ff);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-margin-bottom: 20px;
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .subTitle {
-color: $subTitle;
+  color: $subTitle;
 }
 
 .skills-text-subtitle {
-font-size: 18px;
-color: rgba(255, 255, 255, 0.8) !important;
-line-height: 1.6;
-margin-bottom: 30px;
+  font-size: 0.85rem;
+  color: $subTitle;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
 .skills-text {
-font-size: 16px;
-color: rgba(255, 255, 255, 0.75) !important;
-line-height: 1.7;
-margin-bottom: 15px;
-position: relative;
-padding-left: 25px;
+  font-size: 0.95rem;
+  color: $cardSubtitle;
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-left: 1.5rem;
+  transition: color 0.2s ease;
 
-&::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 10px;
-  width: 8px;
-  height: 8px;
-  background: linear-gradient(135deg, #55198b, #667eea);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(85, 25, 139, 0.4);
-}
-}
-
-/* Media Query */
-@media (max-width: 1380px) {
-.skills-heading {
-  font-size: 40px;
-}
-
-.skills-image-div {
-  max-width: 400px;
-  
-  > div {
-    max-height: 400px;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 7px;
+    height: 7px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
   }
 }
+
+.dark-mode .skills-text {
+  color: rgba(241, 245, 249, 0.8);
 }
 
-@media (max-width: 768px) {
-.skills-heading {
-  font-size: 30px;
-  text-align: center;
-}
-
-.greeting-text-p {
-  font-size: 16px;
-  line-height: normal;
-}
-
-.skills-main-div {
-  flex-direction: column;
-  gap: 20px;
-}
-
-.skills-text-div {
-  margin-left: 0px;
-  margin: 20px;
-}
-
-.skills-text {
-  font-size: 16px;
-}
-
-.skills-text-subtitle {
-  font-size: 16px;
-  text-align: center;
-}
-
+/* ===== LOTTIE ANIMATION ===== */
 .skills-image-div {
-  order: 2;
-  max-width: 350px;
+  max-width: 480px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
   > div {
-    max-height: 350px;
+    max-width: 100%;
+    max-height: 480px;
+    position: relative;
+    z-index: 1;
   }
 }
+
+.skills-image-div > img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== RESPONSIVE: TABLET ===== */
+@media (max-width: 1380px) {
+  .skills-heading {
+    font-size: 2.4rem;
+  }
+
+  .skills-image-div {
+    max-width: 380px;
+    > div {
+      max-height: 380px;
+    }
+  }
+}
+
+/* ===== RESPONSIVE: MOBILE ===== */
+@media (max-width: 768px) {
+  .skills-main-div {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .skills-text-div {
+    margin-left: 0;
+    margin: 16px;
+    text-align: center;
+  }
+
+  .skills-heading {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .skills-text-subtitle {
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  .skills-text {
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .skills-image-div {
+    order: 2;
+    max-width: 300px;
+    height: auto;
+    margin: 0 auto;
+    > div {
+      max-height: 300px;
+    }
+  }
 }
 
 @media (max-width: 320px) {
-.skills-image-div {
-  max-width: 300px;
-  
-  > div {
-    max-height: 300px;
+  .skills-image-div {
+    max-width: 260px;
+    > div {
+      max-height: 260px;
+    }
   }
-}
 }

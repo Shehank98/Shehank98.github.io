@@ -1,47 +1,60 @@
 @import "../../_globalColor";
 
+/* ===== PRIMARY BUTTON ===== */
 .main-button {
-  background-color: $buttonColor;
-  border: solid 1px $buttonColor;
-  color: $textColorDark;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: 2px solid transparent;
+  color: #ffffff;
   font-weight: 700;
   width: max-content;
-  padding: 13px 22px;
-  margin-right: 50px;
+  padding: 13px 28px;
+  margin-right: 0;
   text-transform: uppercase;
-  border-radius: 6px;
+  border-radius: 12px;
   text-align: center;
   text-decoration: none;
-  display: block;
-  margin-top: 20px;
-  font-size: 1rem;
+  display: inline-block;
+  margin-top: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
 }
+
 .main-button:hover {
-  background-color: $darkBoxShadow2;
-  color: $buttonColor;
-  transition: all 0.3s ease 0s;
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
 }
+
+.main-button:active {
+  transform: translateY(-1px);
+}
+
+/* ===== PROJECT BUTTON ===== */
 .project-button {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
 }
+
 .project-button > .main-button {
   margin-right: 0 !important;
 }
-/* Media Query */
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .main-button {
-    font-size: 0.938rem;
-    padding: 12px 18px;
-    margin-right: 0px;
+    font-size: 0.82rem;
+    padding: 12px 22px;
+    margin-right: 0;
   }
 }
+
 @media (max-width: 320px) {
   .main-button {
     font-size: 0.75rem;
+    padding: 10px 18px;
   }
 }

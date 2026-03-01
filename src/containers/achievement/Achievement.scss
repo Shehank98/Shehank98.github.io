@@ -1,23 +1,33 @@
 @import "../../_globalColor";
 
+/* ===== ACHIEVEMENT SECTION HEADINGS ===== */
 .achievement-heading {
-  font-size: 56px;
-  font-weight: 400;
-  line-height: normal;
-  margin: 0px;
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
 }
 
 .achievement-subtitle {
   text-transform: uppercase;
-  margin: 0px;
-  margin-bottom: 50px;
+  margin: 0;
+  margin-bottom: 40px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: $subTitle;
 }
 
 .subTitle {
   color: $subTitle;
 }
 
-/* Swiper Slider */
+/* ===== SWIPER SLIDER ===== */
 .achievement-swiper {
   padding: 20px 0 60px 0;
   overflow: hidden;
@@ -37,7 +47,6 @@
   display: flex;
 }
 
-/* Force all AchievementCards to same height */
 .achievement-card-wrapper > div {
   height: 100%;
   width: 100%;
@@ -45,43 +54,42 @@
   flex-direction: column;
 }
 
-/* Optional: If you control AchievementCard styles, ensure this inside it */
+/* ===== ACHIEVEMENT CARD ===== */
 .achievement-card {
   display: flex;
   flex-direction: column;
-  height: 520px; /* Uniform height */
-  transition: all 0.3s ease;
+  height: 500px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .achievement-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-10px);
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1380px) {
   .achievement-heading {
-    font-size: 40px;
+    font-size: 2.2rem;
   }
 }
 
 @media (max-width: 768px) {
   .achievement-heading {
-    font-size: 30px;
+    font-size: 1.8rem;
     text-align: center;
   }
   .achievement-subtitle {
-    font-size: 16px;
-    line-height: normal;
+    font-size: 0.78rem;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
   }
-
   .achievement-card {
     height: 480px;
   }
-
   .achievement-swiper {
-    padding: 20px 0 40px 0;
+    padding: 16px 0 40px 0;
   }
 }
 

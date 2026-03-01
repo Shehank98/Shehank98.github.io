@@ -1,7 +1,10 @@
 @import "../../_globalColor";
 
+/* ===== CONTACT SECTION ===== */
 .contact-div-main {
   display: flex;
+  align-items: center;
+  gap: 40px;
 }
 
 .dark-mode a {
@@ -12,75 +15,128 @@
   flex: 1;
 }
 
+/* ===== CONTACT TITLE ===== */
 .contact-title {
-  font-size: 65px;
-  font-weight: 400;
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
 }
 
+/* ===== SUBTITLE ===== */
+.contact-subtitle {
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  color: $subTitle;
+}
+
+/* ===== CONTACT DETAILS ===== */
 .contact-detail,
 .contact-detail-email {
-  margin-top: 20px;
-  font-size: 40px;
-  font-weight: 400;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: $subTitle;
   text-decoration: none;
+  display: inline-block;
+  transition: all 0.25s ease;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    transition: width 0.3s ease;
+    border-radius: 1px;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
 }
 
 .contact-detail:hover,
 .contact-detail-email:hover {
-  color: $textColor;
-  text-shadow: 2px 1px 2px $contactDetailHoverTS;
-  transition: all 0.3s;
+  color: $buttonColor;
+  transform: translateX(4px);
 }
 
-.contact-subtitle {
-  text-transform: uppercase;
+.dark-mode .contact-detail:hover,
+.dark-mode .contact-detail-email:hover {
+  color: #a5b4fc;
 }
 
+/* ===== CONTACT TEXT DIV ===== */
 .contact-text-div {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
 .contact-margin-top {
-  margin-top: 4rem;
+  margin-top: 3rem;
 }
 
+/* ===== LOTTIE IMAGE ===== */
 .contact-image-div > img {
   max-width: 100%;
   height: auto;
   margin-left: 1.5rem;
-  margin-top: -4rem;
+  margin-top: -3rem;
 }
 
-/* Media Query */
-@media (max-width: 1380px), (max-width: 768px) {
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1380px) {
   .contact-title {
-    font-size: 56px;
-    font-weight: 400;
+    font-size: 2.2rem;
     text-align: center;
   }
-
-  .contact-title {
-    font-size: 40px;
-    text-align: center;
-  }
-
   .contact-subtitle {
-    font-size: 16px;
+    font-size: 0.78rem;
+    text-align: center;
+  }
+  .contact-text-div {
+    text-align: center;
+  }
+  .contact-detail,
+  .contact-detail-email {
+    font-size: 1.2rem;
+  }
+  .contact-image-div {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-div-main {
+    flex-direction: column;
+  }
+  .contact-title {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  .contact-subtitle {
+    font-size: 0.75rem;
     line-height: normal;
     text-align: center;
   }
-
   .contact-text-div {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
-
   .contact-detail,
   .contact-detail-email {
-    font-size: 20px;
+    font-size: 1.05rem;
   }
-
   .contact-image-div {
     display: none;
   }

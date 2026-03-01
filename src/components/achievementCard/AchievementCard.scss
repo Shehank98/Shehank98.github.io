@@ -1,77 +1,149 @@
 @import "../../_globalColor";
 
-.card-image {
-  max-width: 100%;
-  height: auto;
-  width: 250px;
-}
-.card-title {
-  color: $titleColor;
-  font-size: 1.375rem;
-  line-height: 24px;
-  font-weight: 700;
-  margin: 15px 0 0 0;
-}
-.card-subtitle {
-  color: $cardSubtitle;
-  font-size: 1.063rem;
-  line-height: 1.5rem;
-}
+/* ===== CERTIFICATE CARD ===== */
 .certificate-card {
-  background-color: $lightBackground2;
-  box-shadow: $lightBoxShadowDark 0px 10px 30px -15px;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
   padding: 1.5rem;
-  border-radius: 10px;
-  border: 1px solid $lightBorder1;
-  -webkit-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 20px 20px 0 0;
+  }
 }
-.certificate-detail-div {
-  text-align: center;
-}
+
 .certificate-card:hover {
-  box-shadow: $lightBoxShadowDark 0px 20px 30px -10px;
+  transform: translateY(-10px);
+  box-shadow: 0 20px 48px rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.3);
+
+  &::before {
+    opacity: 1;
+  }
 }
+
+/* ===== DARK MODE CARD ===== */
+.dark-mode.certificate-card {
+  background: #0f172a;
+  border-color: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
 .dark-mode.certificate-card:hover {
-  box-shadow: $achievementCertificateCardHoverDark 0px 20px 30px -10px;
+  box-shadow: 0 20px 48px rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
 }
+
+/* ===== CARD IMAGE ===== */
 .certificate-image-div {
   position: relative;
-  height: 250px;
+  height: 220px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
 }
-.achievement-cards-div {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem 1rem;
+
+.card-image {
+  max-width: 100%;
+  height: auto;
+  width: 200px;
+  object-fit: contain;
+  transition: transform 0.4s ease;
 }
+
+.certificate-card:hover .card-image {
+  transform: scale(1.06);
+}
+
+/* ===== CARD DETAIL ===== */
+.certificate-detail-div {
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  color: $titleColor;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 800;
+  margin: 12px 0 0 0;
+  letter-spacing: -0.01em;
+}
+
+.dark-mode .card-title {
+  color: $textColorDark;
+}
+
+.card-subtitle {
+  color: $cardSubtitle;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.dark-mode .card-subtitle {
+  color: rgba(241, 245, 249, 0.6);
+}
+
+/* ===== CARD FOOTER (TAGS) ===== */
 .certificate-card-footer {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: auto;
+  gap: 0.4rem;
 }
+
 .certificate-card-footer span.certificate-tag {
-  background: $buttonColor;
-  color: $lightBackground3;
-  vertical-align: middle;
-  align-items: center;
-  border-radius: 4px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  border-radius: 20px;
   display: inline-flex;
   font-size: 0.75rem;
-  height: 2em;
+  height: auto;
+  align-items: center;
   justify-content: center;
   white-space: nowrap;
-  line-height: 1.5;
-  margin: 0 0.5rem 0.5rem 0;
-  padding: 0 0.75em;
+  line-height: 1;
+  padding: 5px 12px;
   cursor: pointer;
-  transition: 0.2s ease-in;
+  transition: all 0.25s ease;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
 }
+
 span.certificate-tag:hover {
-  background: $buttonHover;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+/* ===== ACHIEVEMENT CARDS GRID ===== */
+.achievement-cards-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
 }
