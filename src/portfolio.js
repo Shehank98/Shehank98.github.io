@@ -26,8 +26,11 @@ const greeting = {
     "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions"
   ),
   resumeLink:
-    "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing", // Set to empty to hide the button
-  displayGreeting: true // Set false to hide this section, defaults to true
+    "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
+  // To show your photo: place image in src/assets/images/ and set below:
+  // profileImage: require("./assets/images/profile.jpg"),
+  profileImage: null,
+  displayGreeting: true
 };
 
 // Social Media Links

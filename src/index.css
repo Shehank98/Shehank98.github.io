@@ -27,11 +27,19 @@ html, body {
 
 body {
   margin: 0;
-  font: 18px / 1.6 "Montserrat", sans-serif;
+  font: 16px / 1.65 "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f8fafc;
+  background-image: radial-gradient(rgba(99, 102, 241, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: #1e293b;
+}
+
+/* Dark mode strips the dot pattern — solid deep navy instead */
+.dark-mode body,
+body.dark-body {
+  background-image: none;
 }
 
 /* Custom Scrollbar */
@@ -63,13 +71,19 @@ body {
 /* Media Query */
 @media (max-width: 1380px) {
   html, body {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.65;
   }
 }
 
 @media (max-width: 768px) {
   html, body {
-    font-size: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html, body {
+    font-size: 13.5px;
   }
 }

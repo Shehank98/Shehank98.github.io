@@ -5,7 +5,7 @@
 }
 
 .experience-heading {
-  font-size: 2.8rem;
+  font-size: 2.2rem;
   font-weight: 800;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
@@ -33,14 +33,25 @@
 /* Media Query */
 
 @media (max-width: 1380px) {
-  .experience-heading {
-    font-size: 2.2rem;
+  .experience-heading { font-size: 1.9rem; }
+}
+
+@media (max-width: 1024px) {
+  .experience-heading { font-size: 1.7rem; }
+  .experience-cards-div {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
   }
 }
 
 @media (max-width: 768px) {
   .experience-heading {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-align: center;
+  }
+  .experience-cards-div {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
   }
 }

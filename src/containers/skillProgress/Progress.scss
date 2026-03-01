@@ -79,12 +79,17 @@
 @media (max-width: 768px) {
   .skills-container {
     flex-direction: column;
+    padding: 10px 0;
   }
   .skill-bars {
     width: 100%;
     padding-right: 0;
     line-height: 1.5;
-    margin: 0 16px;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  .skill {
+    margin-bottom: 1.25rem;
   }
   .skills-image {
     display: none;
