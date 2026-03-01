@@ -21,7 +21,7 @@
 }
 
 .skills-heading {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 800;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
@@ -108,13 +108,28 @@
 /* ===== RESPONSIVE: TABLET ===== */
 @media (max-width: 1380px) {
   .skills-heading {
-    font-size: 2.4rem;
+    font-size: 1.9rem;
   }
-
+  .skills-main-div {
+    gap: 36px;
+  }
   .skills-image-div {
-    max-width: 380px;
+    max-width: 360px;
     > div {
-      max-height: 380px;
+      max-height: 360px;
+    }
+  }
+}
+
+/* ===== RESPONSIVE: TABLET (1024px) ===== */
+@media (max-width: 1024px) {
+  .skills-heading {
+    font-size: 1.7rem;
+  }
+  .skills-image-div {
+    max-width: 300px;
+    > div {
+      max-height: 300px;
     }
   }
 }
@@ -123,46 +138,44 @@
 @media (max-width: 768px) {
   .skills-main-div {
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
-
   .skills-text-div {
     margin-left: 0;
-    margin: 16px;
+    margin: 0 12px;
     text-align: center;
   }
-
   .skills-heading {
-    font-size: 2rem;
+    font-size: 1.6rem;
     text-align: center;
   }
-
   .skills-text-subtitle {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     text-align: center;
   }
-
   .skills-text {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     text-align: left;
   }
-
   .skills-image-div {
     order: 2;
-    max-width: 300px;
+    max-width: 270px;
     height: auto;
     margin: 0 auto;
     > div {
-      max-height: 300px;
+      max-height: 270px;
     }
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 480px) {
+  .skills-heading {
+    font-size: 1.45rem;
+  }
   .skills-image-div {
-    max-width: 260px;
+    max-width: 230px;
     > div {
-      max-height: 260px;
+      max-height: 230px;
     }
   }
 }

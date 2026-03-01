@@ -1,5 +1,5 @@
 .education-heading {
-  font-size: 2.8rem;
+  font-size: 2.2rem;
   font-weight: 800;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
@@ -33,28 +33,23 @@
 }
 
 @media (max-width: 1380px) {
-  .education-card-container {
-    padding-top: 0;
-  }
-  .education-heading {
-    font-size: 2.2rem;
-  }
-  .education-text-subtitle {
-    font-size: 0.85rem;
-    text-align: center;
-  }
+  .education-card-container { padding-top: 0; }
+  .education-heading { font-size: 1.9rem; }
+  .education-text-subtitle { font-size: 0.82rem; }
+}
+
+@media (max-width: 1024px) {
+  .education-heading { font-size: 1.7rem; }
 }
 
 @media (max-width: 768px) {
-  .education-card-container {
-    padding-top: 0;
-  }
+  .education-card-container { padding-top: 0; }
   .education-heading {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     text-align: center;
   }
   .education-text-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     text-align: center;
   }
 }
