@@ -71,7 +71,7 @@ export default function Blogs() {
           <div className="blog-text-div">
             {blogSection.displayMediumBlogs !== "true" ||
             !Array.isArray(mediumBlogs)
-              ? blogSection.blogs.map((blog, i) => {
+              ? (blogSection.blogs || []).map((blog, i) => {
                   return (
                     <BlogCard
                       key={i}
