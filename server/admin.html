@@ -183,34 +183,51 @@
         const lbl = document.createElement("label"); lbl.textContent = key;
         wrap.appendChild(lbl);
 
-        const isImage = IMAGE_KEY.test(key) && (typeof value === "string");
-        const input = LONG_KEY.test(key) ? document.createElement("textarea") : document.createElement("input");
-        input.value = value === null || value === undefined ? "" : value;
-        input.addEventListener("input", () => (obj[key] = input.value));
-        wrap.appendChild(input);
+        // Image fields get an upload control, even when they start empty (null).
+        const isImage = IMAGE_KEY.test(key) && (value === null || value === undefined || typeof value === "string");
 
         if (isImage) {
-          const row = document.createElement("div");
-          row.className = "row"; row.style.marginTop = "6px";
-          const file = document.createElement("input");
-          file.type = "file"; file.accept = "image/*";
           const preview = document.createElement("img");
           preview.className = "imgprev";
           preview.style.display = value ? "block" : "none";
           if (value) preview.src = value;
+
+          const row = document.createElement("div");
+          row.className = "row"; row.style.marginTop = "6px";
+          const file = document.createElement("input");
+          file.type = "file"; file.accept = "image/*";
+
+          const clear = document.createElement("button");
+          clear.type = "button"; clear.className = "btn-ghost"; clear.textContent = "Remove";
+          clear.style.display = value ? "inline-block" : "none";
+          clear.addEventListener("click", () => {
+            obj[key] = null;
+            preview.style.display = "none"; clear.style.display = "none";
+            file.value = "";
+            toast("Image removed — Save to apply");
+          });
+
           file.addEventListener("change", async () => {
             if (!file.files[0]) return;
             try {
               const url = await uploadFile(file.files[0]);
-              obj[key] = url; input.value = url;
+              obj[key] = url;
               preview.src = url; preview.style.display = "block";
+              clear.style.display = "inline-block";
               toast("Image uploaded");
             } catch (err) { toast(err.message, true); }
           });
-          row.appendChild(file);
+          row.append(file, clear);
           wrap.appendChild(row);
           wrap.appendChild(preview);
+          parent.appendChild(wrap);
+          return;
         }
+
+        const input = LONG_KEY.test(key) ? document.createElement("textarea") : document.createElement("input");
+        input.value = value === null || value === undefined ? "" : value;
+        input.addEventListener("input", () => (obj[key] = input.value));
+        wrap.appendChild(input);
         parent.appendChild(wrap);
       }
 
