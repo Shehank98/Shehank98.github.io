@@ -15,6 +15,7 @@ export default function Projects() {
   const {isDark} = useContext(StyleContext);
 
   useEffect(() => {
+    let isMounted = true;
     const getRepoData = () => {
       fetch("/profile.json")
         .then(result => {
@@ -24,16 +25,21 @@ export default function Projects() {
           throw result;
         })
         .then(response => {
-          setrepoFunction(response.data.user.pinnedItems.edges);
+          if (!isMounted) return;
+          setrepoFunction(response?.data?.user?.pinnedItems?.edges ?? "Error");
         })
         .catch(function (error) {
-          console.error(
+          console.warn(
             `${error} (because of this error, nothing is shown in place of Projects section. Also check if Projects section has been configured)`
           );
+          if (!isMounted) return;
           setrepoFunction("Error");
         });
     };
     getRepoData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   function setrepoFunction(array) {
