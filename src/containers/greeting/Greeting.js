@@ -57,8 +57,8 @@ export default function Greeting() {
                   </div>
                 )}
               </div>
-              <span className="float-badge badge-ml">{emoji("🧠")} ML Engineer</span>
-              <span className="float-badge badge-py">{emoji("🐍")} Python</span>
+              <span className="float-badge badge-ml">{emoji("🎯")} Media Buying</span>
+              <span className="float-badge badge-py">{emoji("🤖")} AI & ML</span>
               <span className="float-badge badge-ds">{emoji("📊")} Data Science</span>
             </div>
           </div>

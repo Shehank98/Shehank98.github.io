@@ -11,7 +11,7 @@ module.exports = {
     username: "Shehan Kavishka",
     title: "Hi, I'm Shehan",
     subTitle:
-      "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions",
+      "Senior Media Executive at Ogilvy 🎯 | Blending 7+ years in advertising with Data Science & AI to build smarter media systems",
     resumeLink:
       "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
     profileImage: null,
@@ -33,13 +33,13 @@ module.exports = {
 
   skillsSection: {
     title: "What I do",
-    subTitle: "MACHINE LEARNING • DEEP LEARNING • DATA SCIENCE • AI SOLUTIONS",
+    subTitle: "MEDIA BUYING • CAMPAIGN ANALYTICS • MACHINE LEARNING • AI SOLUTIONS",
     skills: [
-      "Build, train & deploy ML models with scikit-learn & TensorFlow",
-      "Deep learning architectures: CNNs, custom dense networks, fine-tuned models",
-      "Create interactive dashboards & data apps with Streamlit and Power BI",
-      "Data wrangling, EDA, feature engineering & visualization with pandas, Matplotlib",
-      "Deploy ML APIs with FastAPI and manage projects with Git/GitHub"
+      "Plan, buy & optimize multi-channel ad campaigns across TV, radio & press",
+      "Build automation & reconciliation systems that cut media ops from hours to minutes",
+      "Design clean, data-driven dashboards for media buying & campaign performance",
+      "Apply machine learning & deep learning (CNNs, ensemble models) to real-world problems",
+      "Turn raw campaign & business data into decisions with Python, pandas & analytics"
     ],
     softwareSkills: [
       {skillName: "Python", fontAwesomeClassname: "fab fa-python"},
@@ -51,7 +51,8 @@ module.exports = {
       {skillName: "Matplotlib", fontAwesomeClassname: "fas fa-chart-area"},
       {skillName: "Seaborn", fontAwesomeClassname: "fas fa-chart-bar"},
       {skillName: "Streamlit", fontAwesomeClassname: "fas fa-stream"},
-      {skillName: "Jupyter", fontAwesomeClassname: "fas fa-book-open"},
+      {skillName: "Power BI", fontAwesomeClassname: "fas fa-chart-pie"},
+      {skillName: "Google Apps Script", fontAwesomeClassname: "fab fa-google"},
       {skillName: "SQL", fontAwesomeClassname: "fas fa-database"},
       {skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
       {skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
@@ -64,25 +65,26 @@ module.exports = {
     display: true,
     experience: [
       {
-        role: "Media Executive",
-        company: "Ogilvy Media",
+        role: "Senior Media Executive",
+        company: "Ogilvy",
         companylogo: img("ogilvy.png"),
         date: "Aug 2024 – Present",
-        desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems.",
+        desc: "Media buying across TV, radio & press for major brands, while building the data & automation systems that run media operations. Promoted to Senior Media Executive in 2026.",
         descBullets: [
-          "Scheduled monthly commercials across leading TV, radio, and press outlets",
-          "Involved in campaign planning and budgeting for multi-channel media strategies"
+          "Managed SLT-Mobitel Print, Radio & TV campaigns end-to-end — planning, buying, reconciliation, invoicing & client reporting",
+          "Built Ogilvy Nova, an automated media reconciliation system that cuts ad verification from hours to minutes",
+          "Developed Ogilvy Orbit, clean operational dashboards for managing media buying & campaign performance"
         ]
       },
       {
         role: "Scheduling Officer",
         company: "Wijeya Newspapers Ltd",
         companylogo: img("wijeyaLogo.png"),
-        date: "Sep 2019 – Aug 2024",
-        desc: "Managed advertising scheduling and workflows",
+        date: "Sep 2019 – Aug 2024 · 5 yrs",
+        desc: "Managed advertising scheduling and workflows for Sri Lanka's leading publications.",
         descBullets: [
-          "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror and other publications",
-          "Handled advertisement artworks maintaining quality and consistency across daily releases"
+          "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror, Sunday Lankadeepa & Deshaya",
+          "Handled ad artworks and coordinated rates, working with clients across Sri Lanka"
         ]
       },
       {
@@ -106,9 +108,23 @@ module.exports = {
 
   bigProjects: {
     title: "Featured Projects",
-    subtitle: "Research & production-grade ML/AI systems",
+    subtitle: "Media-tech systems & production-grade ML/AI — where advertising meets data",
     display: true,
     projects: [
+      {
+        image: img("recon.jfif"),
+        projectName: "Ogilvy Nova — Media Reconciliation System",
+        projectDesc:
+          "Automated reconciliation platform for media operations at Ogilvy. Matches scheduled advertisements against broadcast & publication data, cutting ad verification from hours to ~10 minutes. Built for scale with a clean, professional interface tailored to real media workflows.",
+        footerLink: [{name: "Ogilvy", url: "https://www.linkedin.com/in/shehan-kavishka/"}]
+      },
+      {
+        image: img("rate.png"),
+        projectName: "Ogilvy Orbit — Media Buying Operations Dashboard",
+        projectDesc:
+          "Operations dashboards for managing media buying at Ogilvy — tracking campaigns, placements and performance in one clean, professional interface. Streamlines day-to-day media operations, reconciliation and reporting for the team.",
+        footerLink: [{name: "Ogilvy", url: "https://www.linkedin.com/in/shehan-kavishka/"}]
+      },
       {
         image: img("brain.png"),
         projectName: "Brain Tumor Classification - Ensemble Learning Research",
