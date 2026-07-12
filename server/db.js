@@ -16,6 +16,13 @@ db.exec(`
     data    TEXT NOT NULL,
     updated INTEGER NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS messages (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    name    TEXT NOT NULL,
+    email   TEXT NOT NULL,
+    message TEXT NOT NULL,
+    created INTEGER NOT NULL
+  );
 `);
 
 const getStmt = db.prepare("SELECT data FROM content WHERE section = ?");
@@ -51,4 +58,31 @@ function deleteSection(section) {
   delStmt.run(section);
 }
 
-module.exports = {DATA_DIR, getSection, getAllSections, setSection, deleteSection};
+const insertMsgStmt = db.prepare(
+  "INSERT INTO messages (name, email, message, created) VALUES (?, ?, ?, ?)"
+);
+const listMsgStmt = db.prepare(
+  "SELECT id, name, email, message, created FROM messages ORDER BY created DESC LIMIT 200"
+);
+const delMsgStmt = db.prepare("DELETE FROM messages WHERE id = ?");
+
+function addMessage({name, email, message}) {
+  insertMsgStmt.run(name, email, message, Date.now());
+}
+function listMessages() {
+  return listMsgStmt.all();
+}
+function deleteMessage(id) {
+  delMsgStmt.run(id);
+}
+
+module.exports = {
+  DATA_DIR,
+  getSection,
+  getAllSections,
+  setSection,
+  deleteSection,
+  addMessage,
+  listMessages,
+  deleteMessage
+};

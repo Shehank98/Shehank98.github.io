@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Header from "../components/header/Header";
 import Greeting from "./greeting/Greeting";
+import Stats from "./stats/Stats";
+import About from "./about/About";
 import Skills from "./skills/Skills";
 import StackProgress from "./skillProgress/skillProgress";
 import WorkExperience from "./workExperience/WorkExperience";
-import Projects from "./projects/Projects";
 import StartupProject from "./StartupProjects/StartupProject";
 import Achievement from "./achievement/Achievement";
 import Honors from "./honors/Honors";
@@ -15,9 +16,11 @@ import Footer from "../components/footer/Footer";
 import Talks from "./talks/Talks";
 import Podcast from "./podcast/Podcast";
 import Education from "./education/Education";
+import Languages from "./languages/Languages";
+import Resume from "./resume/Resume";
 import ScrollToTopButton from "./topbutton/Top";
 import Twitter from "./twitter-embed/twitter";
-import Profile from "./profile/Profile";
+import Contact from "./contact/Contact";
 import SplashScreen from "./splashScreen/SplashScreen";
 import {splashScreen} from "../portfolio";
 import {StyleProvider} from "../contexts/StyleContext";
@@ -55,25 +58,28 @@ const Main = () => {
           <>
             <Header />
             <Greeting />
+            <Stats />
+            <About />
+            <WorkExperience />
+            <StartupProject />
             <Skills />
             <StackProgress />
             <Education />
-            <WorkExperience />
-            <Projects />
-            <StartupProject />
             <Achievement />
             <Honors />
-            <Blogs />
             {linkedinRecommendations.display && (
               <LinkedinRecommendations
                 recommendations={linkedinRecommendations.recommendations}
                 isDark={isDark}
               />
             )}
+            <Blogs />
+            <Languages />
+            <Resume />
             <Talks />
             <Twitter />
             <Podcast />
-            <Profile />
+            <Contact />
             <Footer />
             <ScrollToTopButton />
           </>

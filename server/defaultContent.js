@@ -229,10 +229,42 @@ module.exports = {
     ]
   },
 
+  aboutSection: {
+    title: "About Me",
+    paragraphs: [
+      "Senior Media Executive at Ogilvy, driving campaigns across TV, radio and press while integrating data and strategy to maximize performance.",
+      "Currently pursuing a BSc in Data Science (London Metropolitan University), backed by an HND in Data Analytics — applying analytical thinking to real business challenges.",
+      "Recognized on the global stage as Sri Lanka's first-ever Grand Award winner at the Intel ISEF in the USA. Now focused on leveraging AI and machine learning to transform the media industry — unlocking insights, improving efficiency, and driving smarter, data-led decisions.",
+      "Open to remote and relocation opportunities worldwide."
+    ],
+    display: true
+  },
+
+  statsSection: {
+    display: true,
+    stats: [
+      {value: "7+", label: "Years in Media"},
+      {value: "98.2%", label: "ML Model Accuracy"},
+      {value: "40+", label: "Hrs/Week Automated"},
+      {value: "ISEF", label: "Grand Award Winner"}
+    ]
+  },
+
+  languagesSection: {
+    title: "Languages",
+    display: true,
+    languages: [
+      {name: "English", level: "Professional working proficiency"},
+      {name: "Sinhala", level: "Native / bilingual"},
+      {name: "Tamil", level: "Limited working proficiency"}
+    ]
+  },
+
   resumeSection: {
     title: "Resume",
-    subtitle: "Download my resume",
-    resumeLink: "",
+    subtitle: "Grab a copy of my full CV",
+    resumeLink:
+      "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
     display: true
   },
 

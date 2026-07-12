@@ -6,7 +6,15 @@ const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 
-const {DATA_DIR, getAllSections, setSection, deleteSection} = require("./db");
+const {
+  DATA_DIR,
+  getAllSections,
+  setSection,
+  deleteSection,
+  addMessage,
+  listMessages,
+  deleteMessage
+} = require("./db");
 const defaults = require("./defaultContent");
 
 const app = express();
@@ -87,6 +95,32 @@ app.get("/api/me", requireAuth, (req, res) => res.json({ok: true}));
 // --- Public content: only sections that have been explicitly saved ---------
 app.get("/api/content", (req, res) => {
   res.json(getAllSections());
+});
+
+// --- Public: contact form submissions --------------------------------------
+app.post("/api/contact", (req, res) => {
+  const {name, email, message} = req.body || {};
+  const str = v => typeof v === "string" && v.trim().length > 0;
+  if (!str(name) || !str(email) || !str(message)) {
+    return res.status(400).json({error: "All fields are required"});
+  }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return res.status(400).json({error: "Invalid email"});
+  }
+  if (name.length > 200 || email.length > 200 || message.length > 5000) {
+    return res.status(400).json({error: "Input too long"});
+  }
+  addMessage({name: name.trim(), email: email.trim(), message: message.trim()});
+  res.json({ok: true});
+});
+
+app.get("/api/admin/messages", requireAuth, (req, res) => {
+  res.json(listMessages());
+});
+
+app.delete("/api/admin/messages/:id", requireAuth, (req, res) => {
+  deleteMessage(Number(req.params.id));
+  res.json({ok: true});
 });
 
 // --- Admin: effective content (defaults overlaid with saved overrides) -----

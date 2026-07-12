@@ -100,6 +100,8 @@
     <script>
       const SECTION_LABELS = {
         greeting: "Greeting & Profile",
+        aboutSection: "About Me",
+        statsSection: "Impact Stats",
         splashScreen: "Splash / Lottie",
         socialMediaLinks: "Social Links",
         skillsSection: "Skills",
@@ -109,6 +111,7 @@
         achievementSection: "Achievements",
         blogSection: "Blogs",
         linkedinRecommendations: "Recommendations",
+        languagesSection: "Languages",
         resumeSection: "Resume",
         contactInfo: "Contact Me"
       };
@@ -316,8 +319,57 @@
           b.addEventListener("click", () => { current = key; renderNav(); renderSection(); });
           nav.appendChild(b);
         });
+        // Messages inbox (contact form submissions)
+        const msg = document.createElement("button");
+        msg.className = "navbtn" + (current === "__messages" ? " active" : "");
+        msg.textContent = "📬 Messages";
+        msg.style.marginTop = "10px";
+        msg.addEventListener("click", () => { current = "__messages"; renderNav(); renderMessages(); });
+        nav.appendChild(msg);
+      }
+
+      async function renderMessages() {
+        $("#sectionTitle").textContent = "Messages";
+        $("#saveBtn").style.display = "none";
+        $("#resetBtn").style.display = "none";
+        const editor = $("#editor");
+        editor.innerHTML = "Loading…";
+        let msgs = [];
+        try { msgs = await api("/api/admin/messages"); }
+        catch (err) { editor.innerHTML = ""; toast(err.message, true); return; }
+        editor.innerHTML = "";
+        if (!msgs.length) {
+          editor.innerHTML = '<p class="hint">No messages yet. Submissions from your site\'s contact form will appear here.</p>';
+          return;
+        }
+        msgs.forEach(m => {
+          const card = document.createElement("div");
+          card.className = "group";
+          const when = new Date(m.created).toLocaleString();
+          const head = document.createElement("div");
+          head.className = "group-head";
+          head.innerHTML = '<span class="title">' + escapeHtml(m.name) +
+            ' &lt;' + escapeHtml(m.email) + '&gt;</span><span class="title">' + when + "</span>";
+          const body = document.createElement("p");
+          body.style.whiteSpace = "pre-wrap";
+          body.style.margin = "0 0 10px";
+          body.textContent = m.message;
+          const del = document.createElement("button");
+          del.className = "btn-danger"; del.textContent = "Delete";
+          del.addEventListener("click", async () => {
+            try { await api("/api/admin/messages/" + m.id, {method: "DELETE"}); renderMessages(); }
+            catch (err) { toast(err.message, true); }
+          });
+          card.append(head, body, del);
+          editor.appendChild(card);
+        });
+      }
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
       }
       function renderSection() {
+        $("#saveBtn").style.display = "";
+        $("#resetBtn").style.display = "";
         $("#sectionTitle").textContent = SECTION_LABELS[current] || current;
         const editor = $("#editor");
         editor.innerHTML = "";

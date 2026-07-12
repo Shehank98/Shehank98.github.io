@@ -19,6 +19,9 @@ const SECTION_MAP = {
   achievementSection: portfolio.achievementSection,
   blogSection: portfolio.blogSection,
   linkedinRecommendations: portfolio.linkedinRecommendations,
+  aboutSection: portfolio.aboutSection,
+  statsSection: portfolio.statsSection,
+  languagesSection: portfolio.languagesSection,
   resumeSection: portfolio.resumeSection,
   contactInfo: portfolio.contactInfo
 };
