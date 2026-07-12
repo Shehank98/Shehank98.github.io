@@ -31,7 +31,7 @@ export default function Blogs() {
             }
           })
           .then(response => {
-            setMediumBlogsFunction(response.items);
+            setMediumBlogsFunction(response?.items ?? "Error");
           })
           .catch(function (error) {
             console.error(
@@ -63,7 +63,7 @@ export default function Blogs() {
         <div className="blog-main-div">
           <div className="blog-text-div">
             {blogSection.displayMediumBlogs !== "true" ||
-            mediumBlogs === "Error"
+            !Array.isArray(mediumBlogs)
               ? blogSection.blogs.map((blog, i) => {
                   return (
                     <BlogCard
