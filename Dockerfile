@@ -1,29 +1,34 @@
-# This file is the main docker file configurations
+# This file is the main docker file configuration
 
-# Official Node JS runtime as a parent image
-FROM node:20.0-alpine
+# Debian-based Node image (glibc) so better-sqlite3 installs from prebuilt
+# binaries without a native toolchain.
+FROM node:20-bookworm-slim
 
 # Set the working directory to ./app
 WORKDIR /app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# git is used by some build steps; build tools are a fallback for native modules.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends git python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install app dependencies first for better layer caching
 COPY package.json ./
 
-RUN apk add --no-cache git
-
-# Install any needed packages
 RUN npm install
-
-# Audit fix npm packages
-RUN npm audit fix
 
 # Bundle app source
 COPY . /app
 
-# Make port 3000 available to the world outside this container
-EXPOSE 3000
+# Create the optimized production build (served by the Express server)
+RUN npx react-scripts build
 
-# Run app.js when the container launches
-CMD ["npm", "start"]
+# Railway routes public traffic to this port
+EXPOSE 8080
+
+# Persist content + uploads on a Railway Volume mounted at /app/data.
+ENV DATA_DIR=/app/data
+
+# At container start: fetch live GitHub/Medium data (writes into build/), then
+# run the Express server which serves the site, the /admin UI, and the content API.
+CMD ["sh", "-c", "node fetch.js && node server/server.js"]

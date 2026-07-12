@@ -22,6 +22,7 @@ export default function Blogs() {
       : NaN;
   }
   useEffect(() => {
+    let isMounted = true;
     if (blogSection.displayMediumBlogs === "true") {
       const getProfileData = () => {
         fetch("/blogs.json")
@@ -29,20 +30,26 @@ export default function Blogs() {
             if (result.ok) {
               return result.json();
             }
+            throw result;
           })
           .then(response => {
-            setMediumBlogsFunction(response.items);
+            if (!isMounted) return;
+            setMediumBlogsFunction(response?.items ?? "Error");
           })
           .catch(function (error) {
-            console.error(
+            console.warn(
               `${error} (because of this error Blogs section could not be displayed. Blogs section has reverted to default)`
             );
+            if (!isMounted) return;
             setMediumBlogsFunction("Error");
             blogSection.displayMediumBlogs = "false";
           });
       };
       getProfileData();
     }
+    return () => {
+      isMounted = false;
+    };
   }, []);
   if (!blogSection.display) {
     return null;
@@ -63,8 +70,8 @@ export default function Blogs() {
         <div className="blog-main-div">
           <div className="blog-text-div">
             {blogSection.displayMediumBlogs !== "true" ||
-            mediumBlogs === "Error"
-              ? blogSection.blogs.map((blog, i) => {
+            !Array.isArray(mediumBlogs)
+              ? (blogSection.blogs || []).map((blog, i) => {
                   return (
                     <BlogCard
                       key={i}

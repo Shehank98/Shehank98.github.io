@@ -23,7 +23,7 @@ const greeting = {
   username: "Shehan Kavishka",
   title: "Hi, I'm Shehan",
   subTitle: emoji(
-    "Data Scientist | Specializing in machine learning, deep learning, and data-driven solutions"
+    "Senior Media Executive at Ogilvy 🎯 | Blending 7+ years in advertising with Data Science & AI to build smarter media systems"
   ),
   resumeLink:
     "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
@@ -52,21 +52,23 @@ const socialMediaLinks = {
 
 const skillsSection = {
   title: "What I do",
-  subTitle: "MACHINE LEARNING • DEEP LEARNING • DATA SCIENCE • AI SOLUTIONS",
+  subTitle: "MEDIA BUYING • CAMPAIGN ANALYTICS • MACHINE LEARNING • AI SOLUTIONS",
   skills: [
     emoji(
-      "Build, train & deploy ML models with scikit-learn & TensorFlow"
+      "Plan, buy & optimize multi-channel ad campaigns across TV, radio & press"
     ),
     emoji(
-      "Deep learning architectures: CNNs, custom dense networks, fine-tuned models"
+      "Build automation & reconciliation systems that cut media ops from hours to minutes"
     ),
     emoji(
-      "Create interactive dashboards & data apps with Streamlit and Power BI"
+      "Design clean, data-driven dashboards for media buying & campaign performance"
     ),
     emoji(
-      "Data wrangling, EDA, feature engineering & visualization with pandas, Matplotlib"
+      "Apply machine learning & deep learning (CNNs, ensemble models) to real-world problems"
     ),
-    emoji("Deploy ML APIs with FastAPI and manage projects with Git/GitHub")
+    emoji(
+      "Turn raw campaign & business data into decisions with Python, pandas & analytics"
+    )
   ],
 
   /* Make Sure to include correct Font Awesome Classname to view your icon
@@ -82,7 +84,8 @@ https://fontawesome.com/icons?d=gallery */
     {skillName: "Matplotlib", fontAwesomeClassname: "fas fa-chart-area"},
     {skillName: "Seaborn", fontAwesomeClassname: "fas fa-chart-bar"},
     {skillName: "Streamlit", fontAwesomeClassname: "fas fa-stream"},
-    {skillName: "Jupyter", fontAwesomeClassname: "fas fa-book-open"},
+    {skillName: "Power BI", fontAwesomeClassname: "fas fa-chart-pie"},
+    {skillName: "Google Apps Script", fontAwesomeClassname: "fab fa-google"},
     {skillName: "SQL", fontAwesomeClassname: "fas fa-database"},
     {skillName: "FastAPI", fontAwesomeClassname: "fas fa-rocket"},
     {skillName: "Git/GitHub", fontAwesomeClassname: "fab fa-github"},
@@ -157,25 +160,26 @@ const workExperiences = {
   display: true, //Set it to true to show workExperiences Section
   experience: [
     {
-      role: "Media Executive",
-      company: "Ogilvy Media",
+      role: "Senior Media Executive",
+      company: "Ogilvy",
       companylogo: require("./assets/images/ogilvy.png"),
       date: "Aug 2024 – Present",
-      desc: "Applying ML and data analytics to optimize media operations. Developing automated solutions and insights-driven systems.",
+      desc: "Media buying across TV, radio & press for major brands, while building the data & automation systems that run media operations. Promoted to Senior Media Executive in 2026.",
       descBullets: [
-        "Scheduled monthly commercials across leading TV, radio, and press outlets",
-        "Involved in campaign planning and budgeting for multi-channel media strategies"
+        "Managed SLT-Mobitel Print, Radio & TV campaigns end-to-end — planning, buying, reconciliation, invoicing & client reporting",
+        "Built Ogilvy Nova, an automated media reconciliation system that cuts ad verification from hours to minutes",
+        "Developed Ogilvy Orbit, clean operational dashboards for managing media buying & campaign performance"
       ]
     },
     {
       role: "Scheduling Officer",
       company: "Wijeya Newspapers Ltd",
       companylogo: require("./assets/images/wijeyaLogo.png"),
-      date: "Sep 2019 – Aug 2024",
-      desc: "Managed advertising scheduling and workflows",
+      date: "Sep 2019 – Aug 2024 · 5 yrs",
+      desc: "Managed advertising scheduling and workflows for Sri Lanka's leading publications.",
       descBullets: [
-        "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror and other publications",
-        "Handled advertisement artworks maintaining quality and consistency across daily releases",
+        "Scheduled advertisements for Daily Lankadeepa, Ada, Daily FT, Daily Mirror, Sunday Lankadeepa & Deshaya",
+        "Handled ad artworks and coordinated rates, working with clients across Sri Lanka"
       ]
     },
     {
@@ -206,8 +210,32 @@ const openSource = {
 
 const bigProjects = {
   title: "Featured Projects",
-  subtitle: "Research & production-grade ML/AI systems",
+  subtitle: "Media-tech systems & production-grade ML/AI — where advertising meets data",
   projects: [
+    {
+      image: require("./assets/images/recon.jfif"),
+      projectName: "Ogilvy Nova — Media Reconciliation System",
+      projectDesc:
+        "Automated reconciliation platform for media operations at Ogilvy. Matches scheduled advertisements against broadcast & publication data, cutting ad verification from hours to ~10 minutes. Built for scale with a clean, professional interface tailored to real media workflows.",
+      footerLink: [
+        {
+          name: "Ogilvy",
+          url: "https://www.linkedin.com/in/shehan-kavishka/"
+        }
+      ]
+    },
+    {
+      image: require("./assets/images/rate.png"),
+      projectName: "Ogilvy Orbit — Media Buying Operations Dashboard",
+      projectDesc:
+        "Operations dashboards for managing media buying at Ogilvy — tracking campaigns, placements and performance in one clean, professional interface. Streamlines day-to-day media operations, reconciliation and reporting for the team.",
+      footerLink: [
+        {
+          name: "Ogilvy",
+          url: "https://www.linkedin.com/in/shehan-kavishka/"
+        }
+      ]
+    },
     {
       image: require("./assets/images/brain.png"),
       projectName: "Brain Tumor Classification - Ensemble Learning Research",
@@ -502,10 +530,46 @@ const podcastSection = {
   display: false
 };
 
+// About Section
+const aboutSection = {
+  title: "About Me",
+  paragraphs: [
+    "Senior Media Executive at Ogilvy, driving campaigns across TV, radio and press while integrating data and strategy to maximize performance.",
+    "Currently pursuing a BSc in Data Science (London Metropolitan University), backed by an HND in Data Analytics — applying analytical thinking to real business challenges.",
+    "Recognized on the global stage as Sri Lanka's first-ever Grand Award winner at the Intel ISEF in the USA. Now focused on leveraging AI and machine learning to transform the media industry — unlocking insights, improving efficiency, and driving smarter, data-led decisions.",
+    "Open to remote and relocation opportunities worldwide."
+  ],
+  display: true
+};
+
+// Impact / stats strip
+const statsSection = {
+  display: true,
+  stats: [
+    {value: "7+", label: "Years in Media"},
+    {value: "98.2%", label: "ML Model Accuracy"},
+    {value: "40+", label: "Hrs/Week Automated"},
+    {value: "ISEF", label: "Grand Award Winner"}
+  ]
+};
+
+// Languages Section
+const languagesSection = {
+  title: "Languages",
+  display: true,
+  languages: [
+    {name: "English", level: "Professional working proficiency"},
+    {name: "Sinhala", level: "Native / bilingual"},
+    {name: "Tamil", level: "Limited working proficiency"}
+  ]
+};
+
 // Resume Section
 const resumeSection = {
   title: "Resume",
-  subtitle: "Download my resume",
+  subtitle: "Grab a copy of my full CV",
+  resumeLink:
+    "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
   display: true
 };
 
@@ -546,5 +610,8 @@ export {
   contactInfo,
   twitterDetails,
   isHireable,
+  aboutSection,
+  statsSection,
+  languagesSection,
   resumeSection
 };
