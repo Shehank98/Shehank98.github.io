@@ -27,3 +27,6 @@ public/profile.json
 public/blogs.json
 "build/" 
 "build/" 
+
+# backend data (SQLite + uploads) — lives on the Railway Volume
+/data

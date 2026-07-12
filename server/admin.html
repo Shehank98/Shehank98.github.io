@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio Admin</title>
+    <style>
+      :root {
+        --bg: #0f172a; --panel: #1e293b; --panel2: #273449; --line: #334155;
+        --text: #e2e8f0; --muted: #94a3b8; --accent: #6366f1; --accent2: #4f46e5;
+        --danger: #ef4444; --ok: #22c55e; --radius: 10px;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg); color: var(--text); }
+      button { cursor: pointer; font: inherit; border: none; border-radius: 8px; padding: 9px 14px; }
+      .btn-primary { background: var(--accent); color: #fff; }
+      .btn-primary:hover { background: var(--accent2); }
+      .btn-ghost { background: var(--panel2); color: var(--text); }
+      .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+      input, textarea, select { width: 100%; padding: 9px 11px; border-radius: 8px;
+        border: 1px solid var(--line); background: var(--panel2); color: var(--text); font: inherit; }
+      textarea { min-height: 84px; resize: vertical; }
+      label { display: block; font-size: 12px; color: var(--muted); margin: 0 0 5px; text-transform: capitalize; }
+      .field { margin-bottom: 14px; }
+
+      /* Login */
+      #login { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+      #login .card { background: var(--panel); padding: 32px; border-radius: 14px; width: 340px;
+        border: 1px solid var(--line); }
+      #login h1 { margin: 0 0 6px; font-size: 20px; }
+      #login p { margin: 0 0 20px; color: var(--muted); font-size: 13px; }
+
+      /* App */
+      #app { display: none; grid-template-columns: 240px 1fr; min-height: 100vh; }
+      aside { background: var(--panel); border-right: 1px solid var(--line); padding: 16px; }
+      aside h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+      .navbtn { display: block; width: 100%; text-align: left; background: transparent; color: var(--text);
+        padding: 9px 11px; border-radius: 8px; margin-bottom: 2px; font-size: 14px; }
+      .navbtn:hover { background: var(--panel2); }
+      .navbtn.active { background: var(--accent); color: #fff; }
+      main { padding: 26px 30px; max-width: 860px; }
+      .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+      .topbar h1 { margin: 0; font-size: 22px; }
+      .group { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; background: var(--panel); }
+      .group > .group-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+      .group > .group-head .title { font-weight: 600; font-size: 13px; color: var(--muted); }
+      .arr-item { border: 1px dashed var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; position: relative; background: var(--panel2); }
+      .row { display: flex; gap: 8px; align-items: center; }
+      .imgprev { max-height: 60px; border-radius: 6px; border: 1px solid var(--line); margin-top: 6px; display: block; }
+      .toast { position: fixed; bottom: 22px; right: 22px; padding: 12px 18px; border-radius: 10px;
+        background: var(--ok); color: #05240f; font-weight: 600; opacity: 0; transform: translateY(10px);
+        transition: .25s; pointer-events: none; }
+      .toast.show { opacity: 1; transform: translateY(0); }
+      .toast.err { background: var(--danger); color: #fff; }
+      .hint { font-size: 12px; color: var(--muted); margin: -6px 0 12px; }
+      .checkrow { display: flex; align-items: center; gap: 10px; }
+      .checkrow input { width: auto; }
+      .checkrow label { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- LOGIN -->
+    <div id="login">
+      <div class="card">
+        <h1>Portfolio Admin</h1>
+        <p>Enter your admin password to manage your portfolio content.</p>
+        <form id="loginForm">
+          <div class="field">
+            <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+          </div>
+          <button class="btn-primary" style="width:100%" type="submit">Log in</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app">
+      <aside>
+        <h2>Sections</h2>
+        <div id="nav"></div>
+        <div style="margin-top:16px">
+          <button class="btn-ghost" style="width:100%" id="logout">Log out</button>
+        </div>
+      </aside>
+      <main>
+        <div class="topbar">
+          <h1 id="sectionTitle"></h1>
+          <div class="row">
+            <button class="btn-danger" id="resetBtn">Reset to default</button>
+            <button class="btn-primary" id="saveBtn">Save changes</button>
+          </div>
+        </div>
+        <div id="editor"></div>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      const SECTION_LABELS = {
+        greeting: "Greeting & Profile",
+        splashScreen: "Splash / Lottie",
+        socialMediaLinks: "Social Links",
+        skillsSection: "Skills",
+        workExperiences: "Work Experience",
+        bigProjects: "Projects",
+        openSource: "Open Source",
+        achievementSection: "Achievements",
+        blogSection: "Blogs",
+        linkedinRecommendations: "Recommendations",
+        resumeSection: "Resume",
+        contactInfo: "Contact Me"
+      };
+      const IMAGE_KEY = /image|logo|avatar|photo|profileimage/i;
+      const LONG_KEY = /desc|recommendation|subtitle|subTitle|projectDesc|bio/i;
+
+      let content = {};
+      let current = null;
+
+      const $ = sel => document.querySelector(sel);
+      function toast(msg, isErr) {
+        const t = $("#toast");
+        t.textContent = msg;
+        t.className = "toast show" + (isErr ? " err" : "");
+        setTimeout(() => (t.className = "toast"), 2200);
+      }
+      async function api(url, opts) {
+        const res = await fetch(url, Object.assign({headers: {"Content-Type": "application/json"}}, opts));
+        if (res.status === 401) { showLogin(); throw new Error("Not authenticated"); }
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Request failed");
+        return res.status === 204 ? null : res.json();
+      }
+
+      function showLogin() { $("#app").style.display = "none"; $("#login").style.display = "grid"; }
+      function showApp() { $("#login").style.display = "none"; $("#app").style.display = "grid"; }
+
+      // ---- Login ----
+      $("#loginForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        try {
+          await api("/api/login", {method: "POST", body: JSON.stringify({password: $("#password").value})});
+          await boot();
+        } catch (err) { toast(err.message, true); }
+      });
+      $("#logout").addEventListener("click", async () => {
+        await api("/api/logout", {method: "POST"}).catch(() => {});
+        showLogin();
+      });
+
+      // ---- Upload ----
+      async function uploadFile(file) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/api/admin/upload", {method: "POST", body: fd});
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Upload failed");
+        return (await res.json()).url;
+      }
+
+      // ---- Recursive form builder ----
+      // Renders `value` (obj[key]) into `parent`, binding edits back to obj[key].
+      function buildField(parent, obj, key, value) {
+        if (Array.isArray(value)) return buildArray(parent, obj, key, value);
+        if (value !== null && typeof value === "object") return buildObject(parent, obj, key, value);
+        return buildScalar(parent, obj, key, value);
+      }
+
+      function buildScalar(parent, obj, key, value) {
+        const wrap = document.createElement("div");
+        wrap.className = "field";
+
+        if (typeof value === "boolean") {
+          wrap.className = "field checkrow";
+          const cb = document.createElement("input");
+          cb.type = "checkbox"; cb.checked = value; cb.id = "cb_" + Math.random().toString(36).slice(2);
+          cb.addEventListener("change", () => (obj[key] = cb.checked));
+          const lbl = document.createElement("label"); lbl.textContent = key; lbl.htmlFor = cb.id;
+          wrap.append(cb, lbl);
+          parent.appendChild(wrap);
+          return;
+        }
+
+        const lbl = document.createElement("label"); lbl.textContent = key;
+        wrap.appendChild(lbl);
+
+        const isImage = IMAGE_KEY.test(key) && (typeof value === "string");
+        const input = LONG_KEY.test(key) ? document.createElement("textarea") : document.createElement("input");
+        input.value = value === null || value === undefined ? "" : value;
+        input.addEventListener("input", () => (obj[key] = input.value));
+        wrap.appendChild(input);
+
+        if (isImage) {
+          const row = document.createElement("div");
+          row.className = "row"; row.style.marginTop = "6px";
+          const file = document.createElement("input");
+          file.type = "file"; file.accept = "image/*";
+          const preview = document.createElement("img");
+          preview.className = "imgprev";
+          preview.style.display = value ? "block" : "none";
+          if (value) preview.src = value;
+          file.addEventListener("change", async () => {
+            if (!file.files[0]) return;
+            try {
+              const url = await uploadFile(file.files[0]);
+              obj[key] = url; input.value = url;
+              preview.src = url; preview.style.display = "block";
+              toast("Image uploaded");
+            } catch (err) { toast(err.message, true); }
+          });
+          row.appendChild(file);
+          wrap.appendChild(row);
+          wrap.appendChild(preview);
+        }
+        parent.appendChild(wrap);
+      }
+
+      function buildObject(parent, obj, key, value) {
+        const group = document.createElement("div");
+        group.className = "group";
+        const head = document.createElement("div");
+        head.className = "group-head";
+        head.innerHTML = '<span class="title">' + key + "</span>";
+        group.appendChild(head);
+        for (const k of Object.keys(value)) buildField(group, value, k, value[k]);
+        parent.appendChild(group);
+      }
+
+      function templateFrom(arr) {
+        // Build a blank item matching the shape of existing items (or a bare string).
+        if (arr.length === 0) return "";
+        const sample = arr[0];
+        if (sample === null || typeof sample !== "object") return "";
+        return blankLike(sample);
+      }
+      function blankLike(sample) {
+        if (Array.isArray(sample)) return [];
+        if (sample && typeof sample === "object") {
+          const o = {};
+          for (const k of Object.keys(sample)) o[k] = blankLike(sample[k]);
+          return o;
+        }
+        if (typeof sample === "boolean") return false;
+        if (typeof sample === "number") return 0;
+        return "";
+      }
+
+      function buildArray(parent, obj, key, arr) {
+        const group = document.createElement("div");
+        group.className = "group";
+        const head = document.createElement("div");
+        head.className = "group-head";
+        head.innerHTML = '<span class="title">' + key + " (" + arr.length + ")</span>";
+        const addBtn = document.createElement("button");
+        addBtn.className = "btn-ghost"; addBtn.textContent = "+ Add";
+        head.appendChild(addBtn);
+        group.appendChild(head);
+
+        const list = document.createElement("div");
+        group.appendChild(list);
+
+        function renderItems() {
+          list.innerHTML = "";
+          arr.forEach((item, i) => {
+            const card = document.createElement("div");
+            card.className = "arr-item";
+            const bar = document.createElement("div");
+            bar.className = "row"; bar.style.justifyContent = "flex-end"; bar.style.marginBottom = "8px";
+            const del = document.createElement("button");
+            del.className = "btn-danger"; del.textContent = "Remove";
+            del.addEventListener("click", () => { arr.splice(i, 1); renderItems(); head.querySelector(".title").textContent = key + " (" + arr.length + ")"; });
+            bar.appendChild(del);
+            card.appendChild(bar);
+            if (item !== null && typeof item === "object") {
+              for (const k of Object.keys(item)) buildField(card, item, k, item[k]);
+            } else {
+              // primitive array item — bind by index
+              buildScalar(card, arr, i, item);
+            }
+            list.appendChild(card);
+          });
+        }
+        addBtn.addEventListener("click", () => {
+          arr.push(templateFrom(arr));
+          renderItems();
+          head.querySelector(".title").textContent = key + " (" + arr.length + ")";
+        });
+        renderItems();
+        parent.appendChild(group);
+      }
+
+      // ---- Section rendering ----
+      function renderNav() {
+        const nav = $("#nav");
+        nav.innerHTML = "";
+        Object.keys(content).forEach(key => {
+          const b = document.createElement("button");
+          b.className = "navbtn" + (key === current ? " active" : "");
+          b.textContent = SECTION_LABELS[key] || key;
+          b.addEventListener("click", () => { current = key; renderNav(); renderSection(); });
+          nav.appendChild(b);
+        });
+      }
+      function renderSection() {
+        $("#sectionTitle").textContent = SECTION_LABELS[current] || current;
+        const editor = $("#editor");
+        editor.innerHTML = "";
+        const data = content[current];
+        for (const k of Object.keys(data)) buildField(editor, data, k, data[k]);
+      }
+
+      $("#saveBtn").addEventListener("click", async () => {
+        try {
+          await api("/api/admin/section/" + current, {method: "PUT", body: JSON.stringify(content[current])});
+          toast("Saved — refresh your site to see changes");
+        } catch (err) { toast(err.message, true); }
+      });
+      $("#resetBtn").addEventListener("click", async () => {
+        if (!confirm("Reset this section to its default content?")) return;
+        try {
+          await api("/api/admin/section/" + current + "/reset", {method: "POST"});
+          await loadContent();
+          renderSection();
+          toast("Reset to default");
+        } catch (err) { toast(err.message, true); }
+      });
+
+      async function loadContent() {
+        content = await api("/api/admin/content");
+        if (!current || !content[current]) current = Object.keys(content)[0];
+      }
+      async function boot() {
+        await loadContent();
+        showApp();
+        renderNav();
+        renderSection();
+      }
+
+      // Auto-login if session cookie is still valid.
+      (async () => {
+        try { await api("/api/me"); await boot(); }
+        catch (_) { showLogin(); }
+      })();
+    </script>
+  </body>
+</html>
