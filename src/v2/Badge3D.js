@@ -6,8 +6,8 @@ import {badge} from "../portfolio";
 /*
  * Draggable 3D ID badge on a swinging lanyard.
  *  - Lanyard = verlet rope chain (own physics, no wasm / no React upgrade)
- *  - Drag the card to swing it, flick sideways to spin it, double-click (or tap
- *    the Flip button) to turn it around and show the QR code on the back.
+ *  - Drag the card to swing it, flick sideways to spin it, double-click / double-tap
+ *    it to turn it around and show the QR code on the back.
  */
 
 const CARD_W = 1.7;
@@ -360,7 +360,6 @@ export default function Badge3D({live = true}) {
   const liveRef = useRef(live);
   liveRef.current = live;
   const [fallback, setFallback] = useState(false);
-  const [hint, setHint] = useState(true);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -554,6 +553,7 @@ export default function Badge3D({live = true}) {
     // they resist compression rigidly but stretch like rubber, so dragging the card
     // stretches/bends the strap and releasing it bounces + swings + settles.
     let topY = 3.2;
+    let anchorX = 0; // world x where the strap is pinned (the badge column's centre)
     let segLen = 0.45;
     let visH = 5;
     let visW = 3;
@@ -562,10 +562,10 @@ export default function Badge3D({live = true}) {
       nodes.length = 0;
       for (let i = 0; i <= SEGMENTS; i++) {
         // start curled up high so the badge "drops in" on load
-        const p = new THREE.Vector3(0.25 + i * 0.12, topY + 0.6 - i * 0.04, 0);
+        const p = new THREE.Vector3(anchorX + 0.25 + i * 0.12, topY + 0.6 - i * 0.04, 0);
         nodes.push({p, o: p.clone(), pinned: i === 0});
       }
-      nodes[0].p.set(0, topY, 0);
+      nodes[0].p.set(anchorX, topY, 0);
       nodes[0].o.copy(nodes[0].p);
     };
 
@@ -596,6 +596,15 @@ export default function Badge3D({live = true}) {
       const hero = parent.closest(".hero");
       if (!stacked && hero) down = Math.max(0, hero.getBoundingClientRect().bottom - pRect.bottom);
       mount.style.bottom = `-${down}px`;
+      // desktop: span the full screen width so the card can swing under the headline too
+      if (!stacked && hero) {
+        const vw = document.documentElement.clientWidth;
+        mount.style.left = `${-pRect.left}px`;
+        mount.style.right = `${pRect.right - vw}px`;
+      } else {
+        mount.style.left = "";
+        mount.style.right = "";
+      }
       const w = mount.clientWidth || 300;
       const h = mount.clientHeight || 500;
       renderer.setSize(w, h, false);
@@ -610,6 +619,7 @@ export default function Badge3D({live = true}) {
       camera.position.z = visH / 2 / Math.tan(fovV / 2);
       camera.updateProjectionMatrix();
       topY = visH / 2 + 0.3; // anchor sits just off-screen, above the top edge
+      anchorX = ((pRect.left + pRect.width / 2) - (renderer.domElement.getBoundingClientRect().left + w / 2)) / ppu;
 
       // where the bottom of the card should rest (px from the page top):
       // desktop = inside the first screen; stacked = near the bottom of the badge box
@@ -618,7 +628,7 @@ export default function Badge3D({live = true}) {
       const ropeLen = Math.max(0.9, nodeYpx / ppu + 0.3);
       segLen = ropeLen / SEGMENTS;
       if (!nodes.length) resetRope();
-      nodes[0].p.set(0, topY, 0);
+      nodes[0].p.set(anchorX, topY, 0);
       nodes[0].o.copy(nodes[0].p);
     };
     resize();
@@ -655,12 +665,12 @@ export default function Badge3D({live = true}) {
         lastTap = nowT;
       }
       dragging = true;
+      document.body.style.userSelect = "none";
       lastClientX = cx;
       const w = toWorld(cx, cy);
       dragOffset.copy(nodes[SEGMENTS].p).sub(w);
       dragOffset.z = 0;
       dragPoint.copy(nodes[SEGMENTS].p);
-      setHint(false);
       return true;
     };
     const dragTo = (cx, cy) => {
@@ -675,12 +685,12 @@ export default function Badge3D({live = true}) {
       if (!dragging) return;
       dragging = false;
       document.body.style.cursor = "";
+      document.body.style.userSelect = "";
       if (!flippedThisPress) flipTarget = Math.round((rotY + spin * 8) / Math.PI) * Math.PI;
     };
     const flip = () => {
       flipTarget = Math.round(rotY / Math.PI) * Math.PI + Math.PI;
       spin += 0.1;
-      setHint(false);
     };
 
     // mouse / pen
@@ -787,7 +797,7 @@ export default function Badge3D({live = true}) {
             b.p.addScaledVector(tmp, -diff * 0.5);
           }
         }
-        nodes[0].p.set(0, topY, 0);
+        nodes[0].p.set(anchorX, topY, 0);
       }
       // spin / flip: spring toward the target face while free, direct while dragging
       if (dragging) {
@@ -882,6 +892,7 @@ export default function Badge3D({live = true}) {
         }
       });
       document.body.style.cursor = "";
+      document.body.style.userSelect = "";
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
     };
@@ -902,17 +913,6 @@ export default function Badge3D({live = true}) {
   return (
     <div className="badge3d">
       <div className="badge3d-mount" ref={mountRef} />
-      <div className={`badge3d-hint ${hint ? "show" : ""}`}>
-        Drag me<br />double-tap to flip
-      </div>
-      <button
-        type="button"
-        className="badge3d-flip"
-        onClick={() => apiRef.current.flip && apiRef.current.flip()}
-        aria-label="Flip the ID badge"
-      >
-        <i className="fas fa-sync-alt" /> Flip
-      </button>
     </div>
   );
 }
