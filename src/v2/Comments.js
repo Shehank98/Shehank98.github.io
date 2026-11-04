@@ -81,7 +81,7 @@ export default function Comments() {
       <div className="gb-grid">
         <Reveal className="gb-list" aria-live="polite">
           {offline && <p className="gb-empty">Comments are unavailable right now.</p>}
-          {!offline && list.length === 0 && <p className="gb-empty">Be the first to leave a note ✨</p>}
+          {!offline && list.length === 0 && <p className="gb-empty">Be the first to leave a note</p>}
           {list.map(c => (
             <div className="gb-item" key={c.id}>
               <div className="gb-av" style={{background: `hsl(${hue(c.name)} 70% 55%)`}}>
