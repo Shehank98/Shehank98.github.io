@@ -503,7 +503,12 @@ body {
   h4 { font-size: 15px; line-height: 1.35; } p { color: $muted; font-size: 13px; margin-top: 4px; } a { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 700; color: $cyan; }
 }
 .recs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.rec { padding: 26px; border-radius: 22px; background: $card; border: 1px solid $line; p { color: #c7cbe8; font-size: 15px; font-style: italic; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.rec { padding: 26px; border-radius: 22px; background: $card; border: 1px solid $line; display: flex; flex-direction: column; align-self: start;
+  .rec-text { position: relative; max-height: 190px; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    p { color: #c7cbe8; font-size: 15px; font-style: italic; line-height: 1.7; margin-bottom: 12px; &:last-child { margin-bottom: 0; } }
+    &.open { max-height: 1600px; }
+    &.fade { -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); } }
+  .rec-more { align-self: flex-start; margin-top: 10px; padding: 6px 0; border: 0; background: none; color: $cyan; font: 700 14px "Inter", sans-serif; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; &:hover { color: #fff; } }
   .rec-by { display: flex; align-items: center; gap: 12px; margin-top: 18px; img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; } strong { display: block; } span { color: $muted; font-size: 13px; } }
 }
 
@@ -652,7 +657,7 @@ body {
   .skills-grid { gap: 22px; margin-bottom: 8px; }
   .skill-list p { padding: 11px 0; font-size: 14.5px; }
   .rings { gap: 14px; } .ring svg { width: 92px; height: 92px; } .ring span { font-size: 12px; }
-  .recs { gap: 12px; } .rec { padding: 18px; p { font-size: 14px; -webkit-line-clamp: 6; } }
+  .recs { gap: 12px; } .rec { padding: 18px; .rec-text p { font-size: 14px; } }
 
   // --- music / guestbook / contact
   .music-card { padding: 20px; gap: 22px; border-radius: 24px; h2 { font-size: 34px; } p { margin: 12px 0 16px; font-size: 15px; } .eq { margin-top: 18px; height: 34px; } iframe { min-height: 232px; height: 232px; } }

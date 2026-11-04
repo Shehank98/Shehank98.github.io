@@ -1,7 +1,45 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {skillsSection, techStack, linkedinRecommendations} from "../portfolio";
 import {Reveal, SectionHead} from "./Section";
 import {useInView} from "./hooks";
+
+// One recommendation: full text (every paragraph), collapsed to a preview with a "Read more" toggle
+function Rec({r, delay}) {
+  const [open, setOpen] = useState(false);
+  const [long, setLong] = useState(false);
+  const box = useRef(null);
+  const paras = String(r.recommendation || "").split(/\n\s*\n/).filter(Boolean);
+  useEffect(() => {
+    const check = () => box.current && setLong(box.current.scrollHeight > 190);
+    check();
+    window.addEventListener("resize", check);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
+    return () => window.removeEventListener("resize", check);
+  }, [r.recommendation]);
+  return (
+    <Reveal className="rec" delay={delay}>
+      <div ref={box} className={`rec-text ${open ? "open" : ""} ${long && !open ? "fade" : ""}`}>
+        {paras.map((t, i) => (
+          <p key={i}>{i === 0 ? "\u201C" : ""}{t}{i === paras.length - 1 ? "\u201D" : ""}</p>
+        ))}
+      </div>
+      {long && (
+        <button type="button" className="rec-more" aria-expanded={open} onClick={() => setOpen(o => !o)}>
+          {open ? "Show less" : "Read more"} <i className={`fas fa-chevron-${open ? "up" : "down"}`} />
+        </button>
+      )}
+      <div className="rec-by">
+        {r.image && <img src={r.image} alt="" />}
+        <div>
+          <strong>{r.recommenderName}</strong>
+          <span>
+            {r.title}, {r.company}
+          </span>
+        </div>
+      </div>
+    </Reveal>
+  );
+}
 
 function Ring({label, pct, delay}) {
   const [ref, seen] = useInView();
@@ -33,7 +71,7 @@ function Ring({label, pct, delay}) {
 export default function Skills() {
   const sw = skillsSection.softwareSkills || [];
   const doubled = [...sw, ...sw];
-  const recs = (linkedinRecommendations.recommendations || []).slice(0, 2);
+  const recs = linkedinRecommendations.recommendations || [];
   return (
     <>
       <section id="skills" className="section">
@@ -69,18 +107,7 @@ export default function Skills() {
             <SectionHead kicker="04 / KIND WORDS" title="What people" accent="say" />
             <div className="recs">
               {recs.map((r, i) => (
-                <Reveal key={i} className="rec" delay={i * 0.1}>
-                  <p>“{r.recommendation.split("\n\n")[0]}”</p>
-                  <div className="rec-by">
-                    {r.image && <img src={r.image} alt="" />}
-                    <div>
-                      <strong>{r.recommenderName}</strong>
-                      <span>
-                        {r.title}, {r.company}
-                      </span>
-                    </div>
-                  </div>
-                </Reveal>
+                <Rec key={i} r={r} delay={i * 0.1} />
               ))}
             </div>
           </>
