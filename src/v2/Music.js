@@ -5,7 +5,7 @@ import {Reveal} from "./Section";
 export default function Music() {
   if (musicSection.display === false) return null;
   return (
-    <section className="section music-sec">
+    <section id="music" className="section music-sec">
       <Reveal className="music-card">
         <div className="music-text">
           <h2>

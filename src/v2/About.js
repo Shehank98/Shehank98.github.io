@@ -1,10 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 import {
   aboutSection,
   statsSection,
   educationInfo,
   workExperiences,
-  languagesSection,
   badge,
   bigProjects,
   achievementSection,
@@ -43,12 +42,6 @@ function Stat({value, label, icon, delay}) {
 
 const ICONS = ["fas fa-tv", "fas fa-brain", "fas fa-bolt", "fas fa-trophy"];
 
-const LANGS = [
-  {code: "en", match: "English", label: "English"},
-  {code: "si", match: "Sinhala", label: "සිංහල"},
-  {code: "ta", match: "Tamil", label: "தமிழ்"}
-];
-
 // bold the key phrases (aboutSection.highlights) inside a paragraph
 function withHighlights(text, highlights) {
   const list = (highlights || []).filter(h => h && text.includes(h));
@@ -59,24 +52,16 @@ function withHighlights(text, highlights) {
 }
 
 export default function About() {
-  const [lang, setLang] = useState("en");
   const go = id => e => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({behavior: "smooth"});
   };
-  const en = aboutSection.paragraphs || [];
-  const paras = (lang === "si" ? aboutSection.paragraphsSi : lang === "ta" ? aboutSection.paragraphsTa : en) || [];
-  // a missing translation falls back to the English paragraph
-  const shown = en.map((p, i) => (paras[i] && paras[i].trim() ? paras[i] : p));
+  const paras = aboutSection.paragraphs || [];
   const nameParts = (aboutSection.displayName || "").split(" ");
   const first = nameParts.shift() || "";
   const rest = nameParts.join(" ");
   const photo = aboutSection.photo || badge.photo;
-  const proficiency = name => {
-    const hit = (languagesSection.languages || []).find(l => l.name === name);
-    return hit ? hit.level : "";
-  };
   return (
     <section id="about" className="section about-sec">
       <Reveal as="h2" className="about-title">{aboutSection.title}</Reveal>
@@ -87,23 +72,6 @@ export default function About() {
             <span className="about-hi">{aboutSection.greetingLine}</span>
             <span className="about-first">{first}</span>
             {rest && <span className="about-last">{rest}</span>}
-            {languagesSection.display !== false && (
-              <div className="lang-switch" role="group" aria-label="Language">
-                {LANGS.map(l => (
-                  <button
-                    key={l.code}
-                    type="button"
-                    className={lang === l.code ? "on" : ""}
-                    aria-pressed={lang === l.code}
-                    title={proficiency(l.match)}
-                    lang={l.code}
-                    onClick={() => setLang(l.code)}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </div>
-            )}
             <a href="#contact" className="btn-primary" onClick={go("contact")}>
               <i className="far fa-envelope" /> {aboutSection.primaryButton}
             </a>
@@ -123,9 +91,9 @@ export default function About() {
 
           {/* RIGHT: the three paragraphs + View Projects */}
           <Reveal className="about-copy" delay={0.2}>
-            <div key={lang} className="about-copy-text" lang={lang}>
-              {shown.map((p, i) => (
-                <p key={i}>{withHighlights(p, lang === "en" ? aboutSection.highlights : [])}</p>
+            <div className="about-copy-text">
+              {paras.map((p, i) => (
+                <p key={i}>{withHighlights(p, aboutSection.highlights)}</p>
               ))}
             </div>
             <a href="#portfolio" className="btn-ghost" onClick={go("portfolio")}>

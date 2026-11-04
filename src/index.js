@@ -18,6 +18,8 @@ const SECTION_MAP = {
   socialMediaLinks: portfolio.socialMediaLinks,
   skillsSection: portfolio.skillsSection,
   workExperiences: portfolio.workExperiences,
+  educationInfo: portfolio.educationInfo,
+  techStack: portfolio.techStack,
   bigProjects: portfolio.bigProjects,
   openSource: portfolio.openSource,
   achievementSection: portfolio.achievementSection,

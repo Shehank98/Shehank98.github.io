@@ -592,14 +592,6 @@ const aboutSection = {
     "Senior Media Executive at Ogilvy, running TV, radio and press campaigns with data-led strategy. Currently studying BSc Data Science (London Metropolitan University).",
     "Sri Lanka's first Intel ISEF Grand Award winner, now using AI and machine learning to make media smarter. Open to remote and relocation opportunities worldwide."
   ],
-  paragraphsSi: [
-    "Ogilvy හි ජ්‍යෙෂ්ඨ මාධ්‍ය විධායකයෙකු ලෙස දත්ත මත පදනම් වූ උපාය මාර්ග සමඟ රූපවාහිනී, ගුවන්විදුලි සහ මුද්‍රිත මාධ්‍ය ප්‍රචාරණ ව්‍යාපාර මෙහෙයවමි. දැනට ලන්ඩන් මෙට්‍රොපොලිටන් විශ්වවිද්‍යාලයෙන් දත්ත විද්‍යා උපාධිය (BSc) හදාරමි.",
-    "Intel ISEF තරගයේ ශ්‍රී ලංකාවේ පළමු Grand Award ජයග්‍රාහකයා වන මම, දැන් මාධ්‍ය වඩාත් දක්ෂ කිරීමට කෘත්‍රිම බුද්ධිය සහ යන්ත්‍ර ඉගෙනුම භාවිතා කරමි. දුරස්ථව සහ විදේශගත වී වැඩ කිරීමේ අවස්ථා සඳහා විවෘතයි."
-  ],
-  paragraphsTa: [
-    "Ogilvy நிறுவனத்தில் மூத்த ஊடக நிர்வாகியாக, தரவு சார்ந்த உத்தியுடன் தொலைக்காட்சி, வானொலி மற்றும் அச்சு ஊடகப் பிரச்சாரங்களை நடத்துகிறேன். தற்போது லண்டன் மெட்ரோபொலிட்டன் பல்கலைக்கழகத்தில் தரவு அறிவியலில் BSc படித்து வருகிறேன்.",
-    "Intel ISEF போட்டியில் இலங்கையின் முதல் Grand Award வெற்றியாளரான நான், இப்போது ஊடகத்தை மேலும் புத்திசாலித்தனமாக்க செயற்கை நுண்ணறிவு மற்றும் இயந்திரக் கற்றலைப் பயன்படுத்துகிறேன். தொலைதூர மற்றும் இடம்பெயர்வு வாய்ப்புகளுக்குத் திறந்தவன்."
-  ],
   highlights: [
     "Senior Media Executive",
     "BSc Data Science",

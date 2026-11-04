@@ -330,16 +330,10 @@ body {
   span { display: block; font: 700 clamp(44px, 6vw, 88px) "Space Grotesk", sans-serif; letter-spacing: -0.03em; line-height: 1; }
   .about-hi { background: linear-gradient(120deg, #6366f1, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .about-first, .about-last { background: linear-gradient(180deg, #fff 30%, #9aa0c7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .lang-switch { margin-top: 28px; }
-  .btn-primary { margin-top: 18px; }
-}
-.lang-switch { display: inline-flex; padding: 5px; border-radius: 16px; background: rgba(10, 12, 40, 0.7); border: 1px solid $line; max-width: 100%;
-  button { padding: 10px 16px; border: 0; border-radius: 12px; background: transparent; color: $muted; font: 600 15px "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif; cursor: pointer; transition: background 0.3s, color 0.3s; white-space: nowrap;
-    &:hover { color: #fff; }
-    &.on { color: #fff; background: linear-gradient(135deg, $indigo, $violet); box-shadow: 0 8px 22px -8px rgba(99, 102, 241, 0.8); } }
+  .btn-primary { margin-top: 30px; }
 }
 .about-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
-.about-copy-text { animation: fadeIn 0.5s both; font-family: "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif;
+.about-copy-text { animation: fadeIn 0.5s both; font-family: "Inter", sans-serif;
   p { color: #c7cbe8; font-size: clamp(16px, 1.15vw, 20px); line-height: 1.8; margin-bottom: 18px; &:last-child { margin-bottom: 0; } }
   strong { color: #fff; font-weight: 700; }
 }
