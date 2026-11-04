@@ -44,7 +44,7 @@ const heroSection = {
     "7+ years in advertising, now blending media buying with machine learning and automation. I turn messy campaign data into smarter decisions and build the tools that run media operations in minutes, not hours.",
   primaryButton: "View Projects",
   secondaryButton: "Contact Me",
-  loaderName: "SHEHAN"
+  loaderName: "SHEHAN KAVISHKA"
 };
 
 const musicSection = {
@@ -588,6 +588,12 @@ const aboutSection = {
   photo: require("./assets/images/profile.jpg"),
   primaryButton: "Contact Me",
   secondaryButton: "View Projects",
+  rightText:
+    "Recognized on the global stage as Sri Lanka's first-ever Grand Award winner at the Intel ISEF in the USA. Now focused on leveraging AI and machine learning to transform the media industry - unlocking insights, improving efficiency, and driving smarter, data-led decisions.",
+  rightTextSi:
+    "ඇමරිකාවේ පැවති Intel ISEF තරගයේදී ශ්‍රී ලංකාවේ පළමු Grand Award ජයග්‍රාහකයා ලෙස ගෝලීය වේදිකාවේ පිළිගැනීමට පත් විය. දැන් මාධ්‍ය කර්මාන්තය පරිවර්තනය කිරීම සඳහා කෘත්‍රිම බුද්ධිය සහ යන්ත්‍ර ඉගෙනුම භාවිතා කිරීමට අවධානය යොමු කරමින් - තීක්ෂ්ණ බුද්ධිය ලබා ගැනීම, කාර්යක්ෂමතාව වැඩි දියුණු කිරීම සහ දත්ත මත පදනම් වූ දක්ෂ තීරණ ගැනීම දිරිමත් කරමි.",
+  rightTextTa:
+    "அமெரிக்காவில் நடைபெற்ற Intel ISEF போட்டியில் இலங்கையின் முதல் Grand Award வெற்றியாளராக உலக அரங்கில் அங்கீகாரம் பெற்றேன். இப்போது ஊடகத் துறையை மாற்றியமைக்க செயற்கை நுண்ணறிவு மற்றும் இயந்திரக் கற்றலைப் பயன்படுத்துவதில் கவனம் செலுத்துகிறேன் - நுண்ணறிவுகளைப் பெறுவது, செயல்திறனை மேம்படுத்துவது, மற்றும் தரவு சார்ந்த சிறந்த முடிவுகளை எடுக்க உதவுவது.",
   paragraphs: [
     "Senior Media Executive at Ogilvy, driving campaigns across TV, radio and press while integrating data and strategy to maximize performance.",
     "Currently pursuing a BSc in Data Science (London Metropolitan University), backed by an HND in Data Analytics — applying analytical thinking to real business challenges.",

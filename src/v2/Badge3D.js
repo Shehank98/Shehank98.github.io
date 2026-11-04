@@ -13,8 +13,7 @@ import {badge} from "../portfolio";
 const CARD_W = 1.7;
 const CARD_H = 2.45;
 const CARD_D = 0.045;
-const SEGMENTS = 5;
-const SEG_LEN = 0.56;
+const SEGMENTS = 7;
 
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
@@ -355,9 +354,11 @@ function ribbonTexture(text) {
   return t;
 }
 
-export default function Badge3D() {
+export default function Badge3D({live = true}) {
   const mountRef = useRef(null);
   const apiRef = useRef({});
+  const liveRef = useRef(live);
+  liveRef.current = live;
   const [fallback, setFallback] = useState(false);
   const [hint, setHint] = useState(true);
 
@@ -548,13 +549,19 @@ export default function Badge3D() {
     ribbon.frustumCulled = false;
     scene.add(ribbon);
 
-    // ---- rope physics (verlet)
+    // ---- rope physics (verlet, elastic strap) ----
+    // The strap is anchored ABOVE the top edge of the screen. Segments are springs:
+    // they resist compression rigidly but stretch like rubber, so dragging the card
+    // stretches/bends the strap and releasing it bounces + swings + settles.
     let topY = 3.2;
+    let segLen = 0.45;
+    let visH = 5;
+    let visW = 3;
     const nodes = [];
     const resetRope = () => {
       nodes.length = 0;
       for (let i = 0; i <= SEGMENTS; i++) {
-        // start curled up high and to the right so the badge "drops in"
+        // start curled up high so the badge "drops in" on load
         const p = new THREE.Vector3(0.25 + i * 0.12, topY + 0.6 - i * 0.04, 0);
         nodes.push({p, o: p.clone(), pinned: i === 0});
       }
@@ -574,22 +581,31 @@ export default function Badge3D() {
     let lastTap = 0;
     let flippedThisPress = false;
     let visible = true;
+    let tabHidden = document.hidden;
 
     const resize = () => {
+      const parent = mount.parentElement;
+      // let the canvas reach the very top of the page so the strap starts at the screen edge
+      const up = Math.max(
+        0,
+        parent.getBoundingClientRect().top + (window.pageYOffset || 0)
+      );
+      mount.style.top = `-${up}px`;
       const w = mount.clientWidth || 300;
       const h = mount.clientHeight || 500;
+      const boxH = parent.clientHeight || h;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      // keep the whole rope+card in view regardless of aspect ratio
-      const needH = 4.95;
-      const needW = 3.0;
+      // keep the card the same on-screen size: 4.95 world units fit the hero box height
+      const pxPerUnit = Math.min(boxH / 4.95, w / 3.0);
       const fovV = (camera.fov * Math.PI) / 180;
-      const distH = needH / 2 / Math.tan(fovV / 2);
-      const distW = needW / 2 / (Math.tan(fovV / 2) * camera.aspect);
-      camera.position.z = Math.max(distH, distW);
+      visH = h / pxPerUnit;
+      visW = visH * camera.aspect;
+      camera.position.z = visH / 2 / Math.tan(fovV / 2);
       camera.updateProjectionMatrix();
-      const visH = 2 * Math.tan(fovV / 2) * camera.position.z;
-      topY = visH / 2 + 0.9;
+      topY = visH / 2 + 0.3; // anchor sits just off-screen, above the top edge
+      // rope length so the card bottom rests ~0.45 above the canvas bottom (card+clip = 2.75)
+      segLen = Math.max(0.3, (visH + 0.3 - 3.2) / SEGMENTS);
       if (!nodes.length) resetRope();
       nodes[0].p.set(0, topY, 0);
       nodes[0].o.copy(nodes[0].p);
@@ -598,28 +614,26 @@ export default function Badge3D() {
     resetRope();
     const ro = new ResizeObserver(resize);
     ro.observe(mount);
+    ro.observe(mount.parentElement);
 
-    const toWorld = e => {
+    const setNdc = (cx, cy) => {
       const rect = renderer.domElement.getBoundingClientRect();
-      ndc.set(
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -((e.clientY - rect.top) / rect.height) * 2 + 1
-      );
+      ndc.set(((cx - rect.left) / rect.width) * 2 - 1, -((cy - rect.top) / rect.height) * 2 + 1);
       raycaster.setFromCamera(ndc, camera);
+    };
+    const toWorld = (cx, cy) => {
+      setNdc(cx, cy);
       const t = -raycaster.ray.origin.z / raycaster.ray.direction.z;
       return raycaster.ray.origin.clone().addScaledVector(raycaster.ray.direction, t);
     };
+    const overCard = (cx, cy) => {
+      setNdc(cx, cy);
+      return raycaster.intersectObject(card, true).length > 0;
+    };
 
-    const onDown = e => {
-      if (e.button > 0) return;
-      const rect = renderer.domElement.getBoundingClientRect();
-      ndc.set(
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -((e.clientY - rect.top) / rect.height) * 2 + 1
-      );
-      raycaster.setFromCamera(ndc, camera);
-      const hit = raycaster.intersectObject(card, true);
-      if (!hit.length) return;
+    // ---- unified grab / move / release (mouse, pen and touch share these) ----
+    const grab = (cx, cy) => {
+      if (!overCard(cx, cy)) return false;
       const nowT = performance.now();
       flippedThisPress = false;
       if (nowT - lastTap < 380) {
@@ -630,32 +644,23 @@ export default function Badge3D() {
         lastTap = nowT;
       }
       dragging = true;
-      lastClientX = e.clientX;
-      const w = toWorld(e);
+      lastClientX = cx;
+      const w = toWorld(cx, cy);
       dragOffset.copy(nodes[SEGMENTS].p).sub(w);
       dragOffset.z = 0;
-      document.body.style.cursor = "grabbing";
-      e.preventDefault();
+      dragPoint.copy(nodes[SEGMENTS].p);
       setHint(false);
+      return true;
     };
-    const onMove = e => {
-      if (!dragging) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        ndc.set(
-          ((e.clientX - rect.left) / rect.width) * 2 - 1,
-          -((e.clientY - rect.top) / rect.height) * 2 + 1
-        );
-        raycaster.setFromCamera(ndc, camera);
-        document.body.style.cursor = raycaster.intersectObject(card, true).length
-          ? "grab"
-          : "";
-        return;
-      }
-      dragPoint.copy(toWorld(e)).add(dragOffset);
-      spin += (e.clientX - lastClientX) * 0.0035;
-      lastClientX = e.clientX;
+    const dragTo = (cx, cy) => {
+      dragPoint.copy(toWorld(cx, cy)).add(dragOffset);
+      // keep the grab point inside the visible canvas ("anywhere", but not off into space)
+      dragPoint.x = Math.max(-visW / 2 + 0.7, Math.min(visW / 2 - 0.7, dragPoint.x));
+      dragPoint.y = Math.max(-visH / 2 + 1.0, Math.min(topY - 0.4, dragPoint.y));
+      spin += (cx - lastClientX) * 0.0035;
+      lastClientX = cx;
     };
-    const onUp = e => {
+    const release = () => {
       if (!dragging) return;
       dragging = false;
       document.body.style.cursor = "";
@@ -666,13 +671,54 @@ export default function Badge3D() {
       spin += 0.1;
       setHint(false);
     };
-    // Listen on window: the (wider) canvas has pointer-events:none on desktop so it
-    // never blocks the hero buttons; we only react when the pointer is over the card.
+
+    // mouse / pen
+    const onPointerDown = e => {
+      if (e.pointerType === "touch" || e.button > 0) return;
+      if (grab(e.clientX, e.clientY)) {
+        document.body.style.cursor = "grabbing";
+        e.preventDefault();
+      }
+    };
+    const onPointerMove = e => {
+      if (e.pointerType === "touch") return;
+      if (dragging) dragTo(e.clientX, e.clientY);
+      else document.body.style.cursor = overCard(e.clientX, e.clientY) ? "grab" : "";
+    };
+    const onPointerUp = e => {
+      if (e.pointerType === "touch") return;
+      release();
+    };
+    // touch: non-passive so a finger on the card drags it instead of scrolling the page
+    const onTouchStart = e => {
+      const t = e.touches[0];
+      if (t && grab(t.clientX, t.clientY)) e.preventDefault();
+    };
+    const onTouchMove = e => {
+      if (!dragging) return;
+      const t = e.touches[0];
+      if (t) dragTo(t.clientX, t.clientY);
+      e.preventDefault();
+    };
+    const onTouchEnd = () => release();
+    const onVisibility = () => {
+      tabHidden = document.hidden;
+      if (!tabHidden) {
+        lastT = performance.now();
+        acc = 0;
+      }
+    };
+
     const el = window;
-    el.addEventListener("pointerdown", onDown);
-    el.addEventListener("pointermove", onMove);
-    el.addEventListener("pointerup", onUp);
-    el.addEventListener("pointercancel", onUp);
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", onPointerUp);
+    el.addEventListener("pointercancel", onPointerUp);
+    el.addEventListener("touchstart", onTouchStart, {passive: false});
+    el.addEventListener("touchmove", onTouchMove, {passive: false});
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", onTouchEnd);
+    document.addEventListener("visibilitychange", onVisibility);
     apiRef.current.flip = flip;
 
     const io = new IntersectionObserver(
@@ -681,10 +727,12 @@ export default function Badge3D() {
       },
       {threshold: 0}
     );
-    io.observe(mount);
+    io.observe(mount.parentElement);
 
-    // ---- loop
+    // ---- loop (fixed 60Hz physics, frame-rate independent) ----
     const GRAV = -0.0105;
+    const DAMP = 0.984; // lower = settles faster; this gives a few visible bounces
+    const STRETCH_K = 0.26; // <1: the strap stretches like rubber
     const reduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf;
@@ -693,31 +741,30 @@ export default function Badge3D() {
     let acc = 0;
     let lastT = performance.now();
 
-    // one fixed 60Hz physics step (frame-rate independent)
     const step = () => {
-      // integrate
       for (let i = 1; i <= SEGMENTS; i++) {
         const n = nodes[i];
-        const vx = (n.p.x - n.o.x) * 0.978;
-        const vy = (n.p.y - n.o.y) * 0.978;
+        const vx = (n.p.x - n.o.x) * DAMP;
+        const vy = (n.p.y - n.o.y) * DAMP;
         n.o.copy(n.p);
         n.p.x += vx;
         n.p.y += vy + GRAV * (i === SEGMENTS ? 2.2 : 1); // heavy card end
       }
-      // drag pulls the card end
+      // the grabbed end follows the finger/cursor with a little lag, so the strap stretches
       if (dragging) {
         const end = nodes[SEGMENTS];
-        end.p.x += (dragPoint.x - end.p.x) * 0.35;
-        end.p.y += (dragPoint.y - end.p.y) * 0.35;
+        end.p.x += (dragPoint.x - end.p.x) * 0.22;
+        end.p.y += (dragPoint.y - end.p.y) * 0.22;
       }
-      // constraints
-      for (let it = 0; it < 14; it++) {
+      for (let it = 0; it < 12; it++) {
         for (let i = 0; i < SEGMENTS; i++) {
           const a = nodes[i];
           const b = nodes[i + 1];
           tmp.copy(b.p).sub(a.p);
           const d = tmp.length() || 1e-6;
-          const diff = (d - SEG_LEN) / d;
+          // compress rigidly, stretch softly (elastic)
+          const k = d > segLen ? STRETCH_K : 1;
+          const diff = ((d - segLen) / d) * k;
           if (a.pinned) {
             b.p.addScaledVector(tmp, -diff);
           } else {
@@ -727,7 +774,6 @@ export default function Badge3D() {
         }
         nodes[0].p.set(0, topY, 0);
       }
-
       // spin / flip: spring toward the target face while free, direct while dragging
       if (dragging) {
         spin *= 0.8;
@@ -743,7 +789,14 @@ export default function Badge3D() {
       const now = performance.now();
       acc += Math.min(now - lastT, 250);
       lastT = now;
-      if (!visible) {
+      // pause the simulation when the tab is hidden or the hero is off-screen
+      // hold the intro (rope drop) until the loader starts revealing the site
+      if (!liveRef.current) {
+        acc = 0;
+        renderer.render(scene, camera);
+        return;
+      }
+      if (tabHidden || !visible) {
         acc = 0;
         return;
       }
@@ -762,18 +815,21 @@ export default function Badge3D() {
       pivot.rotation.z = ang * 0.9;
       card.rotation.y = rotY + (reduce ? 0 : Math.sin(now / 900) * 0.04);
 
-      // lanyard ribbon through the nodes
-      const pts = nodes.map(n => new THREE.Vector3(n.p.x, n.p.y, 0));
-      // extend to the clip ring
-      pts[SEGMENTS] = new THREE.Vector3(b.x, b.y, 0);
+      // how far the strap is stretched (1 = relaxed): the ribbon thins out like a rubber band
+      let total = 0;
+      for (let i = 0; i < SEGMENTS; i++) {
+        total += tmp.copy(nodes[i + 1].p).sub(nodes[i].p).length();
+      }
+      const stretch = Math.max(1, total / (SEGMENTS * segLen));
+      const half = 0.17 / Math.sqrt(stretch);
+
+      const pts = nodes.map(nd => new THREE.Vector3(nd.p.x, nd.p.y, 0));
       const curve = new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.4);
       const p = ribbonGeo.attributes.position.array;
-      const half = 0.17;
       for (let i = 0; i <= RIBBON_STEPS; i++) {
         const t = i / RIBBON_STEPS;
         const c = curve.getPoint(t);
         const tg = curve.getTangent(t);
-        // perpendicular in the screen plane, slightly twisted
         const nx = -tg.y;
         const ny = tg.x;
         p[i * 6] = c.x + nx * half;
@@ -794,10 +850,15 @@ export default function Badge3D() {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
-      el.removeEventListener("pointerdown", onDown);
-      el.removeEventListener("pointermove", onMove);
-      el.removeEventListener("pointerup", onUp);
-      el.removeEventListener("pointercancel", onUp);
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", onPointerUp);
+      el.removeEventListener("pointercancel", onPointerUp);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+      document.removeEventListener("visibilitychange", onVisibility);
       scene.traverse(o => {
         if (o.geometry) o.geometry.dispose();
         if (o.material) {

@@ -1,62 +1,95 @@
-import React, {useEffect, useState} from "react";
-import {heroSection, badge} from "../portfolio";
+import React, {useEffect, useRef, useState} from "react";
+import {heroSection} from "../portfolio";
 
-/* Full-screen loader: 0 -> 100% counter with a mini ID card that "prints",
- * then a curtain split reveals the site. */
-export default function Loader({onDone, onReveal}) {
+/*
+ * Loading sequence (~2.5s total):
+ *  a. dark screen, name appears letter by letter (staggered fade + slight rise)
+ *  b. thin progress line fills across the bottom, counter 0 -> 100
+ *  c. at 100% a circular clip reveal expands from the centre to uncover the site
+ * The loader is removed from the DOM when it finishes (Main unmounts it via onDone).
+ */
+const LINE_START = 150; // ms
+const LINE_DUR = 1750; // 100% reached at 1.9s
+const REVEAL_DUR = 600; // finishes at 2.5s
+const MOUNT_AT = 500; // build the site underneath early so the reveal itself stays smooth
+
+const easeInOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+export default function Loader({onMount, onReveal, onDone}) {
+  const rootRef = useRef(null);
+  const contentRef = useRef(null);
   const [pct, setPct] = useState(0);
-  const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
+    const root = rootRef.current;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden"; // no scrolling behind the loader
     let raf;
+    let mounted = false;
+    let revealed = false;
+    let finished = false;
     const start = performance.now();
-    const total = 2600;
-    const step = now => {
-      const t = Math.min(1, (now - start) / total);
-      // ease so it feels like real loading: quick, slow middle, quick end
-      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      setPct(Math.round(eased * 100));
-      if (t < 1) raf = requestAnimationFrame(step);
-      else {
-        setTimeout(() => setLeaving(true), 250);
-        setTimeout(onReveal, 650);
-        setTimeout(onDone, 1500);
+    const maxR = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 40;
+
+    const frame = now => {
+      const t = now - start;
+      const p = Math.min(1, Math.max(0, (t - LINE_START) / LINE_DUR));
+      setPct(Math.round(easeInOut(p) * 100));
+      if (!mounted && t >= MOUNT_AT) {
+        mounted = true;
+        onMount(); // heavy work (3D scene etc.) happens while the progress line is filling
       }
+
+      if (t >= LINE_START + LINE_DUR) {
+        if (!revealed) {
+          revealed = true;
+          onReveal(); // site is already there; start its intro animations as the hole opens
+        }
+        const r = Math.min(1, (t - (LINE_START + LINE_DUR)) / REVEAL_DUR);
+        const radius = easeInOut(r) * maxR;
+        // the loader is masked with a growing transparent circle at the centre
+        const mask = `radial-gradient(circle at 50% 50%, transparent ${radius}px, #000 ${radius + 2}px)`;
+        root.style.webkitMaskImage = mask;
+        root.style.maskImage = mask;
+        if (contentRef.current) contentRef.current.style.opacity = String(1 - Math.min(1, r * 2.2));
+        if (r >= 1 && !finished) {
+          finished = true;
+          onDone();
+          return;
+        }
+      }
+      raf = requestAnimationFrame(frame);
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(raf);
+      document.body.style.overflow = prevOverflow;
+    };
     // eslint-disable-next-line
   }, []);
 
-  const chars = (heroSection.loaderName || "HELLO").split("");
+  const name = heroSection.loaderName || "HELLO";
+  const chars = name.split("");
 
   return (
-    <div className={`loader ${leaving ? "leaving" : ""}`} role="status" aria-label="Loading">
-      <div className="loader-curtain left" />
-      <div className="loader-curtain right" />
-      <div className="loader-center">
-        <div className="loader-card" style={{"--p": pct / 100}}>
-          <div className="lc-slot" />
-          <div className="lc-photo">
-            <i className="fas fa-user" />
-          </div>
-          <div className="lc-line w70" />
-          <div className="lc-line w45" />
-          <div className="lc-bars" />
-          <div className="lc-scan" />
-        </div>
-        <div className="loader-name" aria-hidden="true">
+    <div className="loader" ref={rootRef} role="status" aria-label="Loading">
+      <div className="loader-content" ref={contentRef}>
+        <h1 className="loader-name" aria-label={name}>
           {chars.map((c, i) => (
-            <span key={i} style={{animationDelay: `${i * 0.09}s`}}>
-              {c}
+            <span
+              key={i}
+              aria-hidden="true"
+              className={c === " " ? "gap" : ""}
+              style={{animationDelay: `${0.12 + i * 0.07}s`}}
+            >
+              {c === " " ? " " : c}
             </span>
           ))}
+        </h1>
+        <div className="loader-pct" aria-hidden="true">
+          {String(pct).padStart(3, "0")}%
         </div>
-        <div className="loader-meta">
-          <span>{badge.tagline}</span>
-          <span className="loader-pct">{String(pct).padStart(3, "0")}%</span>
-        </div>
-        <div className="loader-bar">
+        <div className="loader-line" aria-hidden="true">
           <i style={{transform: `scaleX(${pct / 100})`}} />
         </div>
       </div>

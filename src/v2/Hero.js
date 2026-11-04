@@ -31,7 +31,7 @@ function useTypewriter(words) {
   return text;
 }
 
-export default function Hero() {
+export default function Hero({live = true}) {
   const typed = useTypewriter(heroSection.roles);
   const go = id => e => {
     e.preventDefault();
@@ -101,7 +101,7 @@ export default function Hero() {
         )}
       </div>
       <div className="hero-badge">
-        <Badge3D />
+        <Badge3D live={live} />
       </div>
     </section>
   );

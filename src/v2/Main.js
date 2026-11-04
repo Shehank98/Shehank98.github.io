@@ -13,20 +13,22 @@ import Footer from "./Footer";
 import "./v2.scss";
 
 export default function Main() {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false); // site mounted (under the loader)
+  const [live, setLive] = useState(false); // loader is revealing: start intro animations
   const [loading, setLoading] = useState(true);
-  const reveal = useCallback(() => setReady(true), []);
+  const mount = useCallback(() => setReady(true), []);
+  const reveal = useCallback(() => setLive(true), []);
   const done = useCallback(() => setLoading(false), []);
   return (
-    <div className="v2">
+    <div className={`v2 ${live ? "is-live" : ""}`}>
       <Starfield />
       <div className="aurora" aria-hidden="true" />
-      {loading && <Loader onReveal={reveal} onDone={done} />}
+      {loading && <Loader onMount={mount} onReveal={reveal} onDone={done} />}
       {ready && (
         <>
           <Nav />
           <main>
-            <Hero />
+            <Hero live={live} />
             <About />
             <Portfolio />
             <Skills />
