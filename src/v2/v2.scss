@@ -101,47 +101,80 @@ body {
   inset: 0;
   z-index: 100;
   background: $bg;
-  .loader-content { position: absolute; inset: 0; display: grid; place-items: center; }
+  overflow: hidden;
+  .loader-content { position: absolute; inset: 0; }
 }
+// animated backdrop
+.ld-grid {
+  position: absolute; inset: -60px; opacity: 0; animation: ldFade 1.2s 0.1s ease-out forwards, ldGrid 3s linear infinite;
+  background-image: linear-gradient(rgba(129, 140, 248, 0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(129, 140, 248, 0.09) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 50%, #000 0%, transparent 72%);
+}
+@keyframes ldGrid { to { transform: translate(56px, 56px); } }
+@keyframes ldFade { to { opacity: 1; } }
+.ld-glow { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0; animation: ldFade 1.4s ease-out forwards;
+  &.g1 { width: 46vmax; height: 46vmax; left: -12vmax; top: -14vmax; background: rgba(99, 102, 241, 0.35); animation: ldFade 1.4s ease-out forwards, ldDrift1 6s ease-in-out infinite alternate; }
+  &.g2 { width: 40vmax; height: 40vmax; right: -12vmax; bottom: -14vmax; background: rgba(34, 211, 238, 0.2); animation: ldFade 1.4s 0.2s ease-out forwards, ldDrift2 7s ease-in-out infinite alternate; } }
+@keyframes ldDrift1 { to { transform: translate(8vmax, 6vmax) scale(1.15); } }
+@keyframes ldDrift2 { to { transform: translate(-7vmax, -5vmax) scale(1.2); } }
+
+// corners
+.ld-corner { position: absolute; top: clamp(18px, 4vh, 34px); font: 700 11px "Inter", sans-serif; letter-spacing: 0.3em; color: rgba(165, 180, 252, 0.7); opacity: 0; animation: ldFade 0.8s 0.5s forwards;
+  &.tl { left: clamp(18px, 4vw, 40px); display: flex; align-items: center; gap: 10px; i { width: 22px; height: 1px; background: currentColor; } }
+  &.tr { right: clamp(18px, 4vw, 40px); } }
+
+// centre stack
+.ld-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 0 20px; transform: translateY(-2vh); }
+
+// monogram ring
+.ld-ring { position: relative; width: clamp(96px, 15vmin, 132px); aspect-ratio: 1; margin-bottom: clamp(18px, 3.5vh, 30px); opacity: 0; transform: scale(0.8); animation: ldRingIn 0.9s 0.1s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  svg { position: absolute; inset: -6%; width: 112%; height: 112%; overflow: visible; }
+  .ld-track { fill: none; stroke: rgba(129, 140, 248, 0.14); stroke-width: 2; }
+  .ld-arc { fill: none; stroke-width: 3.5; stroke-linecap: round; filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.9)); }
+  .ld-tick { fill: none; stroke: rgba(165, 180, 252, 0.28); stroke-width: 1.5; stroke-dasharray: 1 7; transform-origin: 70px 70px; animation: ldSpin 14s linear infinite; }
+  .ld-mono { position: absolute; inset: 0; display: grid; place-items: center; font: 700 clamp(26px, 4.4vmin, 38px) "Space Grotesk", sans-serif; letter-spacing: 0.02em;
+    background: linear-gradient(135deg, #fff 30%, #a5b4fc); -webkit-background-clip: text; background-clip: text; color: transparent; animation: ldPulse 2s ease-in-out infinite; }
+  .ld-orbit { position: absolute; inset: -14%; animation: ldSpin 2.6s linear infinite; i { position: absolute; left: 50%; top: 0; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 14px #22d3ee, 0 0 30px rgba(34, 211, 238, 0.6); }
+    &.o2 { inset: -26%; animation-duration: 4.2s; animation-direction: reverse; opacity: 0.7; i { width: 5px; height: 5px; margin-left: -2.5px; background: #f472b6; box-shadow: 0 0 12px #f472b6; } } } }
+@keyframes ldRingIn { to { opacity: 1; transform: none; } }
+@keyframes ldSpin { to { transform: rotate(360deg); } }
+@keyframes ldPulse { 50% { filter: drop-shadow(0 0 14px rgba(167, 139, 250, 0.8)); } }
+
+// name
 .loader-name {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 24px;
-  font: 700 clamp(30px, 8vw, 88px) "Space Grotesk", sans-serif;
-  letter-spacing: 0.14em;
-  margin: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; margin: 0;
+  font: 700 clamp(26px, 6.4vw, 76px) "Space Grotesk", sans-serif; letter-spacing: 0.12em;
   span {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(18px);
-    animation: charIn 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
-    background: $grad;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    &.gap { width: 0.4em; }
-  }
+    display: inline-block; opacity: 0; transform: translateY(26px) scale(0.9); filter: blur(12px);
+    background: $grad; -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: ldChar 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) forwards, ldWave 0.9s ease-in-out 1.15s 1;
+    animation-delay: calc(0.35s + var(--i) * 0.045s), calc(1.15s + var(--i) * 0.04s);
+    &.gap { width: 0.4em; } }
 }
-@keyframes charIn { to { opacity: 1; transform: none; } }
-.loader-pct {
-  position: absolute;
-  right: 6vw;
-  bottom: calc(5vh + 16px);
-  font: 600 14px "Inter", sans-serif;
-  letter-spacing: 0.2em;
-  color: $cyan;
-  font-variant-numeric: tabular-nums;
-}
-.loader-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 5vh;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  i { display: block; height: 100%; transform-origin: left; background: $grad; box-shadow: 0 0 12px $violet; }
-}
+@keyframes ldChar { to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes ldWave { 40% { transform: translateY(-9px); filter: brightness(1.9) drop-shadow(0 0 14px rgba(167, 139, 250, 0.9)); } }
+.ld-tagline { display: flex; align-items: center; gap: 14px; margin-top: clamp(12px, 2.2vh, 20px); font: 600 clamp(10px, 1.5vmin, 13px) "Inter", sans-serif; letter-spacing: 0.42em; color: rgba(199, 210, 254, 0.75); opacity: 0; animation: ldTag 0.9s 1.0s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  i { width: clamp(24px, 6vw, 56px); height: 1px; background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.8)); &:last-child { transform: scaleX(-1); } } }
+@keyframes ldTag { from { opacity: 0; letter-spacing: 0.9em; } to { opacity: 1; } }
+
+// bottom: status, counter, glowing progress line
+.ld-foot { position: absolute; left: clamp(18px, 4vw, 40px); right: clamp(18px, 4vw, 40px); bottom: calc(clamp(18px, 5vh, 44px) + 18px); display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.ld-status { display: flex; align-items: center; gap: 10px; font: 600 12px "Inter", sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(199, 210, 254, 0.8); min-width: 0;
+  .ld-dot { width: 7px; height: 7px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 10px #22d3ee; animation: ldBlink 1s ease-in-out infinite; flex-shrink: 0; }
+  .ld-step { animation: ldStep 0.45s cubic-bezier(0.2, 0.9, 0.2, 1) both; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+@keyframes ldBlink { 50% { opacity: 0.25; } }
+@keyframes ldStep { from { opacity: 0; transform: translateY(8px); } }
+.loader-pct { font: 700 clamp(34px, 7vmin, 64px) "Space Grotesk", sans-serif; line-height: 0.85; letter-spacing: -0.02em; color: #fff; font-variant-numeric: tabular-nums;
+  small { font-size: 0.4em; margin-left: 3px; color: #22d3ee; letter-spacing: 0; } }
+.loader-line { position: absolute; left: 0; right: 0; bottom: clamp(18px, 5vh, 44px); height: 3px; background: rgba(255, 255, 255, 0.07);
+  i { display: block; height: 100%; transform-origin: left; background: $grad; box-shadow: 0 0 14px rgba(139, 92, 246, 0.9); }
+  // glowing head that rides the end of the line
+  b { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.35), 0 0 22px 6px rgba(129, 140, 248, 0.85); } }
+// as the circular reveal opens, the ring flares outward
+.loader.revealing .ld-ring { animation: ldRingOut 0.7s cubic-bezier(0.5, 0, 0.8, 0.3) forwards; }
+@keyframes ldRingOut { to { transform: scale(1.5); opacity: 0; } }
 
 // ---------- nav ----------
 .pill-nav {

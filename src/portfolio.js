@@ -44,7 +44,14 @@ const heroSection = {
     "7+ years in advertising, now blending media buying with machine learning and automation. I turn messy campaign data into smarter decisions and build the tools that run media operations in minutes, not hours.",
   primaryButton: "View Projects",
   secondaryButton: "Contact Me",
-  loaderName: "SHEHAN KAVISHKA"
+  loaderName: "SHEHAN KAVISHKA",
+  loaderTagline: "MEDIA × DATA × AI",
+  loaderSteps: [
+    "Loading assets",
+    "Training the model",
+    "Aligning the media plan",
+    "Ready"
+  ]
 };
 
 const musicSection = {
