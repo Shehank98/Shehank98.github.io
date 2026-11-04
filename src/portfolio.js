@@ -613,6 +613,10 @@ const aboutSection = {
   greetingLine: "Hi, I'm",
   displayName: "Shehan Kavishka",
   photo: require("./assets/images/profile.jpg"),
+  // Transparent (background-removed) portrait. Leave empty to use the photo above.
+  photoCutout: require("./assets/images/profile-cutout.png"),
+  // How the cut-out is shown: "floating" | "halo" | "poster"
+  photoStyle: "floating",
   primaryButton: "Contact Me",
   secondaryButton: "View Projects",
   paragraphs: [

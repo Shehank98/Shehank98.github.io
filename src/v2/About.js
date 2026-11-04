@@ -62,6 +62,8 @@ export default function About() {
   const first = nameParts.shift() || "";
   const rest = nameParts.join(" ");
   const photo = aboutSection.photo || badge.photo;
+  const cutout = aboutSection.photoCutout || "";
+  const style = ["floating", "halo", "poster"].includes(aboutSection.photoStyle) ? aboutSection.photoStyle : "floating";
   return (
     <section id="about" className="section about-sec">
       <Reveal as="h2" className="about-title">{aboutSection.title}</Reveal>
@@ -78,16 +80,25 @@ export default function About() {
           </Reveal>
 
           {/* CENTRE: photo */}
-          <Reveal className="about-photo" delay={0.1}>
-            <div className="ring r1" />
-            <div className="ring r2" />
-            <i className="orbit-dot" />
-            {photo ? (
-              <img src={photo} alt={aboutSection.displayName} />
-            ) : (
-              <div className="about-ph"><i className="fas fa-user" /></div>
-            )}
-          </Reveal>
+          {cutout ? (
+            <Reveal className={`about-photo cut cut-${style}`} delay={0.1}>
+              {style === "poster" && <span className="cut-word" aria-hidden="true">{first.toUpperCase()}</span>}
+              {style === "halo" && <span className="cut-disc" aria-hidden="true" />}
+              {style === "floating" && <span className="cut-glow" aria-hidden="true" />}
+              <img src={cutout} alt={aboutSection.displayName} />
+            </Reveal>
+          ) : (
+            <Reveal className="about-photo" delay={0.1}>
+              <div className="ring r1" />
+              <div className="ring r2" />
+              <i className="orbit-dot" />
+              {photo ? (
+                <img src={photo} alt={aboutSection.displayName} />
+              ) : (
+                <div className="about-ph"><i className="fas fa-user" /></div>
+              )}
+            </Reveal>
+          )}
 
           {/* RIGHT: the three paragraphs + View Projects */}
           <Reveal className="about-copy" delay={0.2}>

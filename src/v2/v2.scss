@@ -676,3 +676,31 @@ body {
   .count-card .cc-num { font-size: 28px !important; }
   .pgrid .pcard-wrap { flex-basis: 84%; }
 }
+
+// =====================================================================
+// About portrait with the background removed (3 looks: floating / halo / poster)
+// =====================================================================
+.about-photo.cut { position: relative; display: block; height: auto; min-height: 0; width: 100%; max-width: 470px; margin: 0 auto; aspect-ratio: 0.905; align-self: center;
+  img { position: absolute; left: 0; bottom: 0; width: 100%; height: auto; max-width: none; border-radius: 0; z-index: 3; -webkit-mask-image: none; mask-image: none; filter: none; }
+  // 1) FLOATING: the person floats over the space background with a soft glow and a fade into the dark at the bottom
+  &.cut-floating {
+    img { -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); filter: none; } // (no drop-shadow here: the fade mask would clip it into a visible box)
+    .cut-glow { position: absolute; left: 50%; bottom: 4%; width: 112%; height: 82%; transform: translateX(-50%); border-radius: 50%; z-index: 1; background: radial-gradient(closest-side, rgba(99, 102, 241, 0.55), rgba(139, 92, 246, 0.22) 55%, transparent 76%); filter: blur(26px); animation: ringPulse 6s ease-in-out infinite; }
+  }
+  // 2) HALO: a glowing gradient disc behind the person, with a thin ring; the head breaks out of the circle
+  &.cut-halo {
+    img { -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%); mask-image: linear-gradient(to bottom, #000 90%, transparent 100%); filter: none; }
+    .cut-disc { position: absolute; left: 50%; bottom: 5%; width: 92%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; z-index: 1;
+      background: linear-gradient(150deg, #6366f1 0%, #8b5cf6 55%, #22d3ee 125%); box-shadow: 0 0 90px rgba(99, 102, 241, 0.55), inset 0 0 50px rgba(255, 255, 255, 0.16);
+      &::after { content: ""; position: absolute; inset: -5%; border-radius: 50%; border: 1.5px solid rgba(165, 180, 252, 0.4); animation: ringPulse 6s ease-in-out infinite; } }
+  }
+  // 3) POSTER: a glass card with a huge outlined name behind the person
+  &.cut-poster { container-type: inline-size; border-radius: 30px; overflow: hidden; border: 1px solid rgba(165, 180, 252, 0.3);
+    background: linear-gradient(160deg, rgba(99, 102, 241, 0.38), rgba(34, 211, 238, 0.1) 62%, rgba(10, 12, 40, 0.5)); box-shadow: inset 0 0 70px rgba(99, 102, 241, 0.25), 0 36px 80px -34px rgba(99, 102, 241, 0.75);
+    img { z-index: 3; filter: drop-shadow(0 20px 28px rgba(0, 0, 0, 0.45)); }
+    .cut-word { position: absolute; top: 5%; left: 50%; transform: translateX(-50%); z-index: 1; font: 800 96px/1 "Space Grotesk", sans-serif; font-size: 25cqw; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 2px rgba(165, 180, 252, 0.42); white-space: nowrap; user-select: none; }
+  }
+}
+@media (max-width: 768px) {
+  .about-photo.cut { max-width: 340px; order: 1; margin-bottom: 22px; height: auto; }
+}

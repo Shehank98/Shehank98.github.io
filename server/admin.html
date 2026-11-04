@@ -408,6 +408,8 @@
         qrTitle: {l: "QR panel title"}, qrCaption: {l: "“Scan here” label"}, lanyardText: {l: "Text on the strap"},
         "aboutSection.title": {l: "Section title"}, greetingLine: {l: "Greeting", h: "Small purple line, e.g. “Hi, I'm”."},
         displayName: {l: "Your name", h: "Shown big next to your photo."},
+        photoCutout: {l: "Portrait with background removed", h: "A transparent PNG of you. When set, it replaces the photo above in the About section. Uploaded exactly as-is (no cropping, so the transparency is kept)."},
+        photoStyle: {l: "Portrait style", t: "select", opts: [["floating", "Floating: glow behind you, no frame"], ["halo", "Halo: glowing circle behind you"], ["poster", "Poster: glass card with big name behind you"]], h: "How the background-removed portrait is shown."},
         "aboutSection.photo": {l: "Your photo", h: "Shown in the centre of the About section."},
         "aboutSection.paragraphs": {l: "About text", h: "Keep it short: 2 paragraphs is ideal. Each box is one paragraph.", t: "strings", area: true},
         highlights: {l: "Words to make bold", h: "Type a phrase exactly as written in the text above and it will be bold.", t: "strings"},
@@ -436,7 +438,7 @@
       };
       const TITLE_KEYS = ["projectName", "title", "role", "schoolName", "recommenderName", "skillName", "Stack", "name", "label", "value"];
       const SUB_KEYS = ["company", "subHeader", "subtitle", "date", "duration", "recommendation", "progressPercentage", "description", "projectDesc"];
-      const IMAGE_KEYS = ["image", "logo", "companylogo", "photo", "profileImage"];
+      const IMAGE_KEYS = ["image", "logo", "companylogo", "photo", "profileImage", "photoCutout"];
       const pretty = k => k.replace(/_/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/^./, c => c.toUpperCase());
       const metaFor = (sec, key) => META[sec + "." + key] || META[key] || {};
       const labelFor = (sec, key) => metaFor(sec, key).l || pretty(key);
@@ -677,6 +679,7 @@
         if (typeof val === "boolean") return h("div", {class: "field wide"}, h("div", {class: "toggle-row"}, h("div", {}, h("b", {}, label), m.h ? h("small", {}, m.h) : null), switchEl(obj, key, touch)));
         if (IMAGE_KEYS.includes(key) && (val == null || typeof val === "string")) return wrap(imageWidget(obj, key, path, touch, m), true);
         if (m.t === "video") return wrap(videoWidget(obj, key, touch, m), true);
+        if (m.t === "select") { const sel = h("select", {}, (m.opts || []).map(o => h("option", {value: o[0]}, o[1]))); sel.value = val || (m.opts[0] || [])[0]; sel.addEventListener("change", () => { obj[key] = sel.value; touch(); }); return wrap(sel); }
         if (m.t === "url") return wrap(urlWidget(obj, key, touch, m));
         const long = m.t === "area" || (typeof val === "string" && (val.length > 80 || val.includes("\n")));
         if (long) {
@@ -720,7 +723,7 @@
           actions.innerHTML = "";
           actions.append(h("button", {class: "btn btn-soft btn-sm", type: "button", onclick: () => file.click()}, ic("upload", 15), obj[key] ? "Replace" : "Upload"));
           if (obj[key]) actions.append(
-            h("button", {class: "btn btn-soft btn-sm", type: "button", onclick: recrop}, ic("crop", 15), "Crop / fit"),
+            key === "photoCutout" ? null : h("button", {class: "btn btn-soft btn-sm", type: "button", onclick: recrop}, ic("crop", 15), "Crop / fit"),
             h("button", {class: "btn btn-ghost btn-sm", type: "button", onclick: () => { obj[key] = null; paint(); touch(); }}, ic("trash", 15), "Remove"));
         };
         const apply = async (blobOrFile, name) => { drop.classList.add("loading"); try { obj[key] = await uploadFile(blobOrFile, name); paint(); touch(); toast("Image uploaded. Remember to save."); } catch (e) { toast(e.message, "err"); } drop.classList.remove("loading"); };
@@ -729,6 +732,7 @@
         }
         async function chosen(f) {
           if (!f || !/^image\//.test(f.type)) return toast("Please choose an image file", "err");
+          if (key === "photoCutout") return apply(f, f.name); // keep the transparency: upload untouched
           const local = URL.createObjectURL(f); let up = f, name = f.name;
           try { const r = await openCropper(local, cropPrefs(path)); if (r === null) { URL.revokeObjectURL(local); return; } if (r !== "original") { up = r; name = "cropped-" + Date.now() + ".jpg"; } } catch (_) {}
           URL.revokeObjectURL(local); await apply(up, name);
