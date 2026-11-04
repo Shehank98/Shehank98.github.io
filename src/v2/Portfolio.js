@@ -31,6 +31,8 @@ function Media({item}) {
     <div className={`pc-media ${item.contain ? "contain" : ""}`}>
       {src ? (
         <img src={src} alt={item.alt || item.title} draggable="false" loading="lazy" onError={() => setBad(true)} />
+      ) : item.fallbackText ? (
+        <span className="pc-fallback">{item.fallbackText}</span>
       ) : (
         <i className={item.icon || "fas fa-cube"} />
       )}
@@ -149,6 +151,7 @@ export default function Portfolio() {
       desc: "",
       image: c.image,
       contain: true,
+      fallbackText: c.image ? "" : c.subtitle, // no logo uploaded yet: show the issuer's name
       links: (c.footerLink || []).map(l => ({name: l.name || "Credential", url: l.url})),
       icon: "fas fa-certificate"
     }));

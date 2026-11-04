@@ -392,6 +392,30 @@ const achievementSection = {
 
   achievementsCards: [
     {
+      title: "Meta Certified Digital Marketing Associate",
+      subtitle: "Meta Blueprint",
+      image: null, // upload the Meta logo / certificate in /admin > Certificates
+      imageAlt: "Certificate",
+      footerLink: [] // add the credential link here (or in /admin)
+    },
+
+    {
+      title: "Google Video Ads Certification",
+      subtitle: "Google Ads",
+      image: require("./assets/images/google.png"),
+      imageAlt: "Certificate",
+      footerLink: []
+    },
+
+    {
+      title: "TikTok Basic Achievement Exam",
+      subtitle: "TikTok",
+      image: null, // upload the TikTok logo / certificate in /admin > Certificates
+      imageAlt: "Certificate",
+      footerLink: []
+    },
+
+    {
       title: "AI/ML Engineer - Stage 2",
       subtitle: "Centre for Open & Distance Education - SLIIT (Dec 2023)",
       image: require("./assets/images/sliitlogo.jpeg"),
