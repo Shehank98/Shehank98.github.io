@@ -57,9 +57,6 @@ export default function Hero({live = true}) {
           {heroSection.intro}
         </p>
         <div className="hero-cta reveal-up" style={{"--d": "0.7s"}}>
-          <a href="#portfolio" className="btn-primary" onClick={go("portfolio")}>
-            {heroSection.primaryButton} <i className="fas fa-arrow-right" />
-          </a>
           <a href="#contact" className="btn-ghost" onClick={go("contact")}>
             {heroSection.secondaryButton} <i className="far fa-paper-plane" />
           </a>

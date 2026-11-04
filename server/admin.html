@@ -359,11 +359,11 @@
 
       /* ---------- the sections (what appears on the site, in plain words) ---------- */
       const REG = {
-        heroSection: {title: "Hero & loading text", icon: "home", group: "Home page", anchor: "home", desc: "The big welcome heading, the typing roles under it, and the name shown on the loading screen."},
+        heroSection: {title: "Hero & loading text", icon: "home", group: "Home page", anchor: "home", hide: ["primaryButton"], desc: "The big welcome heading, the typing roles under it, and the name shown on the loading screen."},
         badge: {title: "ID badge", icon: "id", group: "Home page", anchor: "home", desc: "Your 3D hanging ID card: photo, name, role, and the QR code on its back."},
         greeting: {title: "Resume link", icon: "file", group: "Home page", anchor: "home", desc: "Where the “Resume” button in the hero opens.", show: ["resumeLink"]},
         socialMediaLinks: {title: "Social links", icon: "link", group: "Home page", anchor: "home", desc: "GitHub, LinkedIn, Medium and email icons shown under the hero text."},
-        aboutSection: {title: "About me", icon: "user", group: "About", anchor: "about", desc: "Your name, photo and the short text about you."},
+        aboutSection: {title: "About me", icon: "user", group: "About", anchor: "about", hide: ["primaryButton", "secondaryButton"], desc: "Your name, photo and the short text about you."},
         statsSection: {title: "Quick stats", icon: "chart", group: "About", anchor: "about", desc: "The animated number cards, e.g. “7+ Years in Media”."},
         workExperiences: {title: "Experience", icon: "briefcase", group: "About", anchor: "about", desc: "Your work history timeline."},
         educationInfo: {title: "Education", icon: "cap", group: "About", anchor: "about", desc: "Universities, diplomas and courses."},

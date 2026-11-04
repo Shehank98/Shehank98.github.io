@@ -52,11 +52,6 @@ function withHighlights(text, highlights) {
 }
 
 export default function About() {
-  const go = id => e => {
-    e.preventDefault();
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({behavior: "smooth"});
-  };
   const paras = aboutSection.paragraphs || [];
   const nameParts = (aboutSection.displayName || "").split(" ");
   const first = nameParts.shift() || "";
@@ -74,9 +69,6 @@ export default function About() {
             <span className="about-hi">{aboutSection.greetingLine}</span>
             <span className="about-first">{first}</span>
             {rest && <span className="about-last">{rest}</span>}
-            <a href="#contact" className="btn-primary" onClick={go("contact")}>
-              <i className="far fa-envelope" /> {aboutSection.primaryButton}
-            </a>
           </Reveal>
 
           {/* CENTRE: photo */}
@@ -107,9 +99,6 @@ export default function About() {
                 <p key={i}>{withHighlights(p, aboutSection.highlights)}</p>
               ))}
             </div>
-            <a href="#portfolio" className="btn-ghost" onClick={go("portfolio")}>
-              <i className="fas fa-code" /> {aboutSection.secondaryButton} <i className="fas fa-arrow-up-right-from-square" />
-            </a>
           </Reveal>
         </div>
       )}
