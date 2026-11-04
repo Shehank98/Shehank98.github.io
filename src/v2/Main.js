@@ -4,7 +4,7 @@ import Starfield from "./Starfield";
 import Nav from "./Nav";
 import Hero from "./Hero";
 import About from "./About";
-import Projects from "./Projects";
+import Portfolio from "./Portfolio";
 import Skills from "./Skills";
 import Music from "./Music";
 import Comments from "./Comments";
@@ -28,7 +28,7 @@ export default function Main() {
           <main>
             <Hero />
             <About />
-            <Projects />
+            <Portfolio />
             <Skills />
             <Music />
             <Comments />

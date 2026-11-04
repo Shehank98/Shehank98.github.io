@@ -5,10 +5,28 @@ import {
   educationInfo,
   workExperiences,
   languagesSection,
-  badge
+  badge,
+  bigProjects,
+  achievementSection,
+  honorsSection
 } from "../portfolio";
 import {Reveal} from "./Section";
 import {useInView, useCountUp} from "./hooks";
+
+function CountCard({value, label, sub, icon, delay}) {
+  const [ref, seen] = useInView();
+  const out = useCountUp(String(value), seen, 1200);
+  return (
+    <div ref={ref} className={`count-card reveal ${seen ? "in" : ""}`} style={{"--d": `${delay}s`}}>
+      <div className="cc-top">
+        <span className="cc-ico"><i className={icon} /></span>
+        <span className="cc-num">{out}</span>
+      </div>
+      <div className="cc-label">{label}</div>
+      <div className="cc-sub">{sub}</div>
+    </div>
+  );
+}
 
 function Stat({value, label, icon, delay}) {
   const [ref, seen] = useInView();
@@ -140,6 +158,30 @@ export default function About() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="count-grid">
+        <CountCard
+          value={(bigProjects.projects || []).length}
+          label="PROJECTS"
+          sub="Systems & research built"
+          icon="fas fa-code"
+          delay={0}
+        />
+        <CountCard
+          value={(achievementSection.achievementsCards || []).length}
+          label="CERTIFICATES"
+          sub="Skills validated"
+          icon="fas fa-award"
+          delay={0.08}
+        />
+        <CountCard
+          value={(honorsSection.awards || []).length}
+          label="AWARDS"
+          sub="Recognition earned"
+          icon="fas fa-trophy"
+          delay={0.16}
+        />
       </div>
     </section>
   );

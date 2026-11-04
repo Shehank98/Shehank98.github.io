@@ -213,6 +213,46 @@ module.exports = {
     ]
   },
 
+  honorsSection: {
+    title: "Awards & Honors",
+    subtitle: "Recognition for outstanding achievements",
+    display: true,
+    awards: [
+      {
+        title: "Grand Award Winner at INTEL International Science & Engineering Fair",
+        description: "Made history as Sri Lanka's first-ever Grand Award winner at ISEF, the world's premier science competition in Los Angeles, California.",
+        date: "May 2017",
+        image: null,
+        video: "https://www.youtube.com/watch?v=Z-rp2wTpg_s",
+        imageAlt: "ISEF Grand Award"
+      },
+      {
+        title: "Special Award Winner at INTEL International Science & Engineering Fair",
+        description: "Recognized with a Special Award at ISEF for outstanding achievement and innovation.",
+        date: "May 2017",
+        image: null,
+        video: "https://www.youtube.com/watch?v=IlsCEjYRoS0",
+        imageAlt: "ISEF Special Award"
+      },
+      {
+        title: "National Winner - Sri Lanka Science & Engineering Fair",
+        description: "National Winner for the project 'Toxic Cr(VI) Remediation using Biochar and Nanoparticles from Wastewater'",
+        date: "May 2017",
+        image: img("brain.jpeg"),
+        video: "https://www.youtube.com/watch?v=vFGGkyWPhTw",
+        imageAlt: "National Winner Certificate"
+      },
+      {
+        title: "Best School Inventor of the Year",
+        description: "Recognition of Outstanding Performance in the field of Environmental Science",
+        date: "Sep 2017",
+        image: img("ures.jpg"),
+        video: "",
+        imageAlt: "Best School Inventor Award"
+      }
+    ]
+  },
+
   achievementSection: {
     title: "Certifications 🏆",
     subtitle: "Professional certifications from leading platforms",

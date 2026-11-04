@@ -1,5 +1,5 @@
 import React from "react";
-import {skillsSection, techStack, achievementSection, honorsSection, linkedinRecommendations} from "../portfolio";
+import {skillsSection, techStack, linkedinRecommendations} from "../portfolio";
 import {Reveal, SectionHead} from "./Section";
 import {useInView} from "./hooks";
 
@@ -33,8 +33,6 @@ function Ring({label, pct, delay}) {
 export default function Skills() {
   const sw = skillsSection.softwareSkills || [];
   const doubled = [...sw, ...sw];
-  const certs = achievementSection.achievementsCards || [];
-  const awards = honorsSection.awards || [];
   const recs = (linkedinRecommendations.recommendations || []).slice(0, 2);
   return (
     <>
@@ -66,38 +64,9 @@ export default function Skills() {
           )}
         </div>
 
-        <SectionHead kicker="04 / CREDENTIALS" title="Certificates &" accent="Awards" />
-        <div className="cred-grid">
-          {certs.map((c, i) => (
-            <Reveal key={i} className="cred" delay={(i % 3) * 0.07}>
-              {c.image && <img src={c.image} alt="" />}
-              <div>
-                <h4>{c.title}</h4>
-                <p>{c.subtitle}</p>
-                {c.footerLink && c.footerLink[0] && (
-                  <a href={c.footerLink[0].url} target="_blank" rel="noopener noreferrer">
-                    {c.footerLink[0].name} <i className="fas fa-external-link-alt" />
-                  </a>
-                )}
-              </div>
-            </Reveal>
-          ))}
-          {awards.map((a, i) => (
-            <Reveal key={"a" + i} className="cred award" delay={(i % 3) * 0.07}>
-              <i className="fas fa-trophy" />
-              <div>
-                <h4>{a.title}</h4>
-                <p>
-                  {a.date} — {a.description}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
         {linkedinRecommendations.display !== false && recs.length > 0 && (
           <>
-            <SectionHead kicker="05 / KIND WORDS" title="What people" accent="say" />
+            <SectionHead kicker="04 / KIND WORDS" title="What people" accent="say" />
             <div className="recs">
               {recs.map((r, i) => (
                 <Reveal key={i} className="rec" delay={i * 0.1}>

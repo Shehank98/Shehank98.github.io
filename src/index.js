@@ -21,6 +21,7 @@ const SECTION_MAP = {
   bigProjects: portfolio.bigProjects,
   openSource: portfolio.openSource,
   achievementSection: portfolio.achievementSection,
+  honorsSection: portfolio.honorsSection,
   blogSection: portfolio.blogSection,
   linkedinRecommendations: portfolio.linkedinRecommendations,
   aboutSection: portfolio.aboutSection,
