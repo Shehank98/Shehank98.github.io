@@ -153,31 +153,52 @@ body {
   gap: 4px;
   padding: 8px 10px 8px 8px;
   border-radius: 999px;
-  background: rgba(10, 12, 40, 0.62);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid $line;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  // glassmorphism: frosted translucent surface, bright rim, soft highlight on top
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 45%, rgba(255, 255, 255, 0.1) 100%),
+    rgba(20, 22, 64, 0.28);
+  backdrop-filter: blur(24px) saturate(1.9) brightness(1.08);
+  -webkit-backdrop-filter: blur(24px) saturate(1.9) brightness(1.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 12px 40px -8px rgba(0, 0, 0, 0.55),
+    0 2px 0 rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 22px rgba(129, 140, 248, 0.12);
   animation: navDrop 0.9s cubic-bezier(0.2, 0.9, 0.2, 1) both;
-  ul { display: flex; list-style: none; margin: 0; padding: 0; gap: 2px; }
+  // glossy sheen across the top half
+  &::before { content: ""; position: absolute; inset: 1px 1px 50% 1px; border-radius: 999px 999px 40% 40% / 999px 999px 18px 18px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0)); pointer-events: none; }
+  ul { position: relative; display: flex; list-style: none; margin: 0; padding: 0; gap: 2px; }
+  li { position: relative; z-index: 1; }
+  // the morphing blob that follows the active item
+  .pill-blob { position: absolute; top: 0; bottom: 0; left: 0; z-index: 0; border-radius: 999px; pointer-events: none; opacity: 0;
+    background: linear-gradient(135deg, rgba(165, 180, 252, 0.45), rgba(139, 92, 246, 0.35));
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 6px 20px -6px rgba(99, 102, 241, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: transform 0.55s cubic-bezier(0.34, 1.4, 0.4, 1), width 0.55s cubic-bezier(0.34, 1.4, 0.4, 1), opacity 0.3s;
+    &.ready { opacity: 1; } }
   a {
     position: relative;
     display: block;
     padding: 9px 16px;
     border-radius: 999px;
     font: 600 14px "Inter", sans-serif;
-    color: $muted;
-    transition: color 0.25s, background 0.25s;
+    color: rgba(255, 255, 255, 0.72);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    transition: color 0.25s;
     &:hover { color: #fff; }
-    &.active { color: #fff; background: rgba(129, 140, 248, 0.22); box-shadow: inset 0 0 0 1px rgba(165, 180, 252, 0.35); }
+    &.active { color: #fff; }
   }
   .pill-sound {
+    position: relative;
+    z-index: 1;
     margin-left: 4px;
     padding-left: 10px;
     border: 0;
-    border-left: 1px solid $line;
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
     background: none;
-    color: $muted;
+    color: rgba(255, 255, 255, 0.7);
     width: 40px;
     height: 34px;
     cursor: pointer;
@@ -229,9 +250,10 @@ body {
 // ---------- hero ----------
 .hero {
   min-height: 100vh;
+  min-height: 100svh;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 120px 28px 40px;
+  padding: clamp(84px, 11vh, 120px) 28px clamp(16px, 4vh, 40px);
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
@@ -241,23 +263,24 @@ body {
 .hero-title {
   display: flex;
   flex-direction: column;
-  font-size: clamp(46px, 7.4vw, 104px);
+  font-size: clamp(40px, min(6.6vw, 10.5vh), 100px);
   line-height: 1.02;
+  padding-bottom: 0.1em; // room for the descender of the 'y'
   font-weight: 700;
   .grad { font-weight: 700; }
 }
 .hero-role {
-  margin-top: 30px;
-  font: 600 clamp(18px, 2.2vw, 26px) "Space Grotesk", sans-serif;
+  margin-top: clamp(14px, 3vh, 30px);
+  font: 600 clamp(18px, min(2.2vw, 3.2vh), 26px) "Space Grotesk", sans-serif;
   color: #a5b4fc;
   min-height: 1.6em;
   .caret { display: inline-block; width: 2px; height: 1.1em; background: $cyan; margin-left: 4px; vertical-align: -0.15em; animation: blink 1s steps(1) infinite; }
 }
 @keyframes blink { 50% { opacity: 0; } }
-.hero-intro { margin-top: 18px; color: $muted; font-size: 17px; max-width: 580px; }
-.hero-cta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-intro { margin-top: clamp(10px, 2vh, 18px); color: $muted; font-size: clamp(15px, 1.9vh, 17px); max-width: 600px; }
+.hero-cta { margin-top: clamp(16px, 3.5vh, 30px); display: flex; flex-wrap: wrap; gap: 12px; }
 .hero-social {
-  margin-top: 30px;
+  margin-top: clamp(16px, 3.5vh, 30px);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -278,8 +301,8 @@ body {
   .badge3d-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; pointer-events: none; }
   .badge3d-mount { pointer-events: none; }
   .badge3d-hint {
-    position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); font: 600 12px "Inter", sans-serif; letter-spacing: 0.12em;
-    color: $muted; background: rgba(10, 12, 40, 0.7); border: 1px solid $line; padding: 8px 16px; border-radius: 999px; opacity: 0; transition: opacity 0.6s; pointer-events: none; white-space: nowrap;
+    position: absolute; right: 8px; bottom: 66px; max-width: 84px; font: 600 11px "Inter", sans-serif; letter-spacing: 0.06em; text-align: right; line-height: 1.45;
+    color: $muted; background: rgba(10, 12, 40, 0.7); border: 1px solid $line; padding: 8px 10px; border-radius: 12px; opacity: 0; transition: opacity 0.6s; pointer-events: none;
     &.show { opacity: 1; animation: hintPulse 2.4s ease-in-out infinite; }
   }
   .badge3d-flip {
@@ -287,7 +310,7 @@ body {
     &:hover { border-color: $cyan; color: $cyan; }
   }
 }
-@keyframes hintPulse { 50% { transform: translateX(-50%) translateY(-4px); } }
+@keyframes hintPulse { 50% { transform: translateY(-4px); } }
 .badge3d-static {
   display: grid; place-items: center;
   .static-card { padding: 40px 30px; border-radius: 24px; background: linear-gradient(160deg, #1b1440, #2a1b6b); border: 1px solid $line; display: flex; flex-direction: column; gap: 8px; text-align: center; }
@@ -301,28 +324,32 @@ body {
 
 // ---------- about (name | photo | copy) ----------
 .about-sec { padding-top: 120px; }
-.about-title { text-align: center; font-size: clamp(48px, 8vw, 104px); line-height: 1; font-weight: 700; margin-bottom: 56px; }
-.about-intro { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 44px; text-align: center;
-  h3 { font-size: clamp(28px, 4.2vw, 52px); font-weight: 700; line-height: 1.1; }
+.about-title { text-align: center; font-size: clamp(48px, 8vw, 104px); line-height: 1; font-weight: 700; margin-bottom: 72px; }
+.about-hero { display: grid; grid-template-columns: 0.9fr 1.2fr 1.1fr; align-items: center; gap: 18px; }
+.about-name { display: flex; flex-direction: column; align-items: flex-start;
+  span { display: block; font: 700 clamp(44px, 6vw, 88px) "Space Grotesk", sans-serif; letter-spacing: -0.03em; line-height: 1; }
   .about-hi { background: linear-gradient(120deg, #6366f1, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .about-first, .about-last { background: linear-gradient(180deg, #fff 30%, #9aa0c7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lang-switch { margin-top: 28px; }
+  .btn-primary { margin-top: 18px; }
 }
-// [ language switcher + View Projects ] [ photo ] [ ISEF text ]  - all vertically centred
-.about-hero { display: grid; grid-template-columns: minmax(220px, 0.75fr) 1.1fr 1fr; align-items: center; gap: 32px; }
-.about-left { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
-.lang-switch { display: flex; padding: 5px; border-radius: 16px; background: rgba(10, 12, 40, 0.7); border: 1px solid $line;
-  button { flex: 1; padding: 11px 10px; border: 0; border-radius: 12px; background: transparent; color: $muted; font: 600 15px "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif; cursor: pointer; transition: background 0.3s, color 0.3s; white-space: nowrap;
+.lang-switch { display: inline-flex; padding: 5px; border-radius: 16px; background: rgba(10, 12, 40, 0.7); border: 1px solid $line; max-width: 100%;
+  button { padding: 10px 16px; border: 0; border-radius: 12px; background: transparent; color: $muted; font: 600 15px "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif; cursor: pointer; transition: background 0.3s, color 0.3s; white-space: nowrap;
     &:hover { color: #fff; }
     &.on { color: #fff; background: linear-gradient(135deg, $indigo, $violet); box-shadow: 0 8px 22px -8px rgba(99, 102, 241, 0.8); } }
 }
-.about-left .btn-ghost { justify-content: center; }
-.about-right { align-self: center; }
-.about-right-text { color: #c7cbe8; font-size: 18px; line-height: 1.8; font-family: "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif; animation: fadeIn 0.6s both; }
-.about-photo { position: relative; height: min(640px, 66vh); min-height: 420px; display: grid; place-items: center;
+.about-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
+.about-copy-text { animation: fadeIn 0.5s both; font-family: "Inter", "Nirmala UI", "Noto Sans Sinhala", "Noto Sans Tamil", sans-serif;
+  p { color: #c7cbe8; font-size: clamp(16px, 1.15vw, 20px); line-height: 1.8; margin-bottom: 18px; &:last-child { margin-bottom: 0; } }
+  strong { color: #fff; font-weight: 700; }
+}
+.about-copy .btn-ghost { color: #a5b4fc; }
+.about-photo { position: relative; height: min(700px, 72vh); min-height: 420px; display: grid; place-items: center;
   img, .about-ph { position: relative; z-index: 2; height: 100%; width: auto; max-width: 100%; object-fit: contain; border-radius: 28px;
     // black studio backdrop fades into the space background on every edge
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 30%, #000 70%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 12%, #000 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 10%, #000 74%, transparent 100%);
     -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to right, transparent 0, #000 30%, #000 70%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 12%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 10%, #000 74%, transparent 100%);
     mask-composite: intersect;
     filter: contrast(1.04) saturate(1.05); }
   .about-ph { width: 300px; display: grid; place-items: center; font-size: 80px; color: rgba(255, 255, 255, 0.2); }
@@ -333,8 +360,6 @@ body {
 }
 @keyframes ringPulse { 50% { transform: scale(1.04); opacity: 0.6; } }
 @keyframes orbit { 0% { transform: translateY(-14px); } 50% { transform: translateY(14px); } 100% { transform: translateY(-14px); } }
-.about-more { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; }
-.about-more-card { padding: 22px 26px; border-radius: 20px; background: $card; border: 1px solid $line; p { color: #c7cbe8; } }
 .stat {
   position: relative; padding: 22px; border-radius: 22px; background: rgba(12, 14, 46, 0.7); overflow: hidden;
   isolation: isolate;
@@ -499,7 +524,6 @@ body {
 
 // ---------- responsive ----------
 @media (max-width: 980px) {
-  .about-more { grid-template-columns: 1fr; }
   .pgrid { grid-template-columns: 1fr 1fr; }
   .count-grid { grid-template-columns: 1fr; }
   .stack-grid { grid-template-columns: repeat(3, 1fr); }
@@ -509,21 +533,20 @@ body {
   .music-card { padding: 28px; }
   .proj-modal .pm-panel { grid-template-columns: 1fr; .pm-media { min-height: 220px; } }
   // tablets: keep hero in two columns, tighten the About row
-  .about-hero { gap: 18px; grid-template-columns: minmax(190px, 0.8fr) 1fr 1fr; }
-  .about-right-text { font-size: 16px; }
+  .about-hero { gap: 18px; grid-template-columns: 0.9fr 1fr 1.2fr; }
 }
 // below 768px everything stacks:
 //   hero: lanyard on top; About: image -> text -> language switcher + View Projects
 @media (max-width: 768px) {
   .badge3d .badge3d-mount { left: -10%; right: -10%; }
-  .badge3d .badge3d-hint { bottom: -22px; }
+  .badge3d .badge3d-hint { right: auto; left: 50%; bottom: -22px; text-align: center; transform: translateX(-50%); white-space: nowrap; animation: none !important; }
   .badge3d .badge3d-flip { bottom: -26px; }
   .hero { grid-template-columns: 1fr; padding-top: 0; min-height: 0; gap: 0; }
   .hero-badge { height: 640px; order: -1; margin: 0 -28px 36px; }
   .about-hero { grid-template-columns: 1fr; gap: 22px; text-align: center; }
   .about-photo { order: 1; height: 460px; min-height: 0; }
-  .about-right { order: 2; }
-  .about-left { order: 3; max-width: 420px; width: 100%; margin: 0 auto; }
+  .about-name { order: 2; align-items: center; }
+  .about-copy { order: 3; align-items: center; }
 }
 @media (max-width: 640px) {
   .pgrid { grid-template-columns: 1fr; }

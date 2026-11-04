@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {setSound, blip} from "./sfx";
 
 const ITEMS = [
@@ -15,6 +15,22 @@ export default function Nav() {
   const [active, setActive] = useState("home");
   const [glitch, setGlitch] = useState(false);
   const [sound, setSoundState] = useState(false);
+  const listRef = useRef(null);
+  const [ind, setInd] = useState({x: 0, w: 0, ready: false});
+
+  // glass 'morph' highlight: one blob that slides + resizes to the active item
+  useLayoutEffect(() => {
+    const place = () => {
+      const ul = listRef.current;
+      if (!ul) return;
+      const a = ul.querySelector('a.active');
+      if (a) setInd({x: a.parentElement.offsetLeft, w: a.offsetWidth, ready: true});
+    };
+    place();
+    window.addEventListener('resize', place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    return () => window.removeEventListener('resize', place);
+  }, [active]);
 
   useEffect(() => {
     const secs = ITEMS.map(i => document.getElementById(i.id)).filter(Boolean);
@@ -50,7 +66,12 @@ export default function Nav() {
 
   return (
     <nav className={`pill-nav ${glitch ? "glitch" : ""}`} aria-label="Sections">
-      <ul>
+      <ul ref={listRef}>
+        <span
+          className={`pill-blob ${ind.ready ? 'ready' : ''}`}
+          style={{transform: `translateX(${ind.x}px)`, width: ind.w}}
+          aria-hidden="true"
+        />
         {ITEMS.map(i => (
           <li key={i.id}>
             <a

@@ -47,7 +47,7 @@
       .group > .group-head .title { font-weight: 600; font-size: 13px; color: var(--muted); }
       .arr-item { border: 1px dashed var(--line); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; position: relative; background: var(--panel2); }
       .row { display: flex; gap: 8px; align-items: center; }
-      .imgprev { max-height: 60px; border-radius: 6px; border: 1px solid var(--line); margin-top: 6px; display: block; }
+      .imgprev { max-height: 90px; border-radius: 6px; border: 1px solid var(--line); margin-top: 6px; display: block; }
       .toast { position: fixed; bottom: 22px; right: 22px; padding: 12px 18px; border-radius: 10px;
         background: var(--ok); color: #05240f; font-weight: 600; opacity: 0; transform: translateY(10px);
         transition: .25s; pointer-events: none; }
@@ -57,6 +57,21 @@
       .checkrow { display: flex; align-items: center; gap: 10px; }
       .checkrow input { width: auto; }
       .checkrow label { margin: 0; }
+      /* Image cropper */
+      #cropModal { position: fixed; inset: 0; z-index: 50; background: rgba(2,6,23,.8); display: none; place-items: center; padding: 16px; }
+      #cropModal.open { display: grid; }
+      #cropModal .cm { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; width: min(720px, 100%); max-height: 96vh; overflow: auto; }
+      #cropModal h3 { margin: 0 0 4px; font-size: 17px; }
+      #cropModal .sub { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+      #cropModal .aspects { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+      #cropModal .aspects button { background: var(--panel2); color: var(--text); padding: 6px 12px; font-size: 13px; }
+      #cropModal .aspects button.on { background: var(--accent); color: #fff; }
+      #cropCanvas { width: 100%; display: block; border-radius: 8px; border: 1px solid var(--line); background: #000; cursor: grab; touch-action: none; }
+      #cropCanvas.drag { cursor: grabbing; }
+      #cropModal .ctrl { display: flex; gap: 16px; align-items: end; margin: 12px 0; flex-wrap: wrap; }
+      #cropModal .ctrl > div { flex: 1; min-width: 160px; }
+      #cropModal input[type=color] { padding: 2px; height: 38px; }
+      #cropModal input[type=range] { padding: 0; }
     </style>
   </head>
   <body>
@@ -93,6 +108,25 @@
         </div>
         <div id="editor"></div>
       </main>
+    </div>
+
+    <!-- IMAGE CROPPER -->
+    <div id="cropModal" role="dialog" aria-modal="true" aria-label="Crop image">
+      <div class="cm">
+        <h3>Crop image to fit</h3>
+        <p class="sub">Drag the picture to reposition it, use the slider to zoom. The result is what visitors will see.</p>
+        <div class="aspects" id="cropAspects"></div>
+        <canvas id="cropCanvas"></canvas>
+        <div class="ctrl">
+          <div><label>Zoom</label><input type="range" id="cropZoom" min="0" max="100" value="0" /></div>
+          <div style="max-width:150px"><label>Background (if image doesn't fill)</label><input type="color" id="cropBg" value="#0b0b0d" /></div>
+        </div>
+        <div class="row" style="justify-content:flex-end; flex-wrap:wrap">
+          <button class="btn-ghost" id="cropCancel" type="button">Cancel</button>
+          <button class="btn-ghost" id="cropOriginal" type="button">Use original (no crop)</button>
+          <button class="btn-primary" id="cropApply" type="button">Apply crop</button>
+        </div>
+      </div>
     </div>
 
     <div class="toast" id="toast"></div>
@@ -157,12 +191,123 @@
       });
 
       // ---- Upload ----
-      async function uploadFile(file) {
+      async function uploadFile(file, filename) {
         const fd = new FormData();
-        fd.append("file", file);
+        fd.append("file", file, filename || file.name || "image.jpg");
         const res = await fetch("/api/admin/upload", {method: "POST", body: fd});
         if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Upload failed");
         return (await res.json()).url;
+      }
+
+
+      // ---- Image cropper -------------------------------------------------
+      // openCropper(srcUrl) -> Promise<Blob | "original" | null>
+      const ASPECTS = [
+        {label: "16:10 · project card", a: 1.6},
+        {label: "16:9", a: 16 / 9},
+        {label: "4:3", a: 4 / 3},
+        {label: "1:1 · square", a: 1},
+        {label: "4:5 · portrait", a: 0.8}
+      ];
+      let lastAspect = 1.6;
+      function openCropper(srcUrl) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => {
+            const modal = $("#cropModal"), canvas = $("#cropCanvas"), ctx = canvas.getContext("2d");
+            const zoomEl = $("#cropZoom"), bgEl = $("#cropBg"), aspBox = $("#cropAspects");
+            const iw = img.naturalWidth, ih = img.naturalHeight;
+            let aspect = lastAspect, cw = 0, ch = 0, scale = 1, offX = 0, offY = 0, fit = 1, cover = 1, maxS = 1;
+
+            function layout(keepCentre) {
+              cw = 640; ch = Math.round(cw / aspect);
+              if (ch > 460) { ch = 460; cw = Math.round(ch * aspect); }
+              canvas.width = cw; canvas.height = ch;
+              canvas.style.aspectRatio = cw + " / " + ch;
+              canvas.style.maxWidth = cw + "px"; canvas.style.margin = "0 auto";
+              fit = Math.min(cw / iw, ch / ih); cover = Math.max(cw / iw, ch / ih); maxS = cover * 4;
+              if (!keepCentre) {
+                scale = cover; offX = (cw - iw * scale) / 2; offY = (ch - ih * scale) / 2;
+              }
+              zoomEl.value = Math.round(((scale - fit) / (maxS - fit || 1)) * 100);
+              clamp(); draw();
+            }
+            function clamp() {
+              const w = iw * scale, h = ih * scale;
+              offX = w >= cw ? Math.min(0, Math.max(cw - w, offX)) : Math.min(cw - w, Math.max(0, offX));
+              offY = h >= ch ? Math.min(0, Math.max(ch - h, offY)) : Math.min(ch - h, Math.max(0, offY));
+            }
+            function paint(c, W, H, k) {
+              c.fillStyle = bgEl.value; c.fillRect(0, 0, W, H);
+              c.imageSmoothingQuality = "high";
+              c.drawImage(img, offX * k, offY * k, iw * scale * k, ih * scale * k);
+            }
+            function draw() {
+              paint(ctx, cw, ch, 1);
+              ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1; ctx.beginPath();
+              for (let i = 1; i < 3; i++) { ctx.moveTo(cw * i / 3, 0); ctx.lineTo(cw * i / 3, ch); ctx.moveTo(0, ch * i / 3); ctx.lineTo(cw, ch * i / 3); }
+              ctx.stroke();
+            }
+            function setZoom(z) {
+              const cx = cw / 2, cy = ch / 2;
+              const rx = (cx - offX) / scale, ry = (cy - offY) / scale; // image point under the centre
+              scale = fit + (maxS - fit) * (z / 100);
+              offX = cx - rx * scale; offY = cy - ry * scale; clamp(); draw();
+            }
+            aspBox.innerHTML = "";
+            ASPECTS.forEach(o => {
+              const b = document.createElement("button"); b.type = "button"; b.textContent = o.label;
+              if (Math.abs(o.a - aspect) < 0.01) b.className = "on";
+              b.addEventListener("click", () => {
+                aspect = o.a; lastAspect = o.a;
+                [...aspBox.children].forEach(x => x.classList.remove("on")); b.classList.add("on");
+                layout(false);
+              });
+              aspBox.appendChild(b);
+            });
+
+            // drag to pan (mouse + touch via pointer events)
+            let drag = null;
+            const down = e => { drag = {x: e.clientX, y: e.clientY, ox: offX, oy: offY}; canvas.classList.add("drag"); canvas.setPointerCapture(e.pointerId); };
+            const move = e => {
+              if (!drag) return;
+              const r = canvas.getBoundingClientRect(), k = cw / r.width;
+              offX = drag.ox + (e.clientX - drag.x) * k; offY = drag.oy + (e.clientY - drag.y) * k; clamp(); draw();
+            };
+            const up = () => { drag = null; canvas.classList.remove("drag"); };
+            const wheel = e => { e.preventDefault(); const z = Math.max(0, Math.min(100, +zoomEl.value - Math.sign(e.deltaY) * 4)); zoomEl.value = z; setZoom(z); };
+            const onZoom = () => setZoom(+zoomEl.value);
+            const onBg = () => draw();
+            canvas.addEventListener("pointerdown", down); canvas.addEventListener("pointermove", move);
+            canvas.addEventListener("pointerup", up); canvas.addEventListener("pointercancel", up);
+            canvas.addEventListener("wheel", wheel, {passive: false});
+            zoomEl.addEventListener("input", onZoom); bgEl.addEventListener("input", onBg);
+
+            function close(result) {
+              modal.classList.remove("open");
+              canvas.removeEventListener("pointerdown", down); canvas.removeEventListener("pointermove", move);
+              canvas.removeEventListener("pointerup", up); canvas.removeEventListener("pointercancel", up);
+              canvas.removeEventListener("wheel", wheel);
+              zoomEl.removeEventListener("input", onZoom); bgEl.removeEventListener("input", onBg);
+              $("#cropApply").onclick = $("#cropCancel").onclick = $("#cropOriginal").onclick = null;
+              resolve(result);
+            }
+            $("#cropCancel").onclick = () => close(null);
+            $("#cropOriginal").onclick = () => close("original");
+            $("#cropApply").onclick = () => {
+              const OW = 1280, OH = Math.round(OW / aspect), k = OW / cw;
+              const out = document.createElement("canvas"); out.width = OW; out.height = OH;
+              try {
+                paint(out.getContext("2d"), OW, OH, k);
+                out.toBlob(b => (b ? close(b) : (toast("Could not crop this image", true))), "image/jpeg", 0.92);
+              } catch (err) { toast("Could not crop this image (" + err.message + ")", true); }
+            };
+            modal.classList.add("open");
+            layout(false);
+          };
+          img.onerror = () => reject(new Error("Could not load the image to crop"));
+          img.src = srcUrl;
+        });
       }
 
       // ---- Recursive form builder ----
@@ -215,17 +360,43 @@
             toast("Image removed — Save to apply");
           });
 
-          file.addEventListener("change", async () => {
-            if (!file.files[0]) return;
+          const applyUrl = url => {
+            obj[key] = url;
+            preview.src = url; preview.style.display = "block";
+            clear.style.display = "inline-block"; recrop.style.display = "inline-block";
+          };
+          // re-crop the image that is already there
+          const recrop = document.createElement("button");
+          recrop.type = "button"; recrop.className = "btn-ghost"; recrop.textContent = "Crop / reposition";
+          recrop.style.display = value ? "inline-block" : "none";
+          recrop.addEventListener("click", async () => {
             try {
-              const url = await uploadFile(file.files[0]);
-              obj[key] = url;
-              preview.src = url; preview.style.display = "block";
-              clear.style.display = "inline-block";
+              const result = await openCropper(obj[key]);
+              if (result && result !== "original") {
+                applyUrl(await uploadFile(result, "cropped-" + Date.now() + ".jpg"));
+                toast("Cropped image uploaded - Save to apply");
+              }
+            } catch (err) { toast(err.message, true); }
+          });
+
+          file.addEventListener("change", async () => {
+            const f = file.files[0];
+            if (!f) return;
+            try {
+              // offer a crop first (so the picture fits its frame), then upload
+              const local = URL.createObjectURL(f);
+              let toUpload = f, name = f.name;
+              try {
+                const result = await openCropper(local);
+                if (result === null) { file.value = ""; URL.revokeObjectURL(local); return; }
+                if (result !== "original") { toUpload = result; name = "cropped-" + Date.now() + ".jpg"; }
+              } catch (_) { /* unsupported format for preview: upload as is */ }
+              URL.revokeObjectURL(local);
+              applyUrl(await uploadFile(toUpload, name));
               toast("Image uploaded");
             } catch (err) { toast(err.message, true); }
           });
-          row.append(file, clear);
+          row.append(file, recrop, clear);
           wrap.appendChild(row);
           wrap.appendChild(preview);
           parent.appendChild(wrap);

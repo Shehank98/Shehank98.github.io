@@ -49,6 +49,15 @@ const LANGS = [
   {code: "ta", match: "Tamil", label: "தமிழ்"}
 ];
 
+// bold the key phrases (aboutSection.highlights) inside a paragraph
+function withHighlights(text, highlights) {
+  const list = (highlights || []).filter(h => h && text.includes(h));
+  if (!list.length) return text;
+  const esc = list.map(h => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const parts = text.split(new RegExp("(" + esc.join("|") + ")", "g"));
+  return parts.map((part, i) => (list.includes(part) ? <strong key={i}>{part}</strong> : part));
+}
+
 export default function About() {
   const [lang, setLang] = useState("en");
   const go = id => e => {
@@ -56,16 +65,10 @@ export default function About() {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({behavior: "smooth"});
   };
-  const paras = aboutSection.paragraphs || [];
-  // right-hand text next to the photo (falls back to English when a translation is empty)
-  const texts = {
-    en: aboutSection.rightText || paras[2] || "",
-    si: aboutSection.rightTextSi,
-    ta: aboutSection.rightTextTa
-  };
-  const rightText = texts[lang] || texts.en;
-  // everything else stays available as cards below
-  const restParas = paras.filter((p, i) => !(i === 2 && !aboutSection.rightText));
+  const en = aboutSection.paragraphs || [];
+  const paras = (lang === "si" ? aboutSection.paragraphsSi : lang === "ta" ? aboutSection.paragraphsTa : en) || [];
+  // a missing translation falls back to the English paragraph
+  const shown = en.map((p, i) => (paras[i] && paras[i].trim() ? paras[i] : p));
   const nameParts = (aboutSection.displayName || "").split(" ");
   const first = nameParts.shift() || "";
   const rest = nameParts.join(" ");
@@ -78,67 +81,57 @@ export default function About() {
     <section id="about" className="section about-sec">
       <Reveal as="h2" className="about-title">{aboutSection.title}</Reveal>
       {aboutSection.display !== false && (
-        <>
-          <Reveal className="about-intro">
-            <h3>
-              <span className="about-hi">{aboutSection.greetingLine}</span> {first} {rest}
-            </h3>
+        <div className="about-hero">
+          {/* LEFT: big stacked name, language switcher, Contact Me */}
+          <Reveal className="about-name">
+            <span className="about-hi">{aboutSection.greetingLine}</span>
+            <span className="about-first">{first}</span>
+            {rest && <span className="about-last">{rest}</span>}
+            {languagesSection.display !== false && (
+              <div className="lang-switch" role="group" aria-label="Language">
+                {LANGS.map(l => (
+                  <button
+                    key={l.code}
+                    type="button"
+                    className={lang === l.code ? "on" : ""}
+                    aria-pressed={lang === l.code}
+                    title={proficiency(l.match)}
+                    lang={l.code}
+                    onClick={() => setLang(l.code)}
+                  >
+                    {l.label}
+                  </button>
+                ))}
+              </div>
+            )}
             <a href="#contact" className="btn-primary" onClick={go("contact")}>
               <i className="far fa-envelope" /> {aboutSection.primaryButton}
             </a>
           </Reveal>
 
-          <div className="about-hero">
-            {/* LEFT: language switcher + View Projects, stacked, centred against the photo */}
-            <Reveal className="about-left" delay={0.05}>
-              {languagesSection.display !== false && (
-                <div className="lang-switch" role="group" aria-label="Language">
-                  {LANGS.map(l => (
-                    <button
-                      key={l.code}
-                      type="button"
-                      className={lang === l.code ? "on" : ""}
-                      aria-pressed={lang === l.code}
-                      title={proficiency(l.match)}
-                      lang={l.code}
-                      onClick={() => setLang(l.code)}
-                    >
-                      {l.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <a href="#portfolio" className="btn-ghost" onClick={go("portfolio")}>
-                <i className="fas fa-code" /> {aboutSection.secondaryButton}
-              </a>
-            </Reveal>
+          {/* CENTRE: photo */}
+          <Reveal className="about-photo" delay={0.1}>
+            <div className="ring r1" />
+            <div className="ring r2" />
+            <i className="orbit-dot" />
+            {photo ? (
+              <img src={photo} alt={aboutSection.displayName} />
+            ) : (
+              <div className="about-ph"><i className="fas fa-user" /></div>
+            )}
+          </Reveal>
 
-            <Reveal className="about-photo" delay={0.1}>
-              <div className="ring r1" />
-              <div className="ring r2" />
-              <i className="orbit-dot" />
-              {photo ? (
-                <img src={photo} alt={aboutSection.displayName} />
-              ) : (
-                <div className="about-ph"><i className="fas fa-user" /></div>
-              )}
-            </Reveal>
-
-            {/* RIGHT: ISEF text, vertically centred against the photo, fades in on scroll */}
-            <Reveal className="about-right" delay={0.2}>
-              <p key={lang} lang={lang} className="about-right-text">{rightText}</p>
-            </Reveal>
-          </div>
-        </>
-      )}
-
-      {restParas.length > 0 && (
-        <div className="about-more">
-          {restParas.map((p, i) => (
-            <Reveal key={i} className="about-more-card" delay={i * 0.08}>
-              <p>{p}</p>
-            </Reveal>
-          ))}
+          {/* RIGHT: the three paragraphs + View Projects */}
+          <Reveal className="about-copy" delay={0.2}>
+            <div key={lang} className="about-copy-text" lang={lang}>
+              {shown.map((p, i) => (
+                <p key={i}>{withHighlights(p, lang === "en" ? aboutSection.highlights : [])}</p>
+              ))}
+            </div>
+            <a href="#portfolio" className="btn-ghost" onClick={go("portfolio")}>
+              <i className="fas fa-code" /> {aboutSection.secondaryButton} <i className="fas fa-arrow-up-right-from-square" />
+            </a>
+          </Reveal>
         </div>
       )}
 

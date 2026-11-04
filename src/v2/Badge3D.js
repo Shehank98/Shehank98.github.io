@@ -585,27 +585,38 @@ export default function Badge3D({live = true}) {
 
     const resize = () => {
       const parent = mount.parentElement;
-      // let the canvas reach the very top of the page so the strap starts at the screen edge
-      const up = Math.max(
-        0,
-        parent.getBoundingClientRect().top + (window.pageYOffset || 0)
-      );
+      const stacked = window.matchMedia("(max-width: 768px)").matches;
+      const vh = window.innerHeight;
+      const pRect = parent.getBoundingClientRect();
+      // the canvas reaches the very top of the page so the strap starts at the screen edge
+      const up = Math.max(0, pRect.top + (window.pageYOffset || 0));
       mount.style.top = `-${up}px`;
+      // on desktop it also reaches the bottom of the hero, so the card never gets cut off
+      let down = 0;
+      const hero = parent.closest(".hero");
+      if (!stacked && hero) down = Math.max(0, hero.getBoundingClientRect().bottom - pRect.bottom);
+      mount.style.bottom = `-${down}px`;
       const w = mount.clientWidth || 300;
       const h = mount.clientHeight || 500;
-      const boxH = parent.clientHeight || h;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      // keep the card the same on-screen size: 4.95 world units fit the hero box height
-      const pxPerUnit = Math.min(boxH / 4.95, w / 3.0);
+
+      // Card size follows the WINDOW height (about 62% of it, like a real hanging ID),
+      // limited by the canvas width so it never gets too wide on narrow screens.
+      const ppu = Math.min((0.62 * Math.min(vh, h)) / 2.45, w / 3.0); // pixels per world unit
       const fovV = (camera.fov * Math.PI) / 180;
-      visH = h / pxPerUnit;
+      visH = h / ppu;
       visW = visH * camera.aspect;
       camera.position.z = visH / 2 / Math.tan(fovV / 2);
       camera.updateProjectionMatrix();
       topY = visH / 2 + 0.3; // anchor sits just off-screen, above the top edge
-      // rope length so the card bottom rests ~0.45 above the canvas bottom (card+clip = 2.75)
-      segLen = Math.max(0.3, (visH + 0.3 - 3.2) / SEGMENTS);
+
+      // where the bottom of the card should rest (px from the page top):
+      // desktop = inside the first screen; stacked = near the bottom of the badge box
+      const cardBottomPx = stacked ? h - 0.45 * ppu : Math.min(0.94 * vh, h - 0.3 * ppu);
+      const nodeYpx = cardBottomPx - 2.75 * ppu; // card + clip hang 2.75 units below the strap end
+      const ropeLen = Math.max(0.9, nodeYpx / ppu + 0.3);
+      segLen = ropeLen / SEGMENTS;
       if (!nodes.length) resetRope();
       nodes[0].p.set(0, topY, 0);
       nodes[0].o.copy(nodes[0].p);
@@ -732,7 +743,9 @@ export default function Badge3D({live = true}) {
     // ---- loop (fixed 60Hz physics, frame-rate independent) ----
     const GRAV = -0.0105;
     const DAMP = 0.984; // lower = settles faster; this gives a few visible bounces
-    const STRETCH_K = 0.26; // <1: the strap stretches like rubber
+    const K_SOFT = 0.2; // while dragging: stretches like rubber
+    const K_FIRM = 0.6; // at rest: hangs at its natural length
+    let stretchK = K_FIRM;
     const reduce =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf;
@@ -756,6 +769,8 @@ export default function Badge3D({live = true}) {
         end.p.x += (dragPoint.x - end.p.x) * 0.22;
         end.p.y += (dragPoint.y - end.p.y) * 0.22;
       }
+      // stay soft for a moment after release so the card bounces, then firm up
+      stretchK += ((dragging ? K_SOFT : K_FIRM) - stretchK) * (dragging ? 0.2 : 0.012);
       for (let it = 0; it < 12; it++) {
         for (let i = 0; i < SEGMENTS; i++) {
           const a = nodes[i];
@@ -763,7 +778,7 @@ export default function Badge3D({live = true}) {
           tmp.copy(b.p).sub(a.p);
           const d = tmp.length() || 1e-6;
           // compress rigidly, stretch softly (elastic)
-          const k = d > segLen ? STRETCH_K : 1;
+          const k = d > segLen ? stretchK : 1;
           const diff = ((d - segLen) / d) * k;
           if (a.pinned) {
             b.p.addScaledVector(tmp, -diff);
@@ -888,7 +903,7 @@ export default function Badge3D({live = true}) {
     <div className="badge3d">
       <div className="badge3d-mount" ref={mountRef} />
       <div className={`badge3d-hint ${hint ? "show" : ""}`}>
-        Drag me · double-tap to flip
+        Drag me<br />double-tap to flip
       </div>
       <button
         type="button"
