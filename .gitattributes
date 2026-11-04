@@ -5,6 +5,16 @@
 *.png binary
 *.webp binary
 *.woff binary
+*.woff2 binary
+*.pdf binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.jfif binary
+*.gif binary
+*.mp4 binary
+*.h5 binary
+*.pkl binary
 
 *.js   text eol=lf
 *.json text eol=lf
