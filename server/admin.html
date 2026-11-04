@@ -99,6 +99,10 @@
 
     <script>
       const SECTION_LABELS = {
+        heroSection: "Hero & Loader Text",
+        badge: "3D ID Badge",
+        musicSection: "Music / Spotify",
+        commentsSection: "Guestbook Settings",
         greeting: "Greeting & Profile",
         aboutSection: "About Me",
         statsSection: "Impact Stats",
@@ -326,6 +330,41 @@
         msg.style.marginTop = "10px";
         msg.addEventListener("click", () => { current = "__messages"; renderNav(); renderMessages(); });
         nav.appendChild(msg);
+        const cm = document.createElement("button");
+        cm.className = "navbtn" + (current === "__comments" ? " active" : "");
+        cm.textContent = "💬 Comments";
+        cm.addEventListener("click", () => { current = "__comments"; renderNav(); renderComments(); });
+        nav.appendChild(cm);
+      }
+
+      async function renderComments() {
+        $("#sectionTitle").textContent = "Guestbook Comments";
+        $("#saveBtn").style.display = "none";
+        $("#resetBtn").style.display = "none";
+        const editor = $("#editor");
+        editor.innerHTML = "Loading…";
+        let list = [];
+        try { list = await api("/api/admin/comments"); }
+        catch (err) { editor.innerHTML = ""; toast(err.message, true); return; }
+        editor.innerHTML = "";
+        if (!list.length) { editor.innerHTML = '<p class="hint">No comments yet.</p>'; return; }
+        list.forEach(c => {
+          const card = document.createElement("div");
+          card.className = "group";
+          const head = document.createElement("div");
+          head.className = "group-head";
+          head.innerHTML = '<span class="title">' + escapeHtml(c.name) + '</span><span class="title">' + new Date(c.created).toLocaleString() + "</span>";
+          const body = document.createElement("p");
+          body.style.whiteSpace = "pre-wrap"; body.style.margin = "0 0 10px"; body.textContent = c.comment;
+          const del = document.createElement("button");
+          del.className = "btn-danger"; del.textContent = "Delete";
+          del.addEventListener("click", async () => {
+            try { await api("/api/admin/comments/" + c.id, {method: "DELETE"}); renderComments(); }
+            catch (err) { toast(err.message, true); }
+          });
+          card.append(head, body, del);
+          editor.appendChild(card);
+        });
       }
 
       async function renderMessages() {

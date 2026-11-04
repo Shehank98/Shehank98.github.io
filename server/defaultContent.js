@@ -7,6 +7,50 @@
 const img = name => `/uploads/seed/${name}`;
 
 module.exports = {
+  badge: {
+    name: "SHEHAN KAVISHKA",
+    role: "Senior Media Executive | Data & AI",
+    company: "OGILVY",
+    tagline: "MEDIA x DATA x AI",
+    idNumber: "SK-98",
+    photo: null,
+    qrUrl: "https://www.linkedin.com/in/shehan-kavishka/",
+    qrCaption: "SCAN TO CONNECT",
+    lanyardText: "SHEHAN KAVISHKA"
+  },
+
+  heroSection: {
+    welcome: "Welcome to",
+    headline: "My Portfolio",
+    roles: [
+      "Senior Media Executive @ Ogilvy",
+      "Data Science & AI Builder",
+      "Automation & Dashboards",
+      "ISEF Grand Award Winner"
+    ],
+    intro:
+      "7+ years in advertising, now blending media buying with machine learning and automation. I turn messy campaign data into smarter decisions and build the tools that run media operations in minutes, not hours.",
+    primaryButton: "View Projects",
+    secondaryButton: "Contact Me",
+    loaderName: "SHEHAN"
+  },
+
+  musicSection: {
+    display: true,
+    heading: "A little music.",
+    headingAccent: "A lot of ideas.",
+    text: "The soundtrack behind my late-night dashboards and model training runs.",
+    buttonText: "Open on Spotify",
+    spotifyUrl: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+    embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"
+  },
+
+  commentsSection: {
+    display: true,
+    title: "Guestbook",
+    subtitle: "Leave a note - I read every one."
+  },
+
   greeting: {
     username: "Shehan Kavishka",
     title: "Hi, I'm Shehan",

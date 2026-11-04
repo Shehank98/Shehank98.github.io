@@ -9,6 +9,10 @@ import * as portfolio from "./portfolio";
 // Backend overrides are shallow-merged onto these defaults, so any section the
 // admin hasn't edited keeps its original hardcoded values (and bundled images).
 const SECTION_MAP = {
+  badge: portfolio.badge,
+  heroSection: portfolio.heroSection,
+  musicSection: portfolio.musicSection,
+  commentsSection: portfolio.commentsSection,
   greeting: portfolio.greeting,
   splashScreen: portfolio.splashScreen,
   socialMediaLinks: portfolio.socialMediaLinks,

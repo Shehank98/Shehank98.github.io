@@ -13,11 +13,16 @@ const {
   deleteSection,
   addMessage,
   listMessages,
-  deleteMessage
+  deleteMessage,
+  addComment,
+  listComments,
+  deleteComment
 } = require("./db");
 const defaults = require("./defaultContent");
 
 const app = express();
+// Behind Railway/other proxies, use the real client IP (needed for the comment throttle).
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 8080;
 const BUILD_DIR = path.join(__dirname, "..", "build");
 const UPLOADS_DIR = path.join(DATA_DIR, "uploads");
@@ -113,6 +118,36 @@ app.post("/api/contact", (req, res) => {
   addMessage({name: name.trim(), email: email.trim(), message: message.trim()});
   res.json({ok: true});
 });
+
+// --- Public: guestbook comments ---------------------------------------------
+const lastPost = new Map(); // ip -> timestamp, simple spam throttle
+app.get("/api/comments", (req, res) => {
+  res.json(listComments());
+});
+app.post("/api/comments", (req, res) => {
+  const {name, comment} = req.body || {};
+  const str = v => typeof v === "string" && v.trim().length > 0;
+  if (!str(name) || !str(comment)) {
+    return res.status(400).json({error: "Name and comment are required"});
+  }
+  if (name.length > 60 || comment.length > 500) {
+    return res.status(400).json({error: "Input too long"});
+  }
+  const ip = req.ip;
+  const now = Date.now();
+  if (now - (lastPost.get(ip) || 0) < 15000) {
+    return res.status(429).json({error: "Slow down - try again in a few seconds"});
+  }
+  lastPost.set(ip, now);
+  if (lastPost.size > 5000) lastPost.clear(); // keep memory bounded
+  addComment({name: name.trim(), comment: comment.trim()});
+  res.json({ok: true});
+});
+app.delete("/api/admin/comments/:id", requireAuth, (req, res) => {
+  deleteComment(Number(req.params.id));
+  res.json({ok: true});
+});
+app.get("/api/admin/comments", requireAuth, (req, res) => res.json(listComments()));
 
 app.get("/api/admin/messages", requireAuth, (req, res) => {
   res.json(listMessages());

@@ -23,6 +23,12 @@ db.exec(`
     message TEXT NOT NULL,
     created INTEGER NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS comments (
+    id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    name    TEXT NOT NULL,
+    comment TEXT NOT NULL,
+    created INTEGER NOT NULL
+  );
 `);
 
 const getStmt = db.prepare("SELECT data FROM content WHERE section = ?");
@@ -76,7 +82,27 @@ function deleteMessage(id) {
   delMsgStmt.run(id);
 }
 
+const addCommentStmt = db.prepare(
+  "INSERT INTO comments (name, comment, created) VALUES (?, ?, ?)"
+);
+const listCommentsStmt = db.prepare(
+  "SELECT id, name, comment, created FROM comments ORDER BY created DESC LIMIT 200"
+);
+const delCommentStmt = db.prepare("DELETE FROM comments WHERE id = ?");
+function addComment({name, comment}) {
+  addCommentStmt.run(name, comment, Date.now());
+}
+function listComments() {
+  return listCommentsStmt.all();
+}
+function deleteComment(id) {
+  delCommentStmt.run(id);
+}
+
 module.exports = {
+  addComment,
+  listComments,
+  deleteComment,
   DATA_DIR,
   getSection,
   getAllSections,

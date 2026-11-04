@@ -13,6 +13,51 @@ const splashScreen = {
   duration: 3000 // Set animation duration as per your animation
 };
 
+// 3D ID badge (hero) - editable from /admin
+const badge = {
+  name: "SHEHAN KAVISHKA",
+  role: "Senior Media Executive | Data & AI",
+  company: "OGILVY",
+  tagline: "MEDIA x DATA x AI",
+  idNumber: "SK-98",
+  photo: null, // null = placeholder silhouette. Upload a photo in /admin
+  qrUrl: "https://www.linkedin.com/in/shehan-kavishka/",
+  qrCaption: "SCAN TO CONNECT",
+  lanyardText: "SHEHAN KAVISHKA"
+};
+
+const heroSection = {
+  welcome: "Welcome to",
+  headline: "My Portfolio",
+  roles: [
+    "Senior Media Executive @ Ogilvy",
+    "Data Science & AI Builder",
+    "Automation & Dashboards",
+    "ISEF Grand Award Winner"
+  ],
+  intro:
+    "7+ years in advertising, now blending media buying with machine learning and automation. I turn messy campaign data into smarter decisions and build the tools that run media operations in minutes, not hours.",
+  primaryButton: "View Projects",
+  secondaryButton: "Contact Me",
+  loaderName: "SHEHAN"
+};
+
+const musicSection = {
+  display: true,
+  heading: "A little music.",
+  headingAccent: "A lot of ideas.",
+  text: "The soundtrack behind my late-night dashboards and model training runs.",
+  buttonText: "Open on Spotify",
+  spotifyUrl: "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+  embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"
+};
+
+const commentsSection = {
+  display: true,
+  title: "Guestbook",
+  subtitle: "Leave a note - I read every one."
+};
+
 // Summary And Greeting Section
 
 const illustration = {
@@ -591,6 +636,10 @@ const twitterDetails = {
 const isHireable = false; // Set false if you are not looking for a job. Also isHireable will be display as Open for opportunities: Yes/No in the GitHub footer
 
 export {
+  heroSection,
+  badge,
+  musicSection,
+  commentsSection,
   illustration,
   greeting,
   socialMediaLinks,
