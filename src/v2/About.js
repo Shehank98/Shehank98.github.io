@@ -4,9 +4,10 @@ import {
   statsSection,
   educationInfo,
   workExperiences,
-  languagesSection
+  languagesSection,
+  badge
 } from "../portfolio";
-import {Reveal, SectionHead} from "./Section";
+import {Reveal} from "./Section";
 import {useInView, useCountUp} from "./hooks";
 
 function Stat({value, label, icon, delay}) {
@@ -25,13 +26,41 @@ function Stat({value, label, icon, delay}) {
 const ICONS = ["fas fa-tv", "fas fa-brain", "fas fa-bolt", "fas fa-trophy"];
 
 export default function About() {
+  const go = id => e => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({behavior: "smooth"});
+  };
+  const paras = aboutSection.paragraphs || [];
+  const nameParts = (aboutSection.displayName || "").split(" ");
+  const first = nameParts.shift() || "";
+  const rest = nameParts.join(" ");
+  const photo = aboutSection.photo || badge.photo;
   return (
-    <section id="about" className="section">
-      <SectionHead kicker="01 / ABOUT" title="Who is" accent="Shehan?" />
+    <section id="about" className="section about-sec">
+      <Reveal as="h2" className="about-title">{aboutSection.title}</Reveal>
       {aboutSection.display !== false && (
-        <div className="about-grid">
-          <Reveal className="about-text">
-            {aboutSection.paragraphs.map((p, i) => (
+        <div className="about-hero">
+          <Reveal className="about-name">
+            <span className="about-hi">{aboutSection.greetingLine}</span>
+            <span className="about-first">{first}</span>
+            {rest && <span className="about-last">{rest}</span>}
+            <a href="#contact" className="btn-primary" onClick={go("contact")}>
+              <i className="far fa-envelope" /> {aboutSection.primaryButton}
+            </a>
+          </Reveal>
+          <Reveal className="about-photo" delay={0.1}>
+            <div className="ring r1" />
+            <div className="ring r2" />
+            <i className="orbit-dot" />
+            {photo ? (
+              <img src={photo} alt={aboutSection.displayName} />
+            ) : (
+              <div className="about-ph"><i className="fas fa-user" /></div>
+            )}
+          </Reveal>
+          <Reveal className="about-copy" delay={0.2}>
+            {paras.slice(0, 2).map((p, i) => (
               <p key={i}>{p}</p>
             ))}
             {languagesSection.display !== false && (
@@ -43,16 +72,28 @@ export default function About() {
                 ))}
               </div>
             )}
+            <a href="#portfolio" className="btn-ghost" onClick={go("portfolio")}>
+              <i className="fas fa-code" /> {aboutSection.secondaryButton} <i className="fas fa-arrow-up-right-from-square" />
+            </a>
           </Reveal>
-          <div className="about-cols">
-            {statsSection.display !== false && (
-              <div className="stats">
-                {statsSection.stats.map((s, i) => (
-                  <Stat key={i} value={s.value} label={s.label} icon={ICONS[i % 4]} delay={i * 0.08} />
-                ))}
-              </div>
-            )}
-          </div>
+        </div>
+      )}
+
+      {paras.length > 2 && (
+        <div className="about-more">
+          {paras.slice(2).map((p, i) => (
+            <Reveal key={i} className="about-more-card" delay={i * 0.08}>
+              <p>{p}</p>
+            </Reveal>
+          ))}
+        </div>
+      )}
+
+      {statsSection.display !== false && (
+        <div className="stats stats-row">
+          {statsSection.stats.map((s, i) => (
+            <Stat key={i} value={s.value} label={s.label} icon={ICONS[i % 4]} delay={i * 0.08} />
+          ))}
         </div>
       )}
 

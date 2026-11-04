@@ -9,15 +9,21 @@ const img = name => `/uploads/seed/${name}`;
 module.exports = {
   badge: {
     name: "SHEHAN KAVISHKA",
+    tag: "SENIOR",
+    headline: "MEDIA EXEC",
     role: "Senior Media Executive | Data & AI",
+    sideText: "DATA SCIENCE & AI",
     company: "OGILVY",
-    tagline: "MEDIA x DATA x AI",
     idNumber: "SK-98",
-    photo: null,
+    footerText: "PORTFOLIO",
+    footerNote: "Data. Media. AI.",
+    photo: img("profile.jpg"),
     qrUrl: "https://www.linkedin.com/in/shehan-kavishka/",
-    qrCaption: "SCAN TO CONNECT",
-    lanyardText: "SHEHAN KAVISHKA"
+    qrTitle: "CONNECT WITH ME",
+    qrCaption: "SCAN HERE",
+    lanyardText: "Shehan Kavishka"
   },
+
 
   heroSection: {
     welcome: "Welcome to",
@@ -275,6 +281,11 @@ module.exports = {
 
   aboutSection: {
     title: "About Me",
+    greetingLine: "Hi, I'm",
+    displayName: "Shehan Kavishka",
+    photo: img("profile.jpg"),
+    primaryButton: "Contact Me",
+    secondaryButton: "View Projects",
     paragraphs: [
       "Senior Media Executive at Ogilvy, driving campaigns across TV, radio and press while integrating data and strategy to maximize performance.",
       "Currently pursuing a BSc in Data Science (London Metropolitan University), backed by an HND in Data Analytics — applying analytical thinking to real business challenges.",
