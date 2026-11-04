@@ -16,6 +16,7 @@ body {
   background-image: none !important;
   color: $text;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .v2 {
@@ -24,6 +25,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  overflow-x: clip; // 'clip' cannot be scrolled programmatically, so tapping an off-screen card never shifts the page sideways
   line-height: 1.65;
 
   h1, h2, h3, h4 {
@@ -545,3 +547,98 @@ body {
   .v2 *, .v2 *::before, .v2 *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 .about-title.port-title { margin-bottom: 14px; }
+
+// =====================================================================
+// MOBILE POLISH (phones first): tighter spacing, smaller cards, swipe rows
+// =====================================================================
+@media (max-width: 768px) {
+  .v2 .section { padding: 64px 18px 8px; }
+  .sec-head { margin-bottom: 22px; h2 { font-size: clamp(28px, 8.5vw, 38px); } p { font-size: 15px; } }
+  .about-title { font-size: clamp(38px, 12vw, 54px); margin-bottom: 26px; }
+  .about-title.port-title { margin-bottom: 8px; }
+
+  // --- hero: shorter badge box so the headline shows on the first screen
+  .hero { padding-left: 18px; padding-right: 18px; }
+  .hero-badge { height: 540px; margin: 0 -18px 4px; }
+  .hero-title { font-size: clamp(38px, 11.5vw, 54px); padding-bottom: 0.08em; }
+  .hero-role { margin-top: 10px; font-size: 17px; }
+  .hero-intro { font-size: 15px; margin-top: 8px; }
+  .hero-cta { gap: 8px; margin-top: 16px; }
+  .v2 .hero-cta .btn-primary, .v2 .hero-cta .btn-ghost { padding: 11px 15px; font-size: 14px; border-radius: 12px; gap: 7px; }
+  .hero-social { margin-top: 16px; a { width: 42px; height: 42px; } }
+
+  // --- about
+  .about-hero { gap: 14px; }
+  .about-photo { --ph: clamp(340px, 60vw, 460px); height: var(--ph); min-height: 0; order: 1; margin-bottom: 22px; img, .about-ph { height: var(--ph); width: auto; max-width: 100%; } }
+  .about-name span { font-size: clamp(38px, 12vw, 52px); }
+  .about-name .btn-primary { margin-top: 18px; }
+  .about-copy { gap: 16px; }
+  .about-copy-text p { font-size: 16px; line-height: 1.7; margin-bottom: 12px; }
+  .stats-row { margin-top: 28px; gap: 10px; }
+  .stat { padding: 14px; border-radius: 18px; &::after { border-radius: 16px; } .stat-ico { font-size: 15px; padding: 7px; } .stat-num { font-size: 28px; margin-top: 8px; } .stat-label { font-size: 10.5px; letter-spacing: 0.1em; margin-top: 5px; } }
+
+  // --- experience / education timelines: more room for the words
+  .two-col { gap: 26px; margin-top: 36px; }
+  .col-title { font-size: 22px; margin-bottom: 14px; }
+  .timeline { padding-left: 14px; gap: 12px; }
+  .tl-card { padding: 14px; gap: 12px; border-radius: 16px; flex-direction: column; &:hover { transform: none; }
+    .tl-dot { left: -21px; top: 22px; width: 10px; height: 10px; }
+    img { width: 40px; height: 40px; border-radius: 10px; }
+    h4 { font-size: 16.5px; } .tl-sub { font-size: 13px; } .tl-desc { font-size: 13.5px; } ul { font-size: 13.5px; padding-left: 16px; } }
+
+  // --- count cards: three small cards in one row instead of three tall ones
+  .count-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 36px; }
+  .count-card { min-height: 0; padding: 14px 10px 12px; border-radius: 18px; align-items: center; text-align: center; &::after { inset: 1.5px; border-radius: 16.5px; }
+    .cc-top { flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+    .cc-ico { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
+    .cc-num { font-size: 34px !important; line-height: 1; }
+    .cc-label { padding-top: 8px; font-size: 10px; letter-spacing: 0.06em; }
+    .cc-sub { display: none; } }
+
+  // --- portfolio: 2x2 tabs + swipeable card rows (cards are narrower and shorter)
+  .port-sub { font-size: 15px; margin-bottom: 20px; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 6px; padding: 6px; margin-bottom: 22px; border-radius: 18px; overflow: visible;
+    > :first-child, > :last-child { margin: 0; } }
+  .tab { justify-content: center; padding: 11px 8px; font-size: 13.5px; gap: 6px; border-radius: 12px; i { font-size: 13px; } em { font-size: 11px; padding: 1px 6px; } }
+  .pgrid { display: flex; gap: 14px; overflow-x: auto; margin: 0 -18px; padding: 6px 18px 10px; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; &::-webkit-scrollbar { display: none; } }
+  .pcard-wrap { flex: 0 0 80%; max-width: 330px; scroll-snap-align: center; opacity: 1 !important; transform: none !important; }
+  .pcard { padding: 14px; border-radius: 22px; &::after { border-radius: 20.5px; } h3 { font-size: 18px; margin: 14px 0 4px; } p { font-size: 13.5px; -webkit-line-clamp: 3; } .pc-more { padding-top: 12px; font-size: 13.5px; } &:hover { transform: none; } }
+  .pc-media { height: 148px; border-radius: 13px; .pc-play { width: 50px; height: 50px; font-size: 16px; } }
+  .swipe-hint { text-align: center; color: $muted; font-size: 12px; letter-spacing: 0.08em; margin-top: 4px; }
+  .stack-grid { gap: 10px; } .stack-tile { padding: 18px 8px; font-size: 13px; i { font-size: 24px; } }
+  .stack-bars { padding: 18px; gap: 16px; }
+
+  // --- project / award viewer: full-screen sheet
+  .proj-modal { padding: 0; align-items: end;
+    .pm-panel { width: 100%; max-height: 94vh; border-radius: 24px 24px 0 0; grid-template-columns: 1fr; .pm-media { position: relative; overflow: hidden; min-height: 0; aspect-ratio: 16 / 10; img { position: absolute; inset: 0; } iframe { position: absolute; inset: 0; min-height: 0; height: 100%; } } .pm-body { padding: 22px 20px 26px; gap: 10px; h3 { font-size: 21px; } p { font-size: 14.5px; } } }
+    .pm-close { top: 10px; right: 10px; width: 38px; height: 38px; } }
+
+  // --- skills
+  .marquee { margin-bottom: 22px; } .skill-chip { padding: 9px 14px; font-size: 13.5px; }
+  .skills-grid { gap: 22px; margin-bottom: 8px; }
+  .skill-list p { padding: 11px 0; font-size: 14.5px; }
+  .rings { gap: 14px; } .ring svg { width: 92px; height: 92px; } .ring span { font-size: 12px; }
+  .recs { gap: 12px; } .rec { padding: 18px; p { font-size: 14px; -webkit-line-clamp: 6; } }
+
+  // --- music / guestbook / contact
+  .music-card { padding: 20px; gap: 22px; border-radius: 24px; h2 { font-size: 34px; } p { margin: 12px 0 16px; font-size: 15px; } .eq { margin-top: 18px; height: 34px; } iframe { min-height: 232px; height: 232px; } }
+  .gb-list { max-height: 360px; } .gb-item { padding: 13px; gap: 11px; .gb-av { width: 36px; height: 36px; } }
+  .gb-form { padding: 18px; gap: 12px; }
+  .contact-info { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+    a { padding: 13px 14px; gap: 10px; font-size: 14px; border-radius: 14px; min-width: 0; overflow-wrap: anywhere; i { width: 32px; height: 32px; } &:hover { transform: none; } }
+    a:nth-child(-n+2) { grid-column: 1 / -1; }
+    a:nth-child(n+3) { flex-direction: column; gap: 6px; padding: 12px 6px; text-align: center; font-size: 13px; } }
+  .footer { margin-top: 36px; .footer-in { padding: 22px 18px; gap: 12px; flex-direction: column; align-items: flex-start; } }
+}
+
+// --- the top bar: all six links fit; the sound toggle is dropped on phones
+@media (max-width: 560px) {
+  .pill-nav { top: 8px; padding: 5px; ul { gap: 0; } a { padding: 8px 7px; font-size: 12px; letter-spacing: -0.005em; }
+    .pill-sound { display: none; } }
+}
+@media (max-width: 380px) {
+  .pill-nav a { padding: 8px 5px; font-size: 11.5px; }
+  .hero-badge { height: 500px; }
+  .count-card .cc-num { font-size: 28px !important; }
+  .pgrid .pcard-wrap { flex-basis: 84%; }
+}

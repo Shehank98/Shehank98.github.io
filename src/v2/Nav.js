@@ -24,7 +24,11 @@ export default function Nav() {
       const ul = listRef.current;
       if (!ul) return;
       const a = ul.querySelector('a.active');
-      if (a) setInd({x: a.parentElement.offsetLeft, w: a.offsetWidth, ready: true});
+      if (a) {
+        setInd({x: a.parentElement.offsetLeft, w: a.offsetWidth, ready: true});
+        // narrow phones: keep the active link inside the (scrollable) pill
+        if (ul.scrollWidth > ul.clientWidth + 2) ul.scrollTo({left: Math.max(0, a.parentElement.offsetLeft - 24), behavior: "smooth"});
+      }
     };
     place();
     window.addEventListener('resize', place);

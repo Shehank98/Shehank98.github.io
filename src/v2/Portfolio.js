@@ -3,6 +3,19 @@ import {bigProjects, achievementSection, honorsSection, skillsSection, techStack
 import {Reveal} from "./Section";
 import {blip} from "./sfx";
 
+
+function useIsMobile(q = "(max-width: 768px)") {
+  const get = () => typeof window !== "undefined" && window.matchMedia(q).matches;
+  const [m, setM] = useState(get);
+  useEffect(() => {
+    const mq = window.matchMedia(q);
+    const f = () => setM(mq.matches);
+    mq.addListener ? mq.addListener(f) : mq.addEventListener("change", f);
+    return () => (mq.removeListener ? mq.removeListener(f) : mq.removeEventListener("change", f));
+  }, [q]);
+  return m;
+}
+
 const PAGE = 6;
 
 export function youtubeId(url) {
@@ -164,6 +177,7 @@ export default function Portfolio() {
   const [shown, setShown] = useState(PAGE);
   const [open, setOpen] = useState(null);
   const current = tabs.find(t => t.id === tab) || tabs[0];
+  const mobile = useIsMobile();
 
   const pick = id => {
     setTab(id);
@@ -201,7 +215,8 @@ export default function Portfolio() {
   }, [open, close, step]);
 
   if (bigProjects.display === false) return null;
-  const items = current.items.slice(0, shown);
+  // phones get a swipeable row with every card; desktop pages the grid
+  const items = mobile ? current.items : current.items.slice(0, shown);
 
   return (
     <section id="portfolio" className="section">
@@ -257,7 +272,12 @@ export default function Portfolio() {
                 <Card key={it.title + i} item={it} index={i} onOpen={setOpen} />
               ))}
             </div>
-            {current.items.length > PAGE && (
+            {mobile && current.items.length > 1 && (
+              <p className="swipe-hint">
+                <i className="fas fa-arrows-alt-h" /> Swipe to see all {current.items.length}
+              </p>
+            )}
+            {!mobile && current.items.length > PAGE && (
               <div className="more-row">
                 {shown < current.items.length ? (
                   <button className="btn-ghost" onClick={() => setShown(s => s + PAGE)}>
