@@ -73,7 +73,6 @@ export default function Comments() {
   return (
     <section id="guestbook" className="section">
       <SectionHead
-        kicker="06 / GUESTBOOK"
         title={commentsSection.title}
         accent={`(${list.length})`}
         sub={commentsSection.subtitle}

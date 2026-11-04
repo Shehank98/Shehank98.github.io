@@ -31,7 +31,6 @@ export default function Contact() {
   return (
     <section id="contact" className="section">
       <SectionHead
-        kicker="07 / CONTACT"
         title="Let's"
         accent="work together"
         sub="Discuss a project, a role, or just say hi - my inbox is open. Available for remote and relocation opportunities."

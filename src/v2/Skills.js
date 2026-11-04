@@ -75,7 +75,7 @@ export default function Skills() {
   return (
     <>
       <section id="skills" className="section">
-        <SectionHead kicker="03 / SKILLS" title={skillsSection.title} accent="" sub={skillsSection.subTitle} />
+        <SectionHead title={skillsSection.title} accent="" sub={skillsSection.subTitle} />
         <div className="marquee" aria-label="Tools and technologies">
           <div className="marquee-track">
             {doubled.map((s, i) => (
@@ -104,7 +104,7 @@ export default function Skills() {
 
         {linkedinRecommendations.display !== false && recs.length > 0 && (
           <>
-            <SectionHead kicker="04 / KIND WORDS" title="What people" accent="say" />
+            <SectionHead title="What people" accent="say" />
             <div className="recs">
               {recs.map((r, i) => (
                 <Rec key={i} r={r} delay={i * 0.1} />

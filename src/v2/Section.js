@@ -18,7 +18,7 @@ export function Reveal({children, className = "", delay = 0, as: Tag = "div", ..
 export function SectionHead({kicker, title, accent, sub}) {
   return (
     <Reveal className="sec-head">
-      <span className="kicker">{kicker}</span>
+      {kicker && <span className="kicker">{kicker}</span>}
       <h2>
         {title} {accent && <span className="grad">{accent}</span>}
       </h2>

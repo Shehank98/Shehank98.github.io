@@ -67,7 +67,7 @@ export default function Hero({live = true}) {
               rel="noopener noreferrer"
               className="btn-ghost"
             >
-              Resume <i className="fas fa-download" />
+              Resume <i className="far fa-file-alt" />
             </a>
           )}
         </div>

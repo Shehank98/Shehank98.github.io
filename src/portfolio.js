@@ -82,8 +82,7 @@ const greeting = {
   subTitle: emoji(
     "Senior Media Executive at Ogilvy 🎯 | Blending 7+ years in advertising with Data Science & AI to build smarter media systems"
   ),
-  resumeLink:
-    "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
+  resumeLink: "/Shehan_Kavishka_CV.pdf",
   // To show your photo: place image in src/assets/images/ and set below:
   // profileImage: require("./assets/images/profile.jpg"),
   profileImage: null,
@@ -657,8 +656,7 @@ const languagesSection = {
 const resumeSection = {
   title: "Resume",
   subtitle: "Grab a copy of my full CV",
-  resumeLink:
-    "https://drive.google.com/file/d/1flITT_lp9WMyNpC5q53iVjMx22ilS8my/view?usp=sharing",
+  resumeLink: "/Shehan_Kavishka_CV.pdf",
   display: true
 };
 
