@@ -495,8 +495,7 @@ const honorsSection = {
       date: "May 2017",
       //image: require("./assets/images/isef.png"),
       video: "https://www.youtube.com/watch?v=Z-rp2wTpg_s",
-      imageAlt: "ISEF Grand Award",
-      footer: []
+      imageAlt: "ISEF Grand Award"
     },
     {
       title:
@@ -506,8 +505,7 @@ const honorsSection = {
       date: "May 2017",
       //image: require("./assets/images/isef.png"),
       video: "https://www.youtube.com/watch?v=IlsCEjYRoS0",
-      imageAlt: "ISEF Special Award",
-      footer: []
+      imageAlt: "ISEF Special Award"
     },
     {
       title: "National Winner - Sri Lanka Science & Engineering Fair",
@@ -516,8 +514,7 @@ const honorsSection = {
       date: "May 2017",
       // no image: the YouTube thumbnail is used (brain.jpeg is the MRI project image)
       video: "https://www.youtube.com/watch?v=vFGGkyWPhTw",
-      imageAlt: "National Winner Certificate",
-      footer: []
+      imageAlt: "National Winner Certificate"
     },
     {
       title: "Best School Inventor of the Year",
@@ -525,8 +522,7 @@ const honorsSection = {
         "Recognition of Outstanding Performance in the field of Environmental Science",
       date: "Sep 2017",
       image: require("./assets/images/ures.jpg"),
-      imageAlt: "Best School Inventor Award",
-      footer: []
+      imageAlt: "Best School Inventor Award"
     }
   ],
   display: true

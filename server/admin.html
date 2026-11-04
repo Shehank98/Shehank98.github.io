@@ -504,8 +504,24 @@
         } catch (err) { $("#loginErr").textContent = err.message === "Please sign in again" ? "Wrong password" : err.message; }
       });
 
+      /* Items in a list sometimes omit optional fields (e.g. one school has no description).
+         Give every item the same fields so they can all be filled in from the admin. */
+      function normalizeLists(v) {
+        if (Array.isArray(v)) {
+          const objs = v.filter(x => x && typeof x === "object" && !Array.isArray(x));
+          if (objs.length > 1) {
+            const proto = {};
+            objs.forEach(o => Object.keys(o).forEach(k => { if (!(k in proto)) proto[k] = o[k]; }));
+            objs.forEach(o => Object.keys(proto).forEach(k => { if (!(k in o)) o[k] = blankLike(proto[k]); }));
+          }
+          v.forEach(normalizeLists);
+        } else if (v && typeof v === "object") Object.values(v).forEach(normalizeLists);
+        return v;
+      }
+
       async function loadAll() {
         CONTENT = await api("/api/admin/content");
+        Object.keys(CONTENT).forEach(k => normalizeLists(CONTENT[k]));
         SNAP = {}; Object.keys(CONTENT).forEach(k => (SNAP[k] = JSON.stringify(CONTENT[k])));
         try { SAVED = Object.fromEntries(Object.keys(await (await fetch("/api/content")).json()).map(k => [k, true])); } catch (_) { SAVED = {}; }
         try { MSGS = await api("/api/admin/messages"); COMMS = await api("/api/admin/comments"); } catch (_) {}
@@ -834,7 +850,7 @@
         const k = view.key; if (!(await confirmDlg("Reset this section?", "This brings back the original text and images for “" + (REG[k] ? REG[k].title : k) + "”. Your edits to it will be lost.", "Reset", true))) return;
         try {
           await api("/api/admin/section/" + k + "/reset", {method: "POST"});
-          const all = await api("/api/admin/content"); CONTENT[k] = all[k]; SNAP[k] = JSON.stringify(all[k]); delete SAVED[k];
+          const all = await api("/api/admin/content"); CONTENT[k] = normalizeLists(all[k]); SNAP[k] = JSON.stringify(all[k]); delete SAVED[k];
           renderNav(); render(); toast("Section reset"); if (previewOpen) openPreview();
         } catch (e) { toast(e.message, "err"); }
       }
