@@ -31,13 +31,12 @@ export default function Greeting() {
             <div className="button-greeting-div">
               <Button text="Contact me" href="#contact" />
               {greeting.resumeLink && (
-                <a
+                <Button
+                  text="Download CV"
                   href={require("./resume.pdf")}
                   download="Resume.pdf"
                   className="download-link-button"
-                >
-                  <Button text="Download CV" />
-                </a>
+                />
               )}
             </div>
           </div>
@@ -58,8 +57,8 @@ export default function Greeting() {
                   </div>
                 )}
               </div>
-              <span className="float-badge badge-ml">{emoji("🧠")} ML Engineer</span>
-              <span className="float-badge badge-py">{emoji("🐍")} Python</span>
+              <span className="float-badge badge-ml">{emoji("🎯")} Media Buying</span>
+              <span className="float-badge badge-py">{emoji("🤖")} AI & ML</span>
               <span className="float-badge badge-ds">{emoji("📊")} Data Science</span>
             </div>
           </div>

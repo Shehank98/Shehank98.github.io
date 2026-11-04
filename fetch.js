@@ -1,6 +1,6 @@
-fs = require("fs");
+const fs = require("fs");
 const https = require("https");
-process = require("process");
+const process = require("process");
 require("dotenv").config();
 
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
@@ -8,24 +8,38 @@ const GITHUB_USERNAME = process.env.GITHUB_USERNAME;
 const USE_GITHUB_DATA = process.env.USE_GITHUB_DATA;
 const MEDIUM_USERNAME = process.env.MEDIUM_USERNAME;
 
-const ERR = {
-  noUserName:
-    "Github Username was found to be undefined. Please set all relevant environment variables.",
-  requestFailed:
-    "The request to GitHub didn't succeed. Check if GitHub token in your .env file is correct.",
-  requestFailedMedium:
-    "The request to Medium didn't succeed. Check if Medium username in your .env file is correct."
-};
-if (USE_GITHUB_DATA === "true") {
-  if (GITHUB_USERNAME === undefined) {
-    throw new Error(ERR.noUserName);
+// Write generated JSON where the app is actually served from. In a production
+// container the optimized build lives in ./build; during local dev it is ./public.
+const OUTPUT_DIR = fs.existsSync("./build") ? "./build" : "./public";
+
+// Requests should never hang container startup indefinitely.
+const REQUEST_TIMEOUT_MS = 15000;
+
+function saveFile(fileName, data) {
+  const target = `${OUTPUT_DIR}/${fileName}`;
+  fs.writeFile(target, data, function (err) {
+    if (err) return console.warn(`Could not write ${target}:`, err.message);
+    console.log(`saved file to ${target}`);
+  });
+}
+
+function fetchGithubProfile() {
+  if (USE_GITHUB_DATA !== "true") {
+    console.log("USE_GITHUB_DATA is not 'true' — skipping GitHub fetch.");
+    return;
+  }
+  if (!GITHUB_USERNAME || !GITHUB_TOKEN) {
+    console.warn(
+      "GITHUB_USERNAME or REACT_APP_GITHUB_TOKEN is missing — skipping GitHub fetch. Sections relying on GitHub data will show defaults."
+    );
+    return;
   }
 
   console.log(`Fetching profile data for ${GITHUB_USERNAME}`);
-  var data = JSON.stringify({
+  const body = JSON.stringify({
     query: `
 {
-  user(login:"${GITHUB_USERNAME}") { 
+  user(login:"${GITHUB_USERNAME}") {
     name
     bio
     avatarUrl
@@ -56,7 +70,8 @@ if (USE_GITHUB_DATA === "true") {
 }
 `
   });
-  const default_options = {
+
+  const options = {
     hostname: "api.github.com",
     path: "/graphql",
     port: 443,
@@ -67,34 +82,38 @@ if (USE_GITHUB_DATA === "true") {
     }
   };
 
-  const req = https.request(default_options, res => {
+  const req = https.request(options, res => {
     let data = "";
-
-    console.log(`statusCode: ${res.statusCode}`);
-    if (res.statusCode !== 200) {
-      throw new Error(ERR.requestFailed);
-    }
-
-    res.on("data", d => {
-      data += d;
-    });
+    console.log(`GitHub statusCode: ${res.statusCode}`);
+    res.on("data", d => (data += d));
     res.on("end", () => {
-      fs.writeFile("./public/profile.json", data, function (err) {
-        if (err) return console.log(err);
-        console.log("saved file to public/profile.json");
-      });
+      if (res.statusCode !== 200) {
+        console.warn(
+          "GitHub request did not succeed. Check REACT_APP_GITHUB_TOKEN. Sections will show defaults."
+        );
+        return;
+      }
+      saveFile("profile.json", data);
     });
   });
 
-  req.on("error", error => {
-    throw error;
+  req.setTimeout(REQUEST_TIMEOUT_MS, () => {
+    console.warn("GitHub request timed out — skipping.");
+    req.destroy();
   });
-
-  req.write(data);
+  req.on("error", error =>
+    console.warn("GitHub request error — skipping:", error.message)
+  );
+  req.write(body);
   req.end();
 }
 
-if (MEDIUM_USERNAME !== undefined) {
+function fetchMediumBlogs() {
+  if (!MEDIUM_USERNAME) {
+    console.log("MEDIUM_USERNAME is not set — skipping Medium fetch.");
+    return;
+  }
+
   console.log(`Fetching Medium blogs data for ${MEDIUM_USERNAME}`);
   const options = {
     hostname: "api.rss2json.com",
@@ -105,26 +124,28 @@ if (MEDIUM_USERNAME !== undefined) {
 
   const req = https.request(options, res => {
     let mediumData = "";
-
-    console.log(`statusCode: ${res.statusCode}`);
-    if (res.statusCode !== 200) {
-      throw new Error(ERR.requestMediumFailed);
-    }
-
-    res.on("data", d => {
-      mediumData += d;
-    });
+    console.log(`Medium statusCode: ${res.statusCode}`);
+    res.on("data", d => (mediumData += d));
     res.on("end", () => {
-      fs.writeFile("./public/blogs.json", mediumData, function (err) {
-        if (err) return console.log(err);
-        console.log("saved file to public/blogs.json");
-      });
+      if (res.statusCode !== 200) {
+        console.warn(
+          "Medium request did not succeed. Check MEDIUM_USERNAME. Blogs will show defaults."
+        );
+        return;
+      }
+      saveFile("blogs.json", mediumData);
     });
   });
 
-  req.on("error", error => {
-    throw error;
+  req.setTimeout(REQUEST_TIMEOUT_MS, () => {
+    console.warn("Medium request timed out — skipping.");
+    req.destroy();
   });
-
+  req.on("error", error =>
+    console.warn("Medium request error — skipping:", error.message)
+  );
   req.end();
 }
+
+fetchGithubProfile();
+fetchMediumBlogs();

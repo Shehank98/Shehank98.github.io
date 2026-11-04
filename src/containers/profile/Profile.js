@@ -14,6 +14,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    let isMounted = true;
     if (openSource.showGithubProfile === "true") {
       const getProfileData = () => {
         fetch("/profile.json")
@@ -21,20 +22,26 @@ export default function Profile() {
             if (result.ok) {
               return result.json();
             }
+            throw result;
           })
           .then(response => {
-            setProfileFunction(response.data.user);
+            if (!isMounted) return;
+            setProfileFunction(response?.data?.user ?? "Error");
           })
           .catch(function (error) {
-            console.error(
+            console.warn(
               `${error} (because of this error GitHub contact section could not be displayed. Contact section has reverted to default)`
             );
+            if (!isMounted) return;
             setProfileFunction("Error");
             openSource.showGithubProfile = "false";
           });
       };
       getProfileData();
     }
+    return () => {
+      isMounted = false;
+    };
   }, []);
   if (
     openSource.display &&

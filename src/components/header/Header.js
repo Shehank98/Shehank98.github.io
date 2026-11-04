@@ -4,24 +4,25 @@ import "./Header.scss";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import StyleContext from "../../contexts/StyleContext";
 import {
-  greeting,
+  aboutSection,
   workExperiences,
   skillsSection,
-  openSource,
   blogSection,
   talkSection,
   achievementSection,
+  languagesSection,
   resumeSection
 } from "../../portfolio";
 
 function Header() {
   const {isDark} = useContext(StyleContext);
+  const viewAbout = aboutSection.display;
   const viewExperience = workExperiences.display;
-  const viewOpenSource = openSource.display;
   const viewSkills = skillsSection.display;
   const viewAchievement = achievementSection.display;
   const viewBlog = blogSection.display;
   const viewTalks = talkSection.display;
+  const viewLanguages = languagesSection.display;
   const viewResume = resumeSection.display;
 
   return (
@@ -41,19 +42,19 @@ function Header() {
           <span className={isDark ? "navicon navicon-dark" : "navicon"}></span>
         </label>
         <ul className={isDark ? "dark-menu menu" : "menu"}>
-          {viewSkills && (
+          {viewAbout && (
             <li>
-              <a href="#skills">Skills</a>
+              <a href="#about">About</a>
             </li>
           )}
           {viewExperience && (
             <li>
-              <a href="#experience">Work Experiences</a>
+              <a href="#experience">Experience</a>
             </li>
           )}
-          {viewOpenSource && (
+          {viewSkills && (
             <li>
-              <a href="#opensource">Open Source</a>
+              <a href="#skills">Skills</a>
             </li>
           )}
           {viewAchievement && (
@@ -69,6 +70,11 @@ function Header() {
           {viewTalks && (
             <li>
               <a href="#talks">Talks</a>
+            </li>
+          )}
+          {viewLanguages && (
+            <li>
+              <a href="#languages">Languages</a>
             </li>
           )}
           {viewResume && (

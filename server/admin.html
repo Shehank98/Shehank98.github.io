@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio Studio</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" />
+    <style>
+      :root, html[data-theme="dark"] {
+        --bg: #080a1a; --bg2: #0d1024; --panel: #131733; --panel2: #1a1f42; --panel3: #222850;
+        --line: rgba(148, 163, 255, 0.14); --line2: rgba(148, 163, 255, 0.26);
+        --text: #e9ecff; --muted: #8f97c6; --faint: #5f6797;
+        --accent: #6366f1; --accent2: #8b5cf6; --cyan: #22d3ee;
+        --ok: #34d399; --danger: #f87171; --warn: #fbbf24;
+        --shadow: 0 18px 50px -18px rgba(0, 0, 0, 0.7);
+        --glow: 0 10px 30px -10px rgba(99, 102, 241, 0.7);
+        --bgfx: radial-gradient(900px 500px at 8% -10%, rgba(99, 102, 241, 0.22), transparent 60%), radial-gradient(700px 500px at 100% 0%, rgba(139, 92, 246, 0.16), transparent 60%);
+      }
+      html[data-theme="light"] {
+        --bg: #f3f4fb; --bg2: #ffffff; --panel: #ffffff; --panel2: #f1f3fc; --panel3: #e7eafa;
+        --line: rgba(60, 70, 140, 0.12); --line2: rgba(60, 70, 140, 0.24);
+        --text: #14173a; --muted: #5d648f; --faint: #98a0c8;
+        --accent: #5558e6; --accent2: #7c4ee6; --cyan: #0891b2;
+        --ok: #059669; --danger: #dc2626; --warn: #d97706;
+        --shadow: 0 18px 50px -22px rgba(40, 50, 120, 0.35);
+        --glow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+        --bgfx: radial-gradient(900px 500px at 8% -10%, rgba(99, 102, 241, 0.12), transparent 60%);
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body { margin: 0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 14.5px; line-height: 1.5;
+        background: var(--bg); background-image: var(--bgfx); background-attachment: fixed; color: var(--text); -webkit-font-smoothing: antialiased; }
+      h1, h2, h3 { font-family: "Space Grotesk", "Inter", sans-serif; margin: 0; letter-spacing: -0.01em; }
+      button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+      svg.ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+      ::-webkit-scrollbar { width: 10px; height: 10px; } ::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+
+      /* ---------- buttons ---------- */
+      .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 11px; font-weight: 600; font-size: 13.5px; transition: transform .15s, background .2s, box-shadow .2s, border-color .2s, opacity .2s; border: 1px solid transparent; white-space: nowrap; }
+      .btn:active { transform: scale(0.97); }
+      .btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
+      .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: var(--glow); }
+      .btn-primary:hover:not([disabled]) { filter: brightness(1.1); transform: translateY(-1px); }
+      .btn-soft { background: var(--panel2); border-color: var(--line); color: var(--text); }
+      .btn-soft:hover { border-color: var(--line2); background: var(--panel3); }
+      .btn-ghost { color: var(--muted); } .btn-ghost:hover { color: var(--text); background: var(--panel2); }
+      .btn-danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+      .btn-danger:hover { background: color-mix(in srgb, var(--danger) 18%, transparent); }
+      .btn-sm { padding: 6px 10px; font-size: 12.5px; border-radius: 9px; }
+      .icon-btn { width: 32px; height: 32px; display: inline-grid; place-items: center; border-radius: 9px; color: var(--muted); transition: background .15s, color .15s; }
+      .icon-btn:hover { background: var(--panel3); color: var(--text); }
+      .icon-btn.danger:hover { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+      .icon-btn[disabled] { opacity: .3; pointer-events: none; }
+
+      /* ---------- login ---------- */
+      #login { min-height: 100vh; display: none; place-items: center; padding: 24px; }
+      .login-card { width: min(400px, 100%); background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(20px); border: 1px solid var(--line); border-radius: 22px; padding: 34px; box-shadow: var(--shadow); text-align: center; animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
+      .logo { width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 18px; display: grid; place-items: center; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font: 700 21px "Space Grotesk", sans-serif; box-shadow: var(--glow); }
+      .login-card h1 { font-size: 24px; } .login-card p { color: var(--muted); margin: 6px 0 24px; }
+      .pw { position: relative; } .pw input { padding-right: 44px; } .pw button { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); }
+      .login-err { color: var(--danger); font-size: 13px; min-height: 20px; margin: 10px 0 0; }
+      @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+
+      /* ---------- shell ---------- */
+      #app { display: none; min-height: 100vh; grid-template-columns: 276px minmax(0, 1fr); }
+      aside.side { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; background: color-mix(in srgb, var(--bg2) 92%, transparent); border-right: 1px solid var(--line); backdrop-filter: blur(14px); z-index: 40; }
+      .brand { display: flex; align-items: center; gap: 12px; padding: 20px 20px 14px; }
+      .brand .logo { margin: 0; width: 40px; height: 40px; border-radius: 12px; font-size: 16px; }
+      .brand b { display: block; font: 700 16px "Space Grotesk", sans-serif; } .brand span { color: var(--muted); font-size: 12px; }
+      .search { margin: 4px 16px 10px; position: relative; } .search svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--faint); width: 16px; height: 16px; }
+      .search input[type=text] { padding-left: 36px; height: 38px; background: var(--panel); }
+      .navwrap { flex: 1; overflow-y: auto; padding: 4px 12px 12px; }
+      .navgroup { margin-bottom: 14px; } .navgroup h4 { margin: 10px 8px 6px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; align-items: center; }
+      .navitem { width: 100%; display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: 11px; color: var(--muted); font-weight: 500; text-align: left; transition: background .15s, color .15s; position: relative; }
+      .navitem:hover { background: var(--panel2); color: var(--text); }
+      .navitem.active { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 24%, transparent), color-mix(in srgb, var(--accent2) 14%, transparent)); color: var(--text); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent); }
+      .navitem.active svg { color: var(--cyan); }
+      .navitem .dot { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 10px var(--accent2); }
+      .navitem .count { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+      .legacy-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; color: var(--faint); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+      .side-foot { padding: 12px 16px 16px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+      .side-foot .row { display: flex; gap: 8px; }
+      main.main { min-width: 0; display: flex; flex-direction: column; min-height: 100vh; }
+      .topbar { display: none; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: color-mix(in srgb, var(--bg2) 92%, transparent); backdrop-filter: blur(14px); z-index: 30; }
+      .scrim { display: none; position: fixed; inset: 0; background: rgba(2, 4, 18, .6); z-index: 35; }
+      .work { display: flex; flex: 1; min-height: 0; }
+      .content { flex: 1; min-width: 0; padding: 0 clamp(16px, 3vw, 40px) 90px; }
+      .content-inner { max-width: 880px; margin: 0 auto; min-width: 0; }
+      .card, .item, .item-body { min-width: 0; }
+
+      /* ---------- dashboard ---------- */
+      .hello { padding: 34px 0 8px; } .hello h1 { font-size: clamp(26px, 3.4vw, 36px); } .hello p { color: var(--muted); margin: 8px 0 0; max-width: 620px; }
+      .hello-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+      .tips { margin: 22px 0 6px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .tip { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; gap: 12px; }
+      .tip b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--cyan); font-size: 13px; flex-shrink: 0; }
+      .tip p { margin: 0; color: var(--muted); font-size: 13px; } .tip p strong { color: var(--text); display: block; font-size: 13.5px; }
+      .grp-title { margin: 28px 0 12px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+      .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+      .tile { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 10px; transition: transform .2s, border-color .2s, box-shadow .2s; position: relative; overflow: hidden; }
+      .tile:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: var(--shadow); }
+      .tile .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, transparent), color-mix(in srgb, var(--accent2) 22%, transparent)); color: var(--cyan); }
+      .tile h3 { font-size: 16px; } .tile p { margin: 0; color: var(--muted); font-size: 13px; flex: 1; }
+      .badge { align-self: flex-start; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--panel3); color: var(--muted); }
+      .badge.on { background: color-mix(in srgb, var(--ok) 18%, transparent); color: var(--ok); }
+      .tile .badge-pos { position: absolute; top: 16px; right: 16px; }
+
+      /* ---------- editor header ---------- */
+      .ed-head { position: sticky; top: 0; z-index: 20; margin: 0 calc(-1 * clamp(16px, 3vw, 40px)); padding: 16px clamp(16px, 3vw, 40px) 14px; background: color-mix(in srgb, var(--bg) 90%, transparent); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+      .ed-head-in { max-width: 880px; margin: 0 auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+      .ed-ico { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: var(--glow); }
+      .ed-title { flex: 1; min-width: 180px; } .ed-title h1 { font-size: 24px; } .ed-title p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+      .ed-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .status { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 999px; background: var(--panel2); color: var(--muted); }
+      .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+      .status.dirty { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); } .status.dirty i { background: var(--warn); animation: pulse 1.4s infinite; }
+      @keyframes pulse { 50% { opacity: .35; } }
+      .where { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--cyan); }
+      .vis { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
+
+      /* ---------- forms ---------- */
+      .card { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; margin-top: 16px; }
+      .card > header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+      .card > header h2 { font-size: 16px; flex: 1; } .card > header small { color: var(--muted); font-weight: 500; }
+      .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+      .field { min-width: 0; } .field.wide { grid-column: 1 / -1; }
+      .field > label { display: block; font-size: 12.5px; font-weight: 600; margin: 0 0 6px; color: var(--text); }
+      .hint { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+      input[type=text], input[type=url], input[type=email], input[type=password], input[type=number], input:not([type]), textarea, select {
+        width: 100%; padding: 10px 12px; border-radius: 11px; border: 1px solid var(--line); background: var(--bg2); color: var(--text); font: inherit; transition: border-color .15s, box-shadow .15s; }
+      html[data-theme="light"] input, html[data-theme="light"] textarea { background: #fbfbff; }
+      input::placeholder, textarea::placeholder { color: var(--faint); }
+      input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent); }
+      textarea { resize: vertical; min-height: 84px; line-height: 1.55; overflow: hidden; }
+      .url-row { display: flex; gap: 6px; } .url-row input { flex: 1; }
+      /* switch */
+      .switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; } .switch input { opacity: 0; width: 100%; height: 100%; position: absolute; margin: 0; cursor: pointer; z-index: 1; }
+      .switch span { position: absolute; inset: 0; border-radius: 999px; background: var(--panel3); transition: background .2s; } .switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+      .switch input:checked + span { background: linear-gradient(135deg, var(--accent), var(--accent2)); } .switch input:checked + span::after { transform: translateX(18px); }
+      .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; border-radius: 12px; background: var(--bg2); border: 1px solid var(--line); }
+      .toggle-row b { font-size: 13px; display: block; } .toggle-row small { color: var(--muted); font-size: 12px; }
+
+      /* image widget */
+      .imgw { display: flex; gap: 14px; align-items: stretch; flex-wrap: wrap; }
+      .img-drop { position: relative; width: 190px; min-height: 120px; border-radius: 14px; border: 1.5px dashed var(--line2); background: var(--bg2) center/cover no-repeat; display: grid; place-items: center; text-align: center; color: var(--muted); font-size: 12px; cursor: pointer; overflow: hidden; transition: border-color .2s, background-color .2s; }
+      .img-drop.has { border-style: solid; background-color: #fff; background-image: none; }
+      .img-drop img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+      .img-drop.contain img { object-fit: contain; padding: 8px; }
+      .img-drop:hover, .img-drop.over { border-color: var(--accent); background-color: color-mix(in srgb, var(--accent) 10%, var(--bg2)); }
+      .img-drop .ph { padding: 12px; } .img-drop .ph svg { width: 26px; height: 26px; margin-bottom: 6px; color: var(--accent2); }
+      .img-drop .busy { position: absolute; inset: 0; background: rgba(5,7,20,.7); display: none; place-items: center; color: #fff; font-weight: 600; z-index: 2; } .img-drop.loading .busy { display: grid; }
+      .img-act { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+      .yt-prev { margin-top: 8px; display: flex; gap: 10px; align-items: center; } .yt-prev img { width: 120px; height: 68px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: #000; }
+      .yt-prev span { color: var(--muted); font-size: 12px; }
+
+      /* lists */
+      .rows { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+      .row-item { display: flex; gap: 8px; align-items: flex-start; } .row-item > .num { width: 26px; height: 38px; display: grid; place-items: center; color: var(--faint); font-size: 12px; font-weight: 700; flex-shrink: 0; }
+      .row-item > .inp { flex: 1; min-width: 0; } .row-item > .tools { display: flex; gap: 2px; padding-top: 3px; }
+      .compact-head, .compact-row { display: grid; gap: 8px; align-items: center; }
+      .compact-head { padding: 0 82px 6px 0; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+      .compact-row { grid-template-columns: var(--cols) auto; } .compact-row .tools { display: flex; gap: 2px; }
+      .add-row { margin-top: 10px; }
+      .empty { padding: 20px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line2); border-radius: 14px; font-size: 13px; }
+      .items { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .item { background: var(--bg2); border: 1px solid var(--line); border-radius: 15px; transition: border-color .2s, box-shadow .2s; }
+      .item.open { border-color: color-mix(in srgb, var(--accent) 45%, transparent); box-shadow: 0 8px 30px -16px rgba(99, 102, 241, .5); }
+      .item-head { display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; cursor: pointer; border-radius: 15px; user-select: none; }
+      .item-head:hover { background: color-mix(in srgb, var(--panel2) 60%, transparent); }
+      .item-num { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--panel3); color: var(--muted); font-size: 12px; font-weight: 700; flex-shrink: 0; }
+      .item-thumb { width: 42px; height: 42px; border-radius: 10px; object-fit: cover; background: #fff; border: 1px solid var(--line); flex-shrink: 0; }
+      .item-thumb.empty { display: grid; place-items: center; background: var(--panel3); color: var(--faint); }
+      .item-t { flex: 1; min-width: 0; } .item-t b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .item-t small { color: var(--muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+      .item-tools { display: flex; gap: 2px; align-items: center; } .chev { transition: transform .25s; } .item.open .chev { transform: rotate(180deg); }
+      .item-body { display: none; padding: 4px 16px 18px; border-top: 1px solid var(--line); } .item.open .item-body { display: block; animation: fadeDown .25s ease both; }
+      .item-body .grid2 { margin-top: 14px; } .item-body .sub { margin-top: 18px; }
+      .sub > h4 { margin: 0 0 8px; font-size: 12.5px; font-weight: 700; }
+      @keyframes fadeDown { from { opacity: 0; transform: translateY(-6px); } }
+      @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(99,102,241,.7); } 100% { box-shadow: 0 0 0 14px rgba(99,102,241,0); } }
+      .item.flash { animation: flash .7s ease-out; }
+
+      /* inbox */
+      .msg { display: flex; gap: 14px; padding: 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; margin-top: 12px; }
+      .avatar { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font: 700 17px "Space Grotesk", sans-serif; color: #fff; flex-shrink: 0; }
+      .msg-body { flex: 1; min-width: 0; } .msg-top { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; } .msg-top b { font-size: 15px; } .msg-top a { color: var(--cyan); text-decoration: none; font-size: 13px; } .msg-top time { margin-left: auto; color: var(--muted); font-size: 12px; }
+      .msg p { margin: 8px 0 12px; white-space: pre-wrap; word-break: break-word; } .msg-act { display: flex; gap: 8px; }
+      .blank { text-align: center; padding: 70px 20px; color: var(--muted); } .blank .big { width: 76px; height: 76px; border-radius: 24px; margin: 0 auto 16px; display: grid; place-items: center; background: var(--panel); border: 1px solid var(--line); color: var(--accent2); } .blank .big svg { width: 34px; height: 34px; }
+      .blank h3 { color: var(--text); font-size: 18px; margin-bottom: 4px; }
+
+      /* preview */
+      #preview { display: none; width: min(46vw, 640px); flex-shrink: 0; position: sticky; top: 0; height: 100vh; border-left: 1px solid var(--line); background: var(--bg2); flex-direction: column; }
+      #preview.open { display: flex; }
+      .pv-head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); font-weight: 600; } .pv-head span { flex: 1; }
+      .pv-frame { flex: 1; position: relative; overflow: hidden; background: #05061a; } .pv-frame iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: #05061a; }
+
+      /* modal + toast */
+      .modal { position: fixed; inset: 0; z-index: 90; background: rgba(3, 5, 20, .7); backdrop-filter: blur(6px); display: none; place-items: center; padding: 16px; } .modal.open { display: grid; animation: fadeIn .2s both; }
+      @keyframes fadeIn { from { opacity: 0; } }
+      .dlg { width: min(440px, 100%); background: var(--panel); border: 1px solid var(--line2); border-radius: 20px; padding: 24px; box-shadow: var(--shadow); animation: rise .3s cubic-bezier(.2,.8,.2,1) both; }
+      .dlg h3 { font-size: 19px; } .dlg p { color: var(--muted); margin: 8px 0 20px; } .dlg .btns { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+      .dlg.wide { width: min(740px, 100%); max-height: 96vh; overflow: auto; }
+      .aspects { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; } .aspects button { padding: 6px 12px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); font-size: 12.5px; font-weight: 600; color: var(--muted); } .aspects button.on { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; }
+      #cropCanvas { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--line); background: #000; cursor: grab; touch-action: none; margin: 0 auto; } #cropCanvas.drag { cursor: grabbing; }
+      .ctrl { display: flex; gap: 18px; align-items: end; margin: 14px 0; flex-wrap: wrap; } .ctrl > div { flex: 1; min-width: 160px; } .ctrl input[type=color] { padding: 3px; height: 40px; width: 70px; } .ctrl input[type=range] { padding: 0; accent-color: var(--accent); }
+      .toasts { position: fixed; right: 18px; bottom: 18px; display: grid; gap: 8px; z-index: 120; }
+      .toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line2); box-shadow: var(--shadow); font-weight: 600; animation: rise .3s cubic-bezier(.2,.8,.2,1) both; max-width: 380px; }
+      .toast.ok svg { color: var(--ok); } .toast.err svg { color: var(--danger); } .toast.out { opacity: 0; transform: translateY(8px); transition: .3s; }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1180px) { #preview { display: none !important; } #pvBtn { display: none; } }
+      @media (max-width: 920px) {
+        #app { grid-template-columns: 1fr; }
+        aside.side { position: fixed; left: 0; top: 0; width: 290px; transform: translateX(-102%); transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+        body.nav-open aside.side { transform: none; } body.nav-open .scrim { display: block; }
+        .topbar { display: flex; } .ed-head { top: 57px; }
+        .tips { grid-template-columns: 1fr; } .grid2 { grid-template-columns: minmax(0, 1fr); }
+      }
+      @media (max-width: 560px) { .item-num, .item-tools .icon-btn[title="Duplicate"] { display: none; } .item-thumb { width: 36px; height: 36px; } .item-head { gap: 10px; }
+        .ed-actions { width: 100%; } .ed-actions .btn-primary { flex: 1; justify-content: center; } .img-drop { width: 100%; } .compact-head { display: none; } .compact-row { grid-template-columns: 1fr auto !important; } .compact-row > :not(.tools) { grid-column: 1 / -1; } }
+    </style>
+  </head>
+  <body>
+    <!-- ================= LOGIN ================= -->
+    <div id="login">
+      <form class="login-card" id="loginForm">
+        <div class="logo">SK</div>
+        <h1>Portfolio Studio</h1>
+        <p>Sign in to edit your website content.</p>
+        <div class="pw">
+          <input id="password" type="password" placeholder="Admin password" autocomplete="current-password" />
+          <button type="button" class="icon-btn" id="pwEye" aria-label="Show password"></button>
+        </div>
+        <div class="login-err" id="loginErr"></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" type="submit">Sign in</button>
+      </form>
+    </div>
+
+    <!-- ================= APP ================= -->
+    <div id="app">
+      <aside class="side" id="side">
+        <div class="brand"><div class="logo">SK</div><div><b>Portfolio Studio</b><span>Edit your website</span></div></div>
+        <div class="search"><span id="searchIc"></span><input id="search" type="text" placeholder="Search sections…" autocomplete="off" /></div>
+        <div class="navwrap" id="nav"></div>
+        <div class="side-foot">
+          <a class="btn btn-soft" href="/" target="_blank" rel="noopener" id="viewSite" style="justify-content:center;text-decoration:none"></a>
+          <div class="row">
+            <button class="btn btn-ghost" id="themeBtn" style="flex:1;justify-content:center"></button>
+            <button class="btn btn-ghost" id="logout" style="flex:1;justify-content:center"></button>
+          </div>
+        </div>
+      </aside>
+      <div class="scrim" id="scrim"></div>
+      <main class="main">
+        <div class="topbar"><button class="icon-btn" id="menuBtn" aria-label="Menu"></button><b style="font-family:'Space Grotesk'">Portfolio Studio</b></div>
+        <div class="work">
+          <div class="content" id="content"><div class="content-inner" id="view"></div></div>
+          <aside id="preview">
+            <div class="pv-head"><span>Live preview</span><button class="icon-btn" id="pvReload" title="Reload preview"></button><button class="icon-btn" id="pvClose" title="Close"></button></div>
+            <div class="pv-frame" id="pvFrame"><iframe id="pvIframe" title="Site preview"></iframe></div>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <!-- confirm / choice dialog -->
+    <div class="modal" id="dlgModal"><div class="dlg"><h3 id="dlgTitle"></h3><p id="dlgText"></p><div class="btns" id="dlgBtns"></div></div></div>
+
+    <!-- image cropper -->
+    <div class="modal" id="cropModal" role="dialog" aria-modal="true">
+      <div class="dlg wide">
+        <h3>Crop image to fit</h3>
+        <p style="margin-bottom:0">Drag to reposition, use the slider (or mouse wheel) to zoom. This is exactly what visitors will see.</p>
+        <div class="aspects" id="cropAspects"></div>
+        <canvas id="cropCanvas"></canvas>
+        <div class="ctrl">
+          <div><label style="font-size:12.5px;font-weight:600">Zoom</label><input type="range" id="cropZoom" min="0" max="100" value="0" /></div>
+          <div style="flex:0"><label style="font-size:12.5px;font-weight:600;white-space:nowrap">Background</label><input type="color" id="cropBg" value="#0b0b0d" /></div>
+        </div>
+        <div class="btns"><button class="btn btn-ghost" id="cropCancel" type="button">Cancel</button><button class="btn btn-soft" id="cropOriginal" type="button">Use original</button><button class="btn btn-primary" id="cropApply" type="button">Apply crop</button></div>
+      </div>
+    </div>
+    <div class="toasts" id="toasts"></div>
+
+    <script>
+      /* =====================================================================
+         Portfolio Studio - admin for the portfolio site
+         Reads/writes sections via /api/admin/* (unchanged server API)
+         ===================================================================== */
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+      /* ---------- tiny DOM helper ---------- */
+      function h(tag, props, ...kids) {
+        const el = document.createElement(tag);
+        for (const [k, v] of Object.entries(props || {})) {
+          if (v == null || v === false) continue;
+          if (k === "class") el.className = v;
+          else if (k === "html") el.innerHTML = v;
+          else if (k === "style" && typeof v === "object") Object.assign(el.style, v);
+          else if (k.startsWith("on")) el.addEventListener(k.slice(2).toLowerCase(), v);
+          else if (v === true) el.setAttribute(k, "");
+          else el.setAttribute(k, v);
+        }
+        kids.flat(9).forEach(c => { if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(c)); });
+        return el;
+      }
+
+      /* ---------- icons (inline SVG, no external deps) ---------- */
+      const ICONS = {
+        home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',
+        id: '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="2.5"/><path d="M8 17c.8-2 2.2-3 4-3s3.2 1 4 3"/>',
+        file: '<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/>',
+        link: '<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+        user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/>',
+        chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+        briefcase: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/>',
+        cap: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+        spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/>',
+        sliders: '<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+        folder: '<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+        award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 22l5-3 5 3-1.5-7.5"/>',
+        trophy: '<path d="M8 4h8v6a4 4 0 01-8 0zM8 6H4v1a4 4 0 004 4M16 6h4v1a4 4 0 01-4 4M12 14v4M8 21h8"/>',
+        quote: '<path d="M4 18v-5a6 6 0 016-6M14 18v-5a6 6 0 016-6"/><path d="M4 18h4v-4M14 18h4v-4"/>',
+        music: '<path d="M9 18V6l11-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
+        chat: '<path d="M4 5h16v11H9l-5 4z"/>',
+        mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+        inbox: '<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/>',
+        layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+        copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h8"/>',
+        up: '<path d="M6 15l6-6 6 6"/>', down: '<path d="M6 9l6 6 6-6"/>',
+        upload: '<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>',
+        crop: '<path d="M6 2v14a2 2 0 002 2h14M2 6h14a2 2 0 012 2v14"/>',
+        eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+        eyeoff: '<path d="M3 3l18 18M10.6 6.2A10 10 0 0112 6c6 0 10 6 10 6a17 17 0 01-3.2 3.8M6.3 7.3C3.7 9 2 12 2 12s4 7 10 7a9 9 0 004-1"/>',
+        save: '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/>',
+        undo: '<path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.5M3 4v5h5"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+        menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+        external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>',
+        check: '<path d="M5 12l5 5 9-10"/>',
+        alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h0"/>',
+        sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+        moon: '<path d="M21 13A9 9 0 1111 3a7 7 0 0010 10z"/>',
+        logout: '<path d="M9 4H5a1 1 0 00-1 1v14a1 1 0 001 1h4M16 8l4 4-4 4M20 12H9"/>',
+        x: '<path d="M6 6l12 12M18 6L6 18"/>',
+        image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
+        play: '<path d="M7 4l13 8-13 8z"/>',
+        refresh: '<path d="M20 11a8 8 0 10-2.3 6M20 4v7h-7"/>',
+        grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+        chevron: '<path d="M9 6l6 6-6 6"/>'
+      };
+      const ic = (name, size) => { const s = h("span", {html: `<svg class="ic" viewBox="0 0 24 24" ${size ? `style="width:${size}px;height:${size}px"` : ""}>${ICONS[name] || ICONS.layers}</svg>`}); return s.firstChild; };
+      const icHTML = name => `<svg class="ic" viewBox="0 0 24 24">${ICONS[name] || ICONS.layers}</svg>`;
+
+      /* ---------- the sections (what appears on the site, in plain words) ---------- */
+      const REG = {
+        heroSection: {title: "Hero & loading text", icon: "home", group: "Home page", anchor: "home", hide: ["primaryButton"], desc: "The big welcome heading, the typing roles under it, and the name shown on the loading screen."},
+        badge: {title: "ID badge", icon: "id", group: "Home page", anchor: "home", desc: "Your 3D hanging ID card: photo, name, role, and the QR code on its back."},
+        greeting: {title: "Resume link", icon: "file", group: "Home page", anchor: "home", desc: "Where the “Resume” button in the hero opens.", show: ["resumeLink"]},
+        socialMediaLinks: {title: "Social links", icon: "link", group: "Home page", anchor: "home", desc: "GitHub, LinkedIn, Medium and email icons shown under the hero text."},
+        aboutSection: {title: "About me", icon: "user", group: "About", anchor: "about", hide: ["primaryButton", "secondaryButton"], desc: "Your name, photo and the short text about you."},
+        statsSection: {title: "Quick stats", icon: "chart", group: "About", anchor: "about", desc: "The animated number cards, e.g. “7+ Years in Media”."},
+        workExperiences: {title: "Experience", icon: "briefcase", group: "About", anchor: "about", desc: "Your work history timeline."},
+        educationInfo: {title: "Education", icon: "cap", group: "About", anchor: "about", desc: "Universities, diplomas and courses."},
+        skillsSection: {title: "Skills & tools", icon: "spark", group: "About", anchor: "skills", desc: "What you do, plus the tools shown in the scrolling strip."},
+        techStack: {title: "Skill levels", icon: "sliders", group: "About", anchor: "portfolio", desc: "The percentage rings and bars (Deep Learning 85% …).", hide: ["displayCodersrank"]},
+        bigProjects: {title: "Projects", icon: "folder", group: "Portfolio", anchor: "portfolio", desc: "Project cards in the Portfolio tabs. Click a card to edit it, and crop its image to fit.", hide: ["title"]},
+        achievementSection: {title: "Certificates", icon: "award", group: "Portfolio", anchor: "portfolio", desc: "Your certificates, shown in the Certificates tab.", hide: ["title", "subtitle"]},
+        honorsSection: {title: "Awards & videos", icon: "trophy", group: "Portfolio", anchor: "portfolio", desc: "Awards, with optional YouTube videos that play inside the site.", hide: ["title", "subtitle"]},
+        linkedinRecommendations: {title: "Recommendations", icon: "quote", group: "Portfolio", anchor: "skills", desc: "Kind words from colleagues and lecturers."},
+        musicSection: {title: "Music (Spotify)", icon: "music", group: "Extras", anchor: "music", desc: "The “A little music” card and the Spotify playlist inside it."},
+        commentsSection: {title: "Guestbook text", icon: "chat", group: "Extras", anchor: "guestbook", desc: "Heading and subtitle of the guestbook. Moderate comments in the Inbox."},
+        contactInfo: {title: "Contact details", icon: "mail", group: "Extras", anchor: "contact", desc: "Email and phone shown in the Contact section.", hide: ["title", "subtitle"]},
+        /* not used by the current design - kept out of the way */
+        openSource: {title: "Open source", icon: "layers", group: "legacy", desc: "Not shown on the current site."},
+        blogSection: {title: "Blogs", icon: "layers", group: "legacy", desc: "Not shown on the current site."},
+        splashScreen: {title: "Old splash screen", icon: "layers", group: "legacy", desc: "Not shown on the current site."},
+        languagesSection: {title: "Languages", icon: "layers", group: "legacy", desc: "Not shown on the current site."},
+        resumeSection: {title: "Resume section", icon: "layers", group: "legacy", desc: "Not shown on the current site."}
+      };
+      const GROUPS = ["Home page", "About", "Portfolio", "Extras"];
+
+      /* ---------- friendly field names + tips ---------- */
+      // key can be "section.field" (specific) or "field" (any section)
+      const META = {
+        "heroSection.welcome": {l: "Small heading", h: "First line of the hero, e.g. “Welcome to”"},
+        "heroSection.headline": {l: "Big heading", h: "The large white line, e.g. “My Portfolio”"},
+        roles: {l: "Typing roles", h: "These type out one after another under the heading.", t: "strings"},
+        "heroSection.intro": {l: "Intro paragraph", t: "area"},
+        primaryButton: {l: "Main button text"}, secondaryButton: {l: "Second button text"},
+        loaderName: {l: "Name on loading screen", h: "Appears letter by letter while the site loads."},
+        loaderTagline: {l: "Loading screen tagline", h: "Small line under the name, e.g. MEDIA × DATA × AI."},
+        loaderSteps: {l: "Loading messages", h: "Short messages that change while it loads. Keep the last one as “Ready”.", t: "strings"},
+        "badge.name": {l: "Full name", h: "Shown on the card and on the strap."},
+        "badge.tag": {l: "Small tag", h: "Top-left label on the card, e.g. SENIOR."},
+        "badge.headline": {l: "Big word on card", h: "The huge letters under the tag, e.g. MEDIA EXEC."},
+        "badge.role": {l: "Role line", h: "Small text under your name on the card."},
+        "badge.sideText": {l: "Vertical side text", h: "Runs up the right edge of the card."},
+        "badge.company": {l: "Company"}, idNumber: {l: "ID number"},
+        "badge.footerText": {l: "Footer big word", h: "e.g. PORTFOLIO"}, "badge.footerNote": {l: "Footer small note"},
+        "badge.photo": {l: "Card photo", h: "Shown in the frame on the front of the card."},
+        qrUrl: {l: "QR code link", h: "Where the QR code on the back of the card goes, e.g. your LinkedIn profile.", t: "url"},
+        qrTitle: {l: "QR panel title"}, qrCaption: {l: "“Scan here” label"}, lanyardText: {l: "Text on the strap"},
+        "aboutSection.title": {l: "Section title"}, greetingLine: {l: "Greeting", h: "Small purple line, e.g. “Hi, I'm”."},
+        displayName: {l: "Your name", h: "Shown big next to your photo."},
+        photoCutout: {l: "Portrait with background removed", h: "A transparent PNG of you. When set, it replaces the photo above in the About section. Uploaded exactly as-is (no cropping, so the transparency is kept)."},
+        photoStyle: {l: "Portrait style", t: "select", opts: [["floating", "Floating: glow behind you, no frame"], ["halo", "Halo: glowing circle behind you"], ["poster", "Poster: glass card with big name behind you"]], h: "How the background-removed portrait is shown."},
+        "aboutSection.photo": {l: "Your photo", h: "Shown in the centre of the About section."},
+        "aboutSection.paragraphs": {l: "About text", h: "Keep it short: 2 paragraphs is ideal. Each box is one paragraph.", t: "strings", area: true},
+        highlights: {l: "Words to make bold", h: "Type a phrase exactly as written in the text above and it will be bold.", t: "strings"},
+        stats: {l: "Stat cards", t: "compact"}, value: {l: "Number", p: "e.g. 7+"}, label: {l: "Label", p: "e.g. Years in Media"},
+        experience: {l: "Items"}, role: {l: "Job title"}, company: {l: "Company"}, companylogo: {l: "Company logo"}, date: {l: "Dates", p: "e.g. Aug 2024 – Present"},
+        desc: {l: "Description", t: "area"}, descBullets: {l: "Bullet points", t: "strings"},
+        schools: {l: "Schools & courses"}, schoolName: {l: "School / university"}, logo: {l: "Logo"}, subHeader: {l: "Degree / course"}, duration: {l: "Years", p: "e.g. 2022 – 2024"},
+        "skillsSection.title": {l: "Section heading"}, subTitle: {l: "Sub-heading", h: "Small caps line under the heading."},
+        skills: {l: "What I do", h: "One line per skill.", t: "strings", area: true},
+        softwareSkills: {l: "Tools strip", h: "Scrolling chips. Icon is a Font Awesome class, e.g. “fab fa-python”.", t: "compact"}, skillName: {l: "Tool name"}, fontAwesomeClassname: {l: "Icon class", p: "fab fa-python"},
+        "techStack.experience": {l: "Skill levels", t: "compact"}, Stack: {l: "Skill"}, progressPercentage: {l: "Level", p: "e.g. 85%"}, viewSkillBars: {l: "Show skill levels"},
+        projects: {l: "Projects"}, projectName: {l: "Project name"}, projectDesc: {l: "Description", t: "area"}, image: {l: "Image", h: "Crop it so it fits the card."},
+        footerLink: {l: "Buttons", h: "Links shown on the project, e.g. GitHub or Download.", t: "compact"}, name: {l: "Button text"}, url: {l: "Link", p: "https://…"},
+        "bigProjects.subtitle": {l: "Line under the Portfolio heading", h: "Short sentence shown below the big “Portfolio” title."},
+        achievementsCards: {l: "Certificates"}, "achievementsCards.title": {l: "Certificate name"}, subtitle: {l: "Issuer & date"}, imageAlt: {l: "Image description", h: "Short text for screen readers."},
+        awards: {l: "Awards"}, description: {l: "Details", t: "area"}, video: {l: "YouTube video link", h: "Paste a YouTube link. The video plays inside the site.", t: "video"},
+        recommendations: {l: "Recommendations"}, recommenderName: {l: "Person's name"}, recommendation: {l: "What they said", t: "area", r: 6},
+        heading: {l: "Heading, line 1"}, headingAccent: {l: "Heading, line 2 (colourful)"}, text: {l: "Text", t: "area"}, buttonText: {l: "Button text"},
+        spotifyUrl: {l: "Spotify link", h: "Opens when someone clicks the button.", t: "url"},
+        embedUrl: {l: "Spotify embed link", h: "From Spotify: Share → Embed → copy the src link.", t: "url"},
+        "commentsSection.title": {l: "Heading"}, "commentsSection.subtitle": {l: "Subtitle"},
+        email_address: {l: "Email"}, number: {l: "Phone"},
+        github: {l: "GitHub link", t: "url"}, linkedin: {l: "LinkedIn link", t: "url"}, medium: {l: "Medium link", t: "url"}, gmail: {l: "Email address", h: "Used for the email icon."},
+        resumeLink: {l: "Resume / CV link", h: "Link opened by the Resume button. Default is the CV PDF on this site (opens in the browser). Replace /Shehan_Kavishka_CV.pdf in the repo to update it.", t: "url"},
+        display: {l: "Show this section on the site"}
+      };
+      const TITLE_KEYS = ["projectName", "title", "role", "schoolName", "recommenderName", "skillName", "Stack", "name", "label", "value"];
+      const SUB_KEYS = ["company", "subHeader", "subtitle", "date", "duration", "recommendation", "progressPercentage", "description", "projectDesc"];
+      const IMAGE_KEYS = ["image", "logo", "companylogo", "photo", "profileImage", "photoCutout"];
+      const pretty = k => k.replace(/_/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/^./, c => c.toUpperCase());
+      const metaFor = (sec, key) => META[sec + "." + key] || META[key] || {};
+      const labelFor = (sec, key) => metaFor(sec, key).l || pretty(key);
+
+      /* ---------- crop defaults by field ---------- */
+      function cropPrefs(path) {
+        if (/badge\.photo/.test(path)) return {aspect: 1.225, bg: "#0b0b0d"};
+        if (/aboutSection\.photo/.test(path)) return {aspect: 0.8, bg: "#050619"};
+        if (/logo/i.test(path)) return {aspect: 1, bg: "#ffffff"};
+        if (/achievementsCards/.test(path)) return {aspect: 1.6, bg: "#f4f1ea"};
+        if (/recommendations/.test(path)) return {aspect: 1, bg: "#0b0b0d"};
+        return {aspect: 1.6, bg: "#0b0b0d"};
+      }
+
+      /* ---------- state ---------- */
+      let CONTENT = {}, SNAP = {}, SAVED = {}, MSGS = [], COMMS = [];
+      let view = {type: "home", key: null};
+      let previewOpen = false;
+      const isDirty = () => view.type === "section" && JSON.stringify(CONTENT[view.key]) !== SNAP[view.key];
+
+      /* ---------- api ---------- */
+      async function api(url, opts) {
+        const res = await fetch(url, Object.assign({headers: {"Content-Type": "application/json"}}, opts));
+        if (res.status === 401) { showLogin(); throw new Error("Please sign in again"); }
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Something went wrong");
+        return res.status === 204 ? null : res.json();
+      }
+      async function uploadFile(file, filename) {
+        const fd = new FormData(); fd.append("file", file, filename || file.name || "image.jpg");
+        const res = await fetch("/api/admin/upload", {method: "POST", body: fd});
+        if (res.status === 401) { showLogin(); throw new Error("Please sign in again"); }
+        if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || "Upload failed");
+        return (await res.json()).url;
+      }
+
+      /* ---------- toasts & dialogs ---------- */
+      function toast(msg, type = "ok") {
+        const t = h("div", {class: "toast " + type}, ic(type === "ok" ? "check" : "alert"), msg);
+        $("#toasts").append(t);
+        setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 320); }, type === "ok" ? 2600 : 5000);
+      }
+      // buttons: [{label, value, kind}] -> resolves with the clicked value (or null on Esc/backdrop)
+      function dialog(title, text, buttons) {
+        return new Promise(resolve => {
+          $("#dlgTitle").textContent = title; $("#dlgText").textContent = text;
+          const box = $("#dlgBtns"); box.innerHTML = "";
+          const close = v => { $("#dlgModal").classList.remove("open"); document.removeEventListener("keydown", esc); resolve(v); };
+          const esc = e => { if (e.key === "Escape") close(null); };
+          buttons.forEach(b => box.append(h("button", {class: "btn " + (b.kind || "btn-soft"), onclick: () => close(b.value)}, b.label)));
+          $("#dlgModal").classList.add("open"); document.addEventListener("keydown", esc);
+          const first = box.querySelector(".btn-primary, .btn-danger"); if (first) first.focus();
+        });
+      }
+      const confirmDlg = (title, text, label = "Confirm", danger = false) =>
+        dialog(title, text, [{label: "Cancel", value: false, kind: "btn-ghost"}, {label, value: true, kind: danger ? "btn-danger" : "btn-primary"}]);
+
+      /* ---------- login / boot ---------- */
+      function showLogin() { $("#app").style.display = "none"; $("#login").style.display = "grid"; $("#password").focus(); }
+      function showApp() { $("#login").style.display = "none"; $("#app").style.display = "grid"; }
+      $("#pwEye").append(ic("eye"));
+      $("#pwEye").onclick = () => { const i = $("#password"); const show = i.type === "password"; i.type = show ? "text" : "password"; $("#pwEye").replaceChildren(ic(show ? "eyeoff" : "eye")); };
+      $("#loginForm").addEventListener("submit", async e => {
+        e.preventDefault(); $("#loginErr").textContent = "";
+        try {
+          await api("/api/login", {method: "POST", body: JSON.stringify({password: $("#password").value})});
+          $("#password").value = ""; await boot();
+        } catch (err) { $("#loginErr").textContent = err.message === "Please sign in again" ? "Wrong password" : err.message; }
+      });
+
+      /* Items in a list sometimes omit optional fields (e.g. one school has no description).
+         Give every item the same fields so they can all be filled in from the admin. */
+      function normalizeLists(v) {
+        if (Array.isArray(v)) {
+          const objs = v.filter(x => x && typeof x === "object" && !Array.isArray(x));
+          if (objs.length > 1) {
+            const proto = {};
+            objs.forEach(o => Object.keys(o).forEach(k => { if (!(k in proto)) proto[k] = o[k]; }));
+            objs.forEach(o => Object.keys(proto).forEach(k => { if (!(k in o)) o[k] = blankLike(proto[k]); }));
+          }
+          v.forEach(normalizeLists);
+        } else if (v && typeof v === "object") Object.values(v).forEach(normalizeLists);
+        return v;
+      }
+
+      async function loadAll() {
+        CONTENT = await api("/api/admin/content");
+        Object.keys(CONTENT).forEach(k => normalizeLists(CONTENT[k]));
+        SNAP = {}; Object.keys(CONTENT).forEach(k => (SNAP[k] = JSON.stringify(CONTENT[k])));
+        try { SAVED = Object.fromEntries(Object.keys(await (await fetch("/api/content")).json()).map(k => [k, true])); } catch (_) { SAVED = {}; }
+        try { MSGS = await api("/api/admin/messages"); COMMS = await api("/api/admin/comments"); } catch (_) {}
+      }
+      async function boot() {
+        try { await api("/api/me"); } catch (_) { return showLogin(); }
+        await loadAll(); showApp(); renderNav(); route(true);
+      }
+
+      /* ---------- navigation ---------- */
+      function renderNav() {
+        const q = $("#search").value.trim().toLowerCase();
+        const box = $("#nav"); box.innerHTML = "";
+        const match = k => !q || (REG[k].title + " " + REG[k].desc).toLowerCase().includes(q);
+        const item = (icon, label, active, onclick, extra) => h("button", {class: "navitem" + (active ? " active" : ""), onclick}, ic(icon), label, extra);
+        if (!q) box.append(item("grid", "Dashboard", view.type === "home", () => go("#/")));
+        GROUPS.forEach(g => {
+          const keys = Object.keys(REG).filter(k => REG[k].group === g && CONTENT[k] && match(k));
+          if (!keys.length) return;
+          box.append(h("div", {class: "navgroup"}, h("h4", {}, g), keys.map(k => item(REG[k].icon, REG[k].title, view.type === "section" && view.key === k, () => go("#/s/" + k), SAVED[k] ? h("i", {class: "dot", title: "Customised"}) : null))));
+        });
+        if (!q || "inbox messages comments".includes(q)) box.append(h("div", {class: "navgroup"}, h("h4", {}, "Inbox"),
+          item("mail", "Messages", view.type === "messages", () => go("#/messages"), MSGS.length ? h("span", {class: "count"}, MSGS.length) : null),
+          item("chat", "Guestbook comments", view.type === "comments", () => go("#/comments"), COMMS.length ? h("span", {class: "count"}, COMMS.length) : null)));
+        const leg = Object.keys(REG).filter(k => REG[k].group === "legacy" && CONTENT[k] && match(k));
+        if (leg.length) {
+          const open = !!q || sessionStorage.getItem("legacyOpen") === "1";
+          const wrap = h("div", {class: "navgroup"}, h("button", {class: "legacy-toggle", onclick: () => { sessionStorage.setItem("legacyOpen", open ? "0" : "1"); renderNav(); }}, "Not on current site", ic(open ? "up" : "down", 14)));
+          if (open) leg.forEach(k => wrap.append(item(REG[k].icon, REG[k].title, view.type === "section" && view.key === k, () => go("#/s/" + k))));
+          box.append(wrap);
+        }
+        $("body").classList.remove("nav-open");
+      }
+      $("#search").addEventListener("input", renderNav);
+
+      // guarded navigation (unsaved changes)
+      let navLock = false;
+      async function go(hash) {
+        if (location.hash === hash) return route();
+        location.hash = hash;
+      }
+      let lastHash = location.hash || "#/";
+      window.addEventListener("hashchange", async () => {
+        if (navLock) return;
+        if (isDirty()) {
+          const next = location.hash;
+          navLock = true; location.hash = lastHash; await new Promise(r => setTimeout(r, 0)); navLock = false;
+          const choice = await dialog("Unsaved changes", "You changed something in this section but haven't saved yet.", [
+            {label: "Keep editing", value: "stay", kind: "btn-ghost"}, {label: "Discard", value: "discard", kind: "btn-danger"}, {label: "Save & continue", value: "save", kind: "btn-primary"}]);
+          if (choice === "save") { if (!(await save())) return; }
+          else if (choice === "discard") { CONTENT[view.key] = JSON.parse(SNAP[view.key]); }
+          else return;
+          navLock = true; location.hash = next; await new Promise(r => setTimeout(r, 0)); navLock = false;
+        }
+        route();
+      });
+      function route(first) {
+        const hsh = location.hash || "#/"; lastHash = hsh;
+        const m = hsh.match(/^#\/s\/(.+)$/);
+        if (m && CONTENT[m[1]]) view = {type: "section", key: m[1]};
+        else if (hsh === "#/messages") view = {type: "messages"};
+        else if (hsh === "#/comments") view = {type: "comments"};
+        else view = {type: "home"};
+        renderNav(); render(); window.scrollTo(0, 0); $("#content").scrollTop = 0;
+        if (view.type !== "section") $("#preview").classList.remove("open");
+        else if (previewOpen) openPreview();
+      }
+      window.addEventListener("beforeunload", e => { if (isDirty()) { e.preventDefault(); e.returnValue = ""; } });
+
+      function render() {
+        const v = $("#view"); v.innerHTML = "";
+        if (view.type === "home") v.append(renderDashboard());
+        else if (view.type === "section") v.append(...renderEditor(view.key));
+        else if (view.type === "messages") v.append(renderInbox("messages"));
+        else v.append(renderInbox("comments"));
+      }
+
+      /* ---------- dashboard ---------- */
+      function renderDashboard() {
+        const wrap = h("div", {});
+        const edited = Object.keys(SAVED).filter(k => REG[k] && REG[k].group !== "legacy").length;
+        const q = $("#search").value.trim().toLowerCase();
+        wrap.append(h("div", {class: "hello"}, h("h1", {}, "Welcome back"), h("p", {}, "Everything on your website can be edited from here. Pick a section, change the text or images, and press Save."),
+          h("div", {class: "hello-actions"}, h("a", {class: "btn btn-primary", href: "/", target: "_blank", rel: "noopener", style: {textDecoration: "none"}}, ic("external"), "Open my website"),
+            h("button", {class: "btn btn-soft", onclick: () => go("#/messages")}, ic("mail"), `Messages${MSGS.length ? " (" + MSGS.length + ")" : ""}`),
+            h("button", {class: "btn btn-soft", onclick: () => go("#/comments")}, ic("chat"), `Comments${COMMS.length ? " (" + COMMS.length + ")" : ""}`))));
+        wrap.append(h("div", {class: "tips"},
+          h("div", {class: "tip"}, h("b", {}, "1"), h("p", {}, h("strong", {}, "Pick a section"), "Cards below match the parts of your site.")),
+          h("div", {class: "tip"}, h("b", {}, "2"), h("p", {}, h("strong", {}, "Edit & preview"), "Turn on Live preview to see changes beside the form.")),
+          h("div", {class: "tip"}, h("b", {}, "3"), h("p", {}, h("strong", {}, "Save"), `Ctrl + S saves too. ${edited} section${edited === 1 ? "" : "s"} customised so far.`))));
+        GROUPS.forEach(g => {
+          const keys = Object.keys(REG).filter(k => REG[k].group === g && CONTENT[k] && (!q || (REG[k].title + REG[k].desc).toLowerCase().includes(q)));
+          if (!keys.length) return;
+          wrap.append(h("div", {class: "grp-title"}, g), h("div", {class: "tiles"}, keys.map(k => h("button", {class: "tile", onclick: () => go("#/s/" + k)},
+            h("span", {class: "ico"}, ic(REG[k].icon, 20)), h("h3", {}, REG[k].title), h("p", {}, REG[k].desc),
+            h("span", {class: "badge " + (SAVED[k] ? "on" : "")}, SAVED[k] ? "Customised" : "Default text")))));
+        });
+        return wrap;
+      }
+
+      /* ---------- section editor ---------- */
+      function renderEditor(key) {
+        const reg = REG[key] || {title: pretty(key), icon: "layers", desc: "", group: "legacy"};
+        const data = CONTENT[key];
+        const visKey = Object.keys(data).find(k => typeof data[k] === "boolean" && /^display$/i.test(k));
+        const show = reg.show, hide = reg.hide || [];
+        const keys = Object.keys(data).filter(k => k !== visKey && !hide.includes(k) && (!show || show.includes(k)));
+
+        const statusEl = h("span", {class: "status"}, h("i"), "All saved");
+        const saveBtn = h("button", {class: "btn btn-primary", onclick: () => save()}, ic("save"), "Save changes");
+        const resetBtn = h("button", {class: "btn btn-ghost", onclick: resetSection, title: "Go back to the original text"}, ic("undo"), "Reset");
+        const pvBtn = h("button", {class: "btn btn-soft", id: "pvBtn", onclick: togglePreview}, ic("eye"), "Live preview");
+        const head = h("div", {class: "ed-head"}, h("div", {class: "ed-head-in"},
+          h("span", {class: "ed-ico"}, ic(reg.icon, 22)),
+          h("div", {class: "ed-title"}, h("h1", {}, reg.title), h("p", {}, reg.desc), reg.anchor ? h("span", {class: "where"}, ic("eye", 14), "Shows in the “" + ({home: "Home", about: "About", portfolio: "Portfolio", skills: "Skills", guestbook: "Guestbook", contact: "Contact", music: "Music"}[reg.anchor]) + "” part of the site") : null),
+          h("div", {class: "ed-actions"}, statusEl, pvBtn, resetBtn, saveBtn)));
+        const refresh = () => {
+          const d = isDirty(); statusEl.className = "status" + (d ? " dirty" : ""); statusEl.lastChild.textContent = d ? "Unsaved changes" : "All saved";
+          saveBtn.disabled = !d;
+        };
+        refresh();
+        const touch = () => refresh();
+        window.__touch = touch;
+
+        const body = h("div", {});
+        if (visKey) body.append(h("div", {class: "card", style: {padding: "14px 16px"}}, h("div", {class: "toggle-row", style: {background: "transparent", border: 0, padding: 0}},
+          h("div", {}, h("b", {}, metaFor(key, visKey).l), h("small", {}, "Turn off to hide this part of the website.")), switchEl(data, visKey, touch))));
+        // scalar fields together in one card, each list/object in its own card
+        const scalars = keys.filter(k => !Array.isArray(data[k]) && !(data[k] && typeof data[k] === "object"));
+        const complex = keys.filter(k => !scalars.includes(k));
+        if (scalars.length) {
+          const g = h("div", {class: "grid2"});
+          scalars.forEach(k => g.append(renderField(key, data, k, key + "." + k, touch)));
+          body.append(h("div", {class: "card"}, g));
+        }
+        complex.forEach(k => body.append(renderComplex(key, data, k, key + "." + k, touch)));
+        if (!keys.length && !visKey) body.append(h("div", {class: "empty", style: {marginTop: "16px"}}, "Nothing to edit here."));
+        return [head, body];
+      }
+
+      function switchEl(obj, key, touch) {
+        const i = h("input", {type: "checkbox"}); i.checked = !!obj[key];
+        i.addEventListener("change", () => { obj[key] = i.checked; touch(); });
+        return h("label", {class: "switch"}, i, h("span"));
+      }
+
+      // a single scalar field -> element
+      function renderField(sec, obj, key, path, touch) {
+        const m = metaFor(sec, key), val = obj[key], label = m.l || pretty(key);
+        const wrap = (control, wide) => h("div", {class: "field" + (wide ? " wide" : "")}, h("label", {}, label), control, m.h ? h("p", {class: "hint"}, m.h) : null);
+        if (typeof val === "boolean") return h("div", {class: "field wide"}, h("div", {class: "toggle-row"}, h("div", {}, h("b", {}, label), m.h ? h("small", {}, m.h) : null), switchEl(obj, key, touch)));
+        if (IMAGE_KEYS.includes(key) && (val == null || typeof val === "string")) return wrap(imageWidget(obj, key, path, touch, m), true);
+        if (m.t === "video") return wrap(videoWidget(obj, key, touch, m), true);
+        if (m.t === "select") { const sel = h("select", {}, (m.opts || []).map(o => h("option", {value: o[0]}, o[1]))); sel.value = val || (m.opts[0] || [])[0]; sel.addEventListener("change", () => { obj[key] = sel.value; touch(); }); return wrap(sel); }
+        if (m.t === "url") return wrap(urlWidget(obj, key, touch, m));
+        const long = m.t === "area" || (typeof val === "string" && (val.length > 80 || val.includes("\n")));
+        if (long) {
+          const ta = h("textarea", {rows: m.r || 3, placeholder: m.p || ""}); ta.value = val == null ? "" : val;
+          const grow = () => { ta.style.height = "auto"; ta.style.height = Math.max(ta.scrollHeight + 2, 84) + "px"; };
+          ta.addEventListener("input", () => { obj[key] = ta.value; grow(); touch(); });
+          setTimeout(grow, 0); requestAnimationFrame(grow);
+          return wrap(ta, true);
+        }
+        const inp = h("input", {type: typeof val === "number" ? "number" : "text", placeholder: m.p || ""}); inp.value = val == null ? "" : val;
+        inp.addEventListener("input", () => { obj[key] = typeof val === "number" ? Number(inp.value) : inp.value; touch(); });
+        return wrap(inp);
+      }
+
+      function urlWidget(obj, key, touch, m) {
+        const inp = h("input", {type: "url", placeholder: m.p || "https://…"}); inp.value = obj[key] || "";
+        const open = h("a", {class: "icon-btn", target: "_blank", rel: "noopener", title: "Test link"}, ic("external", 16));
+        const sync = () => { open.href = inp.value || "#"; open.style.visibility = /^https?:/.test(inp.value) ? "visible" : "hidden"; };
+        inp.addEventListener("input", () => { obj[key] = inp.value; sync(); touch(); }); sync();
+        return h("div", {class: "url-row"}, inp, open);
+      }
+
+      const ytId = u => { const m = String(u || "").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/); return m ? m[1] : ""; };
+      function videoWidget(obj, key, touch, m) {
+        const prev = h("div", {class: "yt-prev"}); const inp = h("input", {type: "url", placeholder: "https://www.youtube.com/watch?v=…"}); inp.value = obj[key] || "";
+        const upd = () => { prev.innerHTML = ""; const id = ytId(inp.value); if (id) prev.append(h("img", {src: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, alt: "", onerror: e => e.target.remove()}), h("span", {}, "Video found. This thumbnail is used on the card.")); else if (inp.value) prev.append(h("span", {}, "That doesn't look like a YouTube link.")); };
+        inp.addEventListener("input", () => { obj[key] = inp.value; upd(); touch(); }); upd();
+        return h("div", {}, inp, prev);
+      }
+
+      /* ---------- image widget (drop / click / crop) ---------- */
+      function imageWidget(obj, key, path, touch, m) {
+        const drop = h("div", {class: "img-drop", tabindex: 0}); const busy = h("div", {class: "busy"}, "Uploading…");
+        const file = h("input", {type: "file", accept: "image/*", style: {display: "none"}});
+        const contain = /achievementsCards|logo/i.test(path);
+        const actions = h("div", {class: "img-act"});
+        const paint = () => {
+          drop.innerHTML = ""; drop.classList.toggle("has", !!obj[key]); drop.classList.toggle("contain", contain);
+          if (obj[key]) drop.append(h("img", {src: obj[key], alt: ""})); else drop.append(h("div", {class: "ph"}, ic("image"), h("div", {}, "Drop an image here or click to upload")));
+          drop.append(busy);
+          actions.innerHTML = "";
+          actions.append(h("button", {class: "btn btn-soft btn-sm", type: "button", onclick: () => file.click()}, ic("upload", 15), obj[key] ? "Replace" : "Upload"));
+          if (obj[key]) actions.append(
+            key === "photoCutout" ? null : h("button", {class: "btn btn-soft btn-sm", type: "button", onclick: recrop}, ic("crop", 15), "Crop / fit"),
+            h("button", {class: "btn btn-ghost btn-sm", type: "button", onclick: () => { obj[key] = null; paint(); touch(); }}, ic("trash", 15), "Remove"));
+        };
+        const apply = async (blobOrFile, name) => { drop.classList.add("loading"); try { obj[key] = await uploadFile(blobOrFile, name); paint(); touch(); toast("Image uploaded. Remember to save."); } catch (e) { toast(e.message, "err"); } drop.classList.remove("loading"); };
+        async function recrop() {
+          try { const r = await openCropper(obj[key], cropPrefs(path)); if (r && r !== "original") await apply(r, "cropped-" + Date.now() + ".jpg"); } catch (e) { toast(e.message, "err"); }
+        }
+        async function chosen(f) {
+          if (!f || !/^image\//.test(f.type)) return toast("Please choose an image file", "err");
+          if (key === "photoCutout") return apply(f, f.name); // keep the transparency: upload untouched
+          const local = URL.createObjectURL(f); let up = f, name = f.name;
+          try { const r = await openCropper(local, cropPrefs(path)); if (r === null) { URL.revokeObjectURL(local); return; } if (r !== "original") { up = r; name = "cropped-" + Date.now() + ".jpg"; } } catch (_) {}
+          URL.revokeObjectURL(local); await apply(up, name);
+        }
+        drop.addEventListener("click", () => file.click());
+        drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); file.click(); } });
+        ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+        ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+        drop.addEventListener("drop", e => chosen(e.dataTransfer.files[0]));
+        file.addEventListener("change", () => { chosen(file.files[0]); file.value = ""; });
+        paint();
+        return h("div", {class: "imgw"}, drop, actions, file);
+      }
+
+      /* ---------- lists ---------- */
+      const isScalar = v => v == null || ["string", "number", "boolean"].includes(typeof v);
+      const TEMPLATES = {"footerLink": {name: "", url: ""}, "descBullets": "", "highlights": "", "roles": "", "paragraphs": ""};
+      function blankLike(sample) {
+        if (Array.isArray(sample)) return [];
+        if (sample && typeof sample === "object") { const o = {}; Object.keys(sample).forEach(k => (o[k] = blankLike(sample[k]))); return o; }
+        if (typeof sample === "boolean") return sample;
+        return typeof sample === "number" ? 0 : (sample === null ? null : "");
+      }
+
+      function renderComplex(sec, obj, key, path, touch) {
+        const m = metaFor(sec, key), val = obj[key], label = m.l || pretty(key);
+        if (Array.isArray(val)) return listCard(sec, obj, key, path, touch, m, label);
+        // nested plain object
+        const g = h("div", {class: "grid2"}); Object.keys(val).forEach(k => g.append(renderField(sec, val, k, path + "." + k, touch)));
+        return h("div", {class: "card"}, h("header", {}, h("h2", {}, label)), g);
+      }
+
+      function listCard(sec, obj, key, path, touch, m, label) {
+        const arr = obj[key];
+        const objects = arr.length ? arr.some(x => x && typeof x === "object") : (TEMPLATES[key] !== undefined && typeof TEMPLATES[key] === "object");
+        const kind = !objects ? "strings" : (m.t === "compact" || isCompact(arr[0], key) ? "compact" : "cards");
+        const sample = arr.length ? arr[0] : (TEMPLATES[key] !== undefined ? TEMPLATES[key] : (kind === "strings" ? "" : {}));
+        const countEl = h("small", {}, ""); const holder = h("div", {});
+        const card = h("div", {class: "card"}, h("header", {}, h("h2", {}, label), countEl), m.h ? h("p", {class: "hint", style: {margin: "-8px 0 12px"}}, m.h) : null, holder);
+        const upd = () => { countEl.textContent = arr.length ? arr.length + (arr.length === 1 ? " item" : " items") : ""; };
+        const mutate = fn => { fn(); touch(); draw(); upd(); };
+        const move = (i, d) => mutate(() => { const j = i + d; if (j < 0 || j >= arr.length) return; [arr[i], arr[j]] = [arr[j], arr[i]]; });
+        const addNew = () => { arr.push(blankLike(sample)); touch(); draw(arr.length - 1); upd(); };
+        function draw(openIdx) {
+          holder.innerHTML = "";
+          if (kind === "strings") {
+            const rows = h("div", {class: "rows"});
+            arr.forEach((v, i) => {
+              const long = m.area || (typeof v === "string" && v.length > 70);
+              const inp = long ? h("textarea", {rows: 2}) : h("input", {type: "text", placeholder: m.p || ""}); inp.value = v == null ? "" : v;
+              const grow = () => { if (long) { inp.style.height = "auto"; inp.style.height = Math.max(inp.scrollHeight + 2, 60) + "px"; } };
+              inp.addEventListener("input", () => { arr[i] = inp.value; grow(); touch(); }); setTimeout(grow, 0);
+              rows.append(h("div", {class: "row-item"}, h("div", {class: "num"}, i + 1), h("div", {class: "inp"}, inp), tools(i)));
+            });
+            holder.append(arr.length ? rows : h("div", {class: "empty"}, "Nothing here yet."));
+          } else if (kind === "compact") {
+            const keys = Object.keys(blankLike(sample)); const cols = keys.map(k => (/url|link|desc|name$/i.test(k) && keys.length > 2 ? "1.4fr" : "1fr")).join(" ");
+            const rows = h("div", {class: "rows", style: {"--cols": cols}});
+            if (arr.length) rows.append(h("div", {class: "compact-head", style: {gridTemplateColumns: cols}}, keys.map(k => h("span", {}, labelFor(sec, k)))));
+            arr.forEach((it, i) => {
+              const row = h("div", {class: "compact-row"});
+              keys.forEach(k => { const mm = metaFor(sec, k); const inp = h("input", {type: "text", placeholder: mm.p || labelFor(sec, k)}); inp.value = it[k] == null ? "" : it[k]; inp.addEventListener("input", () => { it[k] = inp.value; touch(); }); row.append(inp); });
+              row.append(tools(i)); rows.append(row);
+            });
+            holder.append(arr.length ? rows : h("div", {class: "empty"}, "Nothing here yet."));
+          } else {
+            const items = h("div", {class: "items"});
+            arr.forEach((it, i) => items.append(itemCard(it, i, i === openIdx)));
+            holder.append(arr.length ? items : h("div", {class: "empty"}, "Nothing here yet. Add the first one below."));
+          }
+          holder.append(h("button", {class: "btn btn-soft btn-sm add-row", type: "button", onclick: addNew}, ic("plus", 15), "Add " + (kind === "cards" ? "item" : kind === "compact" ? "row" : "line")));
+        }
+        function tools(i) {
+          return h("div", {class: "tools"},
+            h("button", {class: "icon-btn", type: "button", title: "Move up", disabled: i === 0, onclick: () => move(i, -1)}, ic("up", 16)),
+            h("button", {class: "icon-btn", type: "button", title: "Move down", disabled: i === arr.length - 1, onclick: () => move(i, 1)}, ic("down", 16)),
+            h("button", {class: "icon-btn danger", type: "button", title: "Delete", onclick: () => mutate(() => arr.splice(i, 1))}, ic("trash", 16)));
+        }
+        function itemCard(it, i, open) {
+          const title = TITLE_KEYS.map(k => it[k]).find(v => typeof v === "string" && v.trim()) || "Item " + (i + 1);
+          const subKey = SUB_KEYS.find(k => typeof it[k] === "string" && it[k].trim() && it[k] !== title); const sub = subKey ? it[subKey] : "";
+          const imgKey = IMAGE_KEYS.find(k => k in it); const thumb = imgKey && it[imgKey] ? h("img", {class: "item-thumb", src: it[imgKey], alt: ""}) : h("span", {class: "item-thumb empty"}, ic(imgKey ? "image" : "layers", 18));
+          const body = h("div", {class: "item-body"});
+          const g = h("div", {class: "grid2"}); const subs = [];
+          Object.keys(it).forEach(k => { if (Array.isArray(it[k])) subs.push(k); else if (it[k] && typeof it[k] === "object") subs.push(k); else g.append(renderField(sec, it, k, path + "[]." + k, touch)); });
+          body.append(g);
+          subs.forEach(k => { const sm = metaFor(sec, k); if (Array.isArray(it[k])) { const inner = listCard(sec, it, k, path + "[]." + k, touch, sm, sm.l || pretty(k)); inner.classList.add("sub"); inner.style.cssText = "background:transparent;border:0;padding:0;margin-top:18px"; body.append(inner); } });
+          const el = h("div", {class: "item" + (open ? " open flash" : "")},
+            h("div", {class: "item-head", onclick: e => { if (!e.target.closest(".item-tools")) el.classList.toggle("open"); }},
+              h("span", {class: "item-num"}, i + 1), thumb, h("div", {class: "item-t"}, h("b", {}, title), sub ? h("small", {}, String(sub).slice(0, 90)) : null),
+              h("div", {class: "item-tools"},
+                h("button", {class: "icon-btn", type: "button", title: "Move up", disabled: i === 0, onclick: () => move(i, -1)}, ic("up", 16)),
+                h("button", {class: "icon-btn", type: "button", title: "Move down", disabled: i === arr.length - 1, onclick: () => move(i, 1)}, ic("down", 16)),
+                h("button", {class: "icon-btn", type: "button", title: "Duplicate", onclick: () => mutate(() => arr.splice(i + 1, 0, JSON.parse(JSON.stringify(it))))}, ic("copy", 16)),
+                h("button", {class: "icon-btn danger", type: "button", title: "Delete", onclick: async () => { if (await confirmDlg("Delete this item?", "“" + String(title).slice(0, 60) + "” will be removed. You can still discard before saving.", "Delete", true)) mutate(() => arr.splice(i, 1)); }}, ic("trash", 16)),
+                h("span", {class: "chev"}, ic("down", 18)))), body);
+          if (open) setTimeout(() => el.scrollIntoView({block: "center", behavior: "smooth"}), 50);
+          return el;
+        }
+        upd(); draw();
+        return card;
+      }
+      // small objects of plain text fields read better as one compact row each
+      function isCompact(sample, key) {
+        if (!sample || typeof sample !== "object") return false;
+        const ks = Object.keys(sample);
+        return ks.length <= 3 && ks.every(k => typeof sample[k] === "string" && !IMAGE_KEYS.includes(k) && !(metaFor("", k).t === "area"));
+      }
+
+      /* ---------- save / reset ---------- */
+      async function save() {
+        if (view.type !== "section") return true;
+        const k = view.key; if (!isDirty()) return true;
+        try {
+          await api("/api/admin/section/" + k, {method: "PUT", body: JSON.stringify(CONTENT[k])});
+          SNAP[k] = JSON.stringify(CONTENT[k]); SAVED[k] = true;
+          if (window.__touch) window.__touch(); renderNav(); toast("Saved. Your site is updated."); if (previewOpen) openPreview(); return true;
+        } catch (e) { toast(e.message, "err"); return false; }
+      }
+      async function resetSection() {
+        const k = view.key; if (!(await confirmDlg("Reset this section?", "This brings back the original text and images for “" + (REG[k] ? REG[k].title : k) + "”. Your edits to it will be lost.", "Reset", true))) return;
+        try {
+          await api("/api/admin/section/" + k + "/reset", {method: "POST"});
+          const all = await api("/api/admin/content"); CONTENT[k] = normalizeLists(all[k]); SNAP[k] = JSON.stringify(all[k]); delete SAVED[k];
+          renderNav(); render(); toast("Section reset"); if (previewOpen) openPreview();
+        } catch (e) { toast(e.message, "err"); }
+      }
+      document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); } });
+
+      /* ---------- live preview ---------- */
+      function togglePreview() { previewOpen = !previewOpen; if (previewOpen) openPreview(); else $("#preview").classList.remove("open"); }
+      function openPreview() {
+        const pv = $("#preview"); pv.classList.add("open");
+        const f = $("#pvIframe"), box = $("#pvFrame"); const W = 1440;
+        const fit = () => { const s = box.clientWidth / W; f.style.width = W + "px"; f.style.height = box.clientHeight / s + "px"; f.style.transform = `scale(${s})`; };
+        fit(); new ResizeObserver(fit).observe(box);
+        const anchor = (REG[view.key] || {}).anchor || "home";
+        f.onload = () => { let n = 0; const t = setInterval(() => { n++; try { const d = f.contentDocument; const el = d.getElementById(anchor); if (el && !d.querySelector(".loader")) { el.scrollIntoView({behavior: "auto"}); clearInterval(t); } } catch (_) { clearInterval(t); } if (n > 80) clearInterval(t); }, 250); };
+        f.src = "/?preview=" + Date.now();
+      }
+      $("#pvReload").append(ic("refresh", 16)); $("#pvClose").append(ic("x", 16));
+      $("#pvReload").onclick = () => openPreview();
+      $("#pvClose").onclick = () => { previewOpen = false; $("#preview").classList.remove("open"); };
+
+      /* ---------- inbox ---------- */
+      const hue = s => { let n = 0; for (const c of s) n = (n * 31 + c.charCodeAt(0)) % 360; return n; };
+      const ago = ts => { const s = Math.max(1, Math.floor((Date.now() - ts) / 1000)); for (const [n, l] of [[31536000, "year"], [2592000, "month"], [86400, "day"], [3600, "hour"], [60, "minute"]]) if (s >= n) { const v = Math.floor(s / n); return v + " " + l + (v > 1 ? "s" : "") + " ago"; } return "just now"; };
+      function renderInbox(kind) {
+        const list = kind === "messages" ? MSGS : COMMS, wrap = h("div", {});
+        wrap.append(h("div", {class: "hello", style: {paddingBottom: 0}}, h("h1", {}, kind === "messages" ? "Messages" : "Guestbook comments"),
+          h("p", {}, kind === "messages" ? "Messages sent from the Contact form on your site." : "Comments visitors left in the guestbook. Delete anything you don't want shown.")));
+        if (!list.length) { wrap.append(h("div", {class: "blank"}, h("div", {class: "big"}, ic(kind === "messages" ? "inbox" : "chat")), h("h3", {}, "Nothing here yet"), h("p", {}, kind === "messages" ? "When someone uses your contact form it will show up here." : "When visitors sign your guestbook it will show up here."))); return wrap; }
+        list.forEach(m => {
+          const del = async () => {
+            if (!(await confirmDlg("Delete this " + (kind === "messages" ? "message" : "comment") + "?", "This can't be undone.", "Delete", true))) return;
+            try { await api("/api/admin/" + kind + "/" + m.id, {method: "DELETE"}); (kind === "messages" ? MSGS : COMMS).splice((kind === "messages" ? MSGS : COMMS).indexOf(m), 1); renderNav(); render(); toast("Deleted"); } catch (e) { toast(e.message, "err"); }
+          };
+          wrap.append(h("div", {class: "msg"}, h("div", {class: "avatar", style: {background: `hsl(${hue(m.name)} 65% 52%)`}}, m.name.trim().charAt(0).toUpperCase()),
+            h("div", {class: "msg-body"}, h("div", {class: "msg-top"}, h("b", {}, m.name), m.email ? h("a", {href: "mailto:" + m.email}, m.email) : null, h("time", {title: new Date(m.created).toLocaleString()}, ago(m.created))),
+              h("p", {}, m.message || m.comment), h("div", {class: "msg-act"}, m.email ? h("a", {class: "btn btn-soft btn-sm", href: "mailto:" + m.email, style: {textDecoration: "none"}}, ic("mail", 15), "Reply") : null, h("button", {class: "btn btn-danger btn-sm", onclick: del}, ic("trash", 15), "Delete")))));
+        });
+        return wrap;
+      }
+
+      /* ---------- image cropper (pan + zoom, aspect presets) ---------- */
+      const ASPECTS = [{label: "16:10 · card", a: 1.6}, {label: "16:9", a: 16 / 9}, {label: "4:3", a: 4 / 3}, {label: "5:4 · ID photo", a: 1.225}, {label: "1:1 · square", a: 1}, {label: "4:5 · portrait", a: 0.8}];
+      function openCropper(srcUrl, prefs) {
+        prefs = prefs || {aspect: 1.6, bg: "#0b0b0d"};
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => {
+            const modal = $("#cropModal"), canvas = $("#cropCanvas"), ctx = canvas.getContext("2d"), zoomEl = $("#cropZoom"), bgEl = $("#cropBg"), aspBox = $("#cropAspects");
+            const iw = img.naturalWidth, ih = img.naturalHeight; bgEl.value = prefs.bg || "#0b0b0d";
+            let aspect = prefs.aspect, cw = 0, ch = 0, scale = 1, offX = 0, offY = 0, fit = 1, cover = 1, maxS = 1;
+            function layout(keep) {
+              cw = 660; ch = Math.round(cw / aspect); if (ch > 460) { ch = 460; cw = Math.round(ch * aspect); }
+              canvas.width = cw; canvas.height = ch; canvas.style.aspectRatio = cw + " / " + ch; canvas.style.maxWidth = cw + "px";
+              fit = Math.min(cw / iw, ch / ih); cover = Math.max(cw / iw, ch / ih); maxS = cover * 4;
+              if (!keep) { scale = cover; offX = (cw - iw * scale) / 2; offY = (ch - ih * scale) / 2; }
+              zoomEl.value = Math.round(((scale - fit) / (maxS - fit || 1)) * 100); clamp(); draw();
+            }
+            function clamp() { const w = iw * scale, hh = ih * scale; offX = w >= cw ? Math.min(0, Math.max(cw - w, offX)) : Math.min(cw - w, Math.max(0, offX)); offY = hh >= ch ? Math.min(0, Math.max(ch - hh, offY)) : Math.min(ch - hh, Math.max(0, offY)); }
+            function paint(c, W, H, k) { c.fillStyle = bgEl.value; c.fillRect(0, 0, W, H); c.imageSmoothingQuality = "high"; c.drawImage(img, offX * k, offY * k, iw * scale * k, ih * scale * k); }
+            function draw() { paint(ctx, cw, ch, 1); ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 1; i < 3; i++) { ctx.moveTo(cw * i / 3, 0); ctx.lineTo(cw * i / 3, ch); ctx.moveTo(0, ch * i / 3); ctx.lineTo(cw, ch * i / 3); } ctx.stroke(); }
+            function setZoom(z) { const cx = cw / 2, cy = ch / 2, rx = (cx - offX) / scale, ry = (cy - offY) / scale; scale = fit + (maxS - fit) * (z / 100); offX = cx - rx * scale; offY = cy - ry * scale; clamp(); draw(); }
+            aspBox.innerHTML = "";
+            ASPECTS.forEach(o => { const b = h("button", {type: "button", class: Math.abs(o.a - aspect) < 0.01 ? "on" : "", onclick: () => { aspect = o.a; $$("button", aspBox).forEach(x => x.classList.remove("on")); b.classList.add("on"); layout(false); }}, o.label); aspBox.append(b); });
+            if (!ASPECTS.some(o => Math.abs(o.a - aspect) < 0.01)) aspBox.prepend(h("button", {type: "button", class: "on"}, "Custom " + aspect.toFixed(2)));
+            let drag = null;
+            const down = e => { drag = {x: e.clientX, y: e.clientY, ox: offX, oy: offY}; canvas.classList.add("drag"); canvas.setPointerCapture(e.pointerId); };
+            const move = e => { if (!drag) return; const r = canvas.getBoundingClientRect(), k = cw / r.width; offX = drag.ox + (e.clientX - drag.x) * k; offY = drag.oy + (e.clientY - drag.y) * k; clamp(); draw(); };
+            const up = () => { drag = null; canvas.classList.remove("drag"); };
+            const wheel = e => { e.preventDefault(); const z = Math.max(0, Math.min(100, +zoomEl.value - Math.sign(e.deltaY) * 4)); zoomEl.value = z; setZoom(z); };
+            const onZoom = () => setZoom(+zoomEl.value), onBg = () => draw();
+            canvas.addEventListener("pointerdown", down); canvas.addEventListener("pointermove", move); canvas.addEventListener("pointerup", up); canvas.addEventListener("pointercancel", up); canvas.addEventListener("wheel", wheel, {passive: false});
+            zoomEl.addEventListener("input", onZoom); bgEl.addEventListener("input", onBg);
+            function close(result) {
+              modal.classList.remove("open");
+              canvas.removeEventListener("pointerdown", down); canvas.removeEventListener("pointermove", move); canvas.removeEventListener("pointerup", up); canvas.removeEventListener("pointercancel", up); canvas.removeEventListener("wheel", wheel);
+              zoomEl.removeEventListener("input", onZoom); bgEl.removeEventListener("input", onBg); $("#cropApply").onclick = $("#cropCancel").onclick = $("#cropOriginal").onclick = null; resolve(result);
+            }
+            $("#cropCancel").onclick = () => close(null); $("#cropOriginal").onclick = () => close("original");
+            $("#cropApply").onclick = () => {
+              const OW = 1280, OH = Math.round(OW / aspect), k = OW / cw, out = document.createElement("canvas"); out.width = OW; out.height = OH;
+              try { paint(out.getContext("2d"), OW, OH, k); out.toBlob(b => (b ? close(b) : toast("Could not crop this image", "err")), "image/jpeg", 0.92); } catch (err) { toast("Could not crop this image (" + err.message + ")", "err"); }
+            };
+            modal.classList.add("open"); layout(false);
+          };
+          img.onerror = () => reject(new Error("Could not load the image to crop"));
+          img.src = srcUrl;
+        });
+      }
+
+      /* ---------- chrome: theme, logout, menu ---------- */
+      const setTheme = t => { document.documentElement.dataset.theme = t; try { localStorage.setItem("studioTheme", t); } catch (_) {} $("#themeBtn").replaceChildren(ic(t === "dark" ? "sun" : "moon"), t === "dark" ? "Light" : "Dark"); };
+      try { setTheme(localStorage.getItem("studioTheme") || "dark"); } catch (_) { setTheme("dark"); }
+      $("#themeBtn").onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      $("#logout").append(ic("logout"), "Log out");
+      $("#logout").onclick = async () => { if (isDirty() && !(await confirmDlg("Log out?", "You have unsaved changes that will be lost.", "Log out", true))) return; await fetch("/api/logout", {method: "POST"}); location.hash = "#/"; showLogin(); };
+      $("#viewSite").append(ic("external"), "View my website");
+      $("#searchIc").replaceWith(ic("search", 16));
+      $("#menuBtn").append(ic("menu", 20)); $("#menuBtn").onclick = () => document.body.classList.toggle("nav-open"); $("#scrim").onclick = () => document.body.classList.remove("nav-open");
+      document.addEventListener("keydown", e => { if (e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); $("#search").focus(); } });
+      boot();
+    </script>
+  </body>
+</html>
